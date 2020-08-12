@@ -9,7 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 
-import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
+import github.scarsz.discordsrv.dependencies.jda.core.entities.Member;
 
 public final class DiscordUtil {
     private DiscordUtil() {
