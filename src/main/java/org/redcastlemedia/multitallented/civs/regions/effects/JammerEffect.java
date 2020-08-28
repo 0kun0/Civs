@@ -131,13 +131,13 @@ public class JammerEffect implements Listener, RegionCreatedListener {
             p.sendMessage(Civs.getPrefix() + ChatColor.RED + LocaleManager.getInstance().getTranslation(
                     civ.getLocale(), "jammer-built").replace("$1", jammerLocalName));
         }
-        if (Civs.discordSRV != null) {
+        /*if (Civs.discordSRV != null) {
             String jammerLocalName = LocaleManager.getInstance().getTranslation(ConfigManager.getInstance().getDefaultLanguage(),
                     regionType.getProcessedName() + "-name");
             String defaultMessage = Civs.getPrefix() + ChatColor.RED + LocaleManager.getInstance().getTranslation(
                     ConfigManager.getInstance().getDefaultLanguage(), "jammer-built")
                     .replace("$1", jammerLocalName);
             DiscordUtil.sendMessageToMainChannel(defaultMessage);
-        }
+        }*/
     }
 }

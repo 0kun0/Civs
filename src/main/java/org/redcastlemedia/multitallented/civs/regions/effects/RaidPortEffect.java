@@ -112,7 +112,7 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
                             .replace("$2", raidLocalName)
                             .replace("$3", town.getName()));
         }
-        if (Civs.discordSRV != null) {
+        /*if (Civs.discordSRV != null) {
             String raidLocalName = LocaleManager.getInstance().getTranslation(ConfigManager.getInstance().getDefaultLanguage(),
                     rt.getProcessedName() + "-name");
             String defaultMessage = Civs.getPrefix() + ChatColor.RED +
@@ -122,7 +122,7 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
                             .replace("$3", town.getName());
             defaultMessage += DiscordUtil.atAllTownOwners(town);
             DiscordUtil.sendMessageToMainChannel(defaultMessage);
-        }
+        }*/
         String raidLocalName = LocaleManager.getInstance().getRawTranslationWithPlaceholders(player,
                 rt.getName() + LocaleConstants.NAME_SUFFIX);
         CVItem raidRemote = CVItem.createCVItemFromString("STICK");

@@ -273,7 +273,7 @@ public class SiegeEffect implements Listener, CreateRegionListener {
                     civ.getLocale(), "siege-built").replace("$1", player.getDisplayName())
                     .replace("$2", siegeMachineLocalName).replace("$3", town.getName()));
         }
-        if (Civs.discordSRV != null) {
+        /*if (Civs.discordSRV != null) {
             String siegeLocalName = LocaleManager.getInstance().getTranslation(ConfigManager.getInstance().getDefaultLanguage(),
                     regionType.getProcessedName() + "-name");
             String defaultMessage = Civs.getPrefix() + ChatColor.RED + LocaleManager.getInstance().getTranslation(
@@ -281,7 +281,7 @@ public class SiegeEffect implements Listener, CreateRegionListener {
                     .replace("$2", siegeLocalName).replace("$3", town.getName());
             defaultMessage += DiscordUtil.atAllTownOwners(town);
             DiscordUtil.sendMessageToMainChannel(defaultMessage);
-        }
+        }*/
         return true;
     }
 }

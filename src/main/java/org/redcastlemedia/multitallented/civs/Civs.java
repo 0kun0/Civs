@@ -40,7 +40,6 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import github.scarsz.discordsrv.DiscordSRV;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import net.Indyuce.mmoitems.MMOItems;
 import net.milkbowl.vault.economy.Economy;
@@ -54,7 +53,6 @@ public class Civs extends JavaPlugin {
     public static Economy econ;
     public static Permission perm;
     public static MMOItems mmoItems;
-    public static DiscordSRV discordSRV;
     public static PlaceholderAPIPlugin placeholderAPI;
     protected static Civs civs;
     public static Logger logger;
@@ -124,9 +122,6 @@ public class Civs extends JavaPlugin {
         }
         if (mmoItems != null) {
             logger.log(Level.INFO, "{0} MMOItems", LogInfo.HOOKITEMS);
-        }
-        if (discordSRV != null) {
-            logger.log(Level.INFO, "{0} DiscordSRV", LogInfo.HOOKCHAT);
         }
         logger.info(LogInfo.PH_INFO);
 
@@ -207,9 +202,6 @@ public class Civs extends JavaPlugin {
         }
         if (Bukkit.getPluginManager().isPluginEnabled("MMOItems")) {
             mmoItems = MMOItems.plugin;
-        }
-        if (Bukkit.getPluginManager().isPluginEnabled("DiscordSRV")) {
-            discordSRV = DiscordSRV.getPlugin();
         }
         Bukkit.getPluginManager().registerEvents(new DynmapHook(), this);
         if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {

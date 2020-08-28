@@ -80,7 +80,7 @@ import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.util.MessageUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-import github.scarsz.discordsrv.DiscordSRV;
+
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import net.Indyuce.mmoitems.MMOItems;
 
@@ -582,11 +582,11 @@ public class CivilianListener implements Listener {
             Civs.mmoItems = MMOItems.plugin;
             return;
         }
-        if ("DiscordSRV".equals(event.getPlugin().getName()) &&
+        /*if ("DiscordSRV".equals(event.getPlugin().getName()) &&
                 Bukkit.getPluginManager().isPluginEnabled("DiscordSRV")) {
             Civs.discordSRV = DiscordSRV.getPlugin();
             return;
-        }
+        }*/
     }
 
     @EventHandler
@@ -599,11 +599,11 @@ public class CivilianListener implements Listener {
             Civs.mmoItems = null;
             return;
         }
-        if ("DiscordSRV".equals(event.getPlugin().getName()) &&
+        /*if ("DiscordSRV".equals(event.getPlugin().getName()) &&
                 !Bukkit.getPluginManager().isPluginEnabled("DiscordSRV")) {
             Civs.discordSRV = null;
             return;
-        }
+        }*/
         if (Constants.PLACEHOLDER_API.equals(event.getPlugin().getName())) {
             Civs.placeholderAPI = null;
             return;

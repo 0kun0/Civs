@@ -9,14 +9,13 @@ import org.bukkit.OfflinePlayer;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 
-import github.scarsz.discordsrv.dependencies.jda.core.entities.Member;
 
 public final class DiscordUtil {
     private DiscordUtil() {
 
     }
 
-    public static String atAllTownOwners(Town town) {
+    /*public static String atAllTownOwners(Town town) {
         String defaultMessage = "";
         try {
             for (UUID uuid : town.getRawPeople().keySet()) {
@@ -55,5 +54,5 @@ public final class DiscordUtil {
         } catch (Exception e) {
             Civs.logger.log(Level.SEVERE, "Unable to broadcast discord message", e);
         }
-    }
+    }*/
 }
