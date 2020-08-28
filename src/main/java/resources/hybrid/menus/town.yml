@@ -22,19 +22,19 @@ items:
     icon: GREEN_WOOL
     name: town-power
     # desc: power-history #TODO
-    actions: []
+    actions: [ ]
   power-unprotected:
     index: 1
     icon: RED_WOOL
     name: town-power
     desc: grace-period
-    actions: []
+    actions: [ ]
   location:
     index: 2
     icon: COMPASS
     name: location
     # desc location world x y z
-    actions: []
+    actions: [ ]
   set-ally:
     index: 3
     icon: GOLDEN_SWORD
@@ -116,7 +116,7 @@ items:
     icon: EMERALD_BLOCK
     name: town-bank-balance
     # desc bank balance, town tax, and town bank desc
-    actions: []
+    actions: [ ]
   join-revolt:
     index: 15
     icon: TORCH
@@ -138,4 +138,4 @@ items:
     icon: SOUL_SAND
     name: karma-display{$hardship$,,$worth$
     desc: karma-town-desc
-    actions: []
+    actions: [ ]

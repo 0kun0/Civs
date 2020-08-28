@@ -8,7 +8,7 @@ groups:
 pre-reqs:
   - skill:bow=5|skill:crossbow=5
 
-allowed-actions: []
+allowed-actions: [ ]
 
 exp-per-use: 10
 

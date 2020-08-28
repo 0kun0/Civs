@@ -1,9 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.towns;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -22,18 +18,17 @@ import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
 import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
 import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
 import org.redcastlemedia.multitallented.civs.menus.MenuManager;
-import org.redcastlemedia.multitallented.civs.towns.GovTransition;
-import org.redcastlemedia.multitallented.civs.towns.Government;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentManager;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentType;
-import org.redcastlemedia.multitallented.civs.towns.Town;
-import org.redcastlemedia.multitallented.civs.towns.TownManager;
-import org.redcastlemedia.multitallented.civs.towns.TownType;
+import org.redcastlemedia.multitallented.civs.towns.*;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.OwnershipUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = Constants.TOWN) @SuppressWarnings("unused")
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+@CivsMenu(name = Constants.TOWN)
+@SuppressWarnings("unused")
 public class TownMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -87,11 +82,11 @@ public class TownMenu extends CustomMenu {
                         government.getGovernmentType() == GovernmentType.LIBERTARIAN);
         boolean govTypeOwnerOverride =
                 town.getRawPeople().containsKey(civilian.getUuid()) &&
-                (government.getGovernmentType() == GovernmentType.OLIGARCHY ||
-                government.getGovernmentType() == GovernmentType.COOPERATIVE ||
-                government.getGovernmentType() == GovernmentType.DEMOCRACY ||
-                government.getGovernmentType() == GovernmentType.DEMOCRATIC_SOCIALISM ||
-                government.getGovernmentType() == GovernmentType.CAPITALISM);
+                        (government.getGovernmentType() == GovernmentType.OLIGARCHY ||
+                                government.getGovernmentType() == GovernmentType.COOPERATIVE ||
+                                government.getGovernmentType() == GovernmentType.DEMOCRACY ||
+                                government.getGovernmentType() == GovernmentType.DEMOCRATIC_SOCIALISM ||
+                                government.getGovernmentType() == GovernmentType.CAPITALISM);
         Player player = Bukkit.getPlayer(civilian.getUuid());
         if (player == null || townType == null) {
             return new ItemStack(Material.AIR);
@@ -185,11 +180,11 @@ public class TownMenu extends CustomMenu {
             cvItem.setDisplayName(LocaleManager.getInstance().getTranslationWithPlaceholders(player,
                     menuIcon.getName()).replace("$1", town.getName()));
             cvItem.getLore().clear();
-            int i=0;
+            int i = 0;
             for (Bounty bounty : town.getBounties()) {
                 OfflinePlayer op = Bukkit.getOfflinePlayer(bounty.getIssuer());
                 cvItem.getLore().add(op.getName() + ": " + Util.getNumberFormat(bounty.getAmount(), civilian.getLocale()));
-                if (i>5) {
+                if (i > 5) {
                     break;
                 }
                 i++;

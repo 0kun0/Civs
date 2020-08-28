@@ -1,10 +1,9 @@
 package org.redcastlemedia.multitallented.civs.spells;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,9 +21,10 @@ import org.redcastlemedia.multitallented.civs.spells.targets.Target;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import java.util.*;
-
-import lombok.Getter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Spell {
     private final Player caster;
@@ -39,6 +39,74 @@ public class Spell {
         this.caster = caster;
         this.level = level;
         this.abilityVariables = new HashMap<>();
+    }
+
+    public static double getLevelAdjustedValue(String configString, int level, Object target, Spell spell) {
+        if (configString.equals("0")) {
+            return 0;
+        }
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        try {
+            Object engineEval = engine.eval(replaceAllVariables(configString, level, target, spell));
+            if (engineEval instanceof Integer) {
+                return (Integer) engineEval;
+            } else if (engineEval instanceof Double) {
+                return (Double) engineEval;
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            return Double.parseDouble(configString);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    private static String replaceAllVariables(String input, int level, Object target, Spell spell) {
+        input = input.replace("$level$", "" + level);
+        input = input.replace("$rand$", "" + Math.random());
+        String[] inputParts = input.split("\\$");
+        if (spell != null && target != null) {
+            input = "";
+            Map<String, Map<Object, Map<String, Double>>> abilityVariables = spell.getAbilityVariables();
+            for (int i = 0; i < inputParts.length; i++) {
+                if (inputParts[i].contains("#")) {
+                    Map<String, Map<Object, Map<String, Double>>> variables = new HashMap<>(abilityVariables);
+                    Map<Object, Map<String, Double>> targetVars = variables.get(inputParts[i].split("#")[0]);
+                    if (targetVars == null) {
+                        continue;
+                    }
+                    Map<String, Double> componentVars = targetVars.get(target);
+                    if (componentVars == null) {
+                        if (targetVars.isEmpty()) {
+                            continue;
+                        } else {
+                            componentVars = targetVars.values().iterator().next();
+                        }
+                    }
+                    Double var = componentVars.get(inputParts[i].split("#")[1]);
+                    if (var == null) {
+                        continue;
+                    }
+                    inputParts[i] = "" + var;
+                    if (inputParts[i] == null || inputParts[i].equals("")) {
+                        inputParts[i] = "0";
+                    }
+                }
+                input += inputParts[i];
+            }
+        }
+        return input;
+    }
+
+    public static void addSelfToTargetMapping(Map<String, Set<?>> mappedTargets, Player self) {
+        Set<Object> targetSet = new HashSet<>();
+        targetSet.add(self);
+        mappedTargets.put(SpellConstants.SELF, targetSet);
     }
 
     public boolean useAbility() {
@@ -431,7 +499,8 @@ public class Spell {
             fulfilledRequirements.add(componentName);
             return true;
         }
-        costLoop: for (String key : costSection.getKeys(false)) {
+        costLoop:
+        for (String key : costSection.getKeys(false)) {
             String costName = "";
             if (!key.contains("^")) {
                 costName += key;
@@ -481,7 +550,7 @@ public class Spell {
                     component = SpellType.getEffect(costName, key, costValueString, level, target, caster, this);
                 } else {
                     ConfigurationSection currentConfigSection = costSection.getConfigurationSection(key);
-                    component = SpellType.getEffect(costName, key, currentConfigSection, level, target,  caster,this);
+                    component = SpellType.getEffect(costName, key, currentConfigSection, level, target, caster, this);
                 }
 
                 boolean meetsRequirement = component.meetsRequirement();
@@ -597,72 +666,5 @@ public class Spell {
                                  Map<String, ConfigurationSection> componentMap) {
         //TODO do I really need this?
         return true;
-    }
-
-    public static double getLevelAdjustedValue(String configString, int level, Object target, Spell spell) {
-        if (configString.equals("0")) {
-            return 0;
-        }
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        ScriptEngine engine = mgr.getEngineByName("JavaScript");
-        try {
-            Object engineEval = engine.eval(replaceAllVariables(configString, level, target, spell));
-            if (engineEval instanceof Integer) {
-                return (Integer) engineEval;
-            } else if (engineEval instanceof Double) {
-                return (Double) engineEval;
-            } else {
-                return 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            return Double.parseDouble(configString);
-        } catch (Exception e) {
-            return 0;
-        }
-    }
-    private static String replaceAllVariables(String input, int level, Object target, Spell spell) {
-        input = input.replace("$level$", "" + level);
-        input = input.replace("$rand$", "" + Math.random());
-        String[] inputParts = input.split("\\$");
-        if (spell != null && target != null) {
-            input = "";
-            Map<String, Map<Object, Map<String, Double>>> abilityVariables = spell.getAbilityVariables();
-            for (int i = 0; i < inputParts.length; i++) {
-                if (inputParts[i].contains("#")) {
-                    Map<String, Map<Object, Map<String, Double>>> variables = new HashMap<>(abilityVariables);
-                    Map<Object, Map<String, Double>> targetVars = variables.get(inputParts[i].split("#")[0]);
-                    if (targetVars == null) {
-                        continue;
-                    }
-                    Map<String, Double> componentVars = targetVars.get(target);
-                    if (componentVars == null) {
-                        if (targetVars.isEmpty()) {
-                            continue;
-                        } else {
-                            componentVars = targetVars.values().iterator().next();
-                        }
-                    }
-                    Double var = componentVars.get(inputParts[i].split("#")[1]);
-                    if (var == null) {
-                        continue;
-                    }
-                    inputParts[i] = "" + var;
-                    if (inputParts[i] == null || inputParts[i].equals("")) {
-                        inputParts[i] = "0";
-                    }
-                }
-                input += inputParts[i];
-            }
-        }
-        return input;
-    }
-
-    public static void addSelfToTargetMapping(Map<String, Set<?>> mappedTargets, Player self) {
-        Set<Object> targetSet = new HashSet<>();
-        targetSet.add(self);
-        mappedTargets.put(SpellConstants.SELF, targetSet);
     }
 }

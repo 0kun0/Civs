@@ -9,23 +9,19 @@ import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
-import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
+import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.util.CommandUtil;
 import org.redcastlemedia.multitallented.civs.util.FallbackConfigUtil;
 import org.redcastlemedia.multitallented.civs.util.PermissionUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGH)
 public class TutorialManager {
@@ -61,7 +57,7 @@ public class TutorialManager {
                 path.setIcon(CVItem.createCVItemFromString(iconString));
                 ConfigurationSection section = tutorialConfig.getConfigurationSection(key + ".names");
 
-                for (Map<?,?> map : tutorialConfig.getMapList(key + ".steps")) {
+                for (Map<?, ?> map : tutorialConfig.getMapList(key + ".steps")) {
                     TutorialStep tutorialStep = new TutorialStep();
 
                     tutorialStep.setType((String) map.get("type"));
@@ -69,7 +65,7 @@ public class TutorialManager {
                     tutorialStep.setKillType((String) map.get("kill-type"));
                     Integer times = (Integer) map.get("times");
                     tutorialStep.setTimes(times == null ? 1 : times);
-                    LinkedHashMap<?,?> rewards = (LinkedHashMap<?,?>) map.get("rewards");
+                    LinkedHashMap<?, ?> rewards = (LinkedHashMap<?, ?>) map.get("rewards");
                     if (rewards != null) {
                         if (rewards.get("money") != null) {
                             if (rewards.get("money") instanceof Double) {

@@ -14,11 +14,11 @@ pre-reqs:
   - member=hamlet:village:town:city:metropolis
 
 towns:
-- hamlet
-- village
-- town
-- city
-- metropolis
+  - hamlet
+  - village
+  - town
+  - city
+  - metropolis
 
 rebuild: inn
 rebuild-required: true

@@ -8,19 +8,19 @@ is-in-shop: false
 level: 1
 
 pre-reqs:
-- member=settlement:hamlet:village:town:city:metropolis
+  - member=settlement:hamlet:village:town:city:metropolis
 
 towns:
-- settlement
-- hamlet
-- village
-- town
-- city
-- metropolis
+  - settlement
+  - hamlet
+  - village
+  - town
+  - city
+  - metropolis
 
 build-radius: 5 # 11x11
 effects:
-- block_break
-- block_build
-- plot
-- buyable
+  - block_break
+  - block_build
+  - plot
+  - buyable

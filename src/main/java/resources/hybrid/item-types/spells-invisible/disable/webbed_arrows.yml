@@ -5,9 +5,9 @@ level: 1
 groups:
   - disable
 
-pre-reqs: []
+pre-reqs: [ ]
 
-allowed-actions: []
+allowed-actions: [ ]
 
 exp-per-use: 15
 

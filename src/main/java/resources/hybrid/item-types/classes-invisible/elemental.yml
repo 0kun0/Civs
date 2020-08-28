@@ -3,9 +3,9 @@ name: elemental
 icon: BLAZE_POWDER
 is-in-shop: false
 level: 1
-groups: []
+groups: [ ]
 
-children: []
+children: [ ]
 pre-reqs:
   - skill:exploration=5
 

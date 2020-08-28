@@ -1,11 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,13 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
 import org.redcastlemedia.multitallented.civs.items.CivItem;
 import org.redcastlemedia.multitallented.civs.items.FolderType;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.localization.LocaleUtil;
 import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
 import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
@@ -28,7 +22,14 @@ import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = "shop") @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
+@CivsMenu(name = "shop")
+@SuppressWarnings("unused")
 public class ShopMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -113,7 +114,8 @@ public class ShopMenu extends CustomMenu {
         return data;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     protected ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         Player player = Bukkit.getPlayer(civilian.getUuid());
         if (player == null) {
@@ -131,7 +133,7 @@ public class ShopMenu extends CustomMenu {
             icon.getLore().add(ChatColor.BLACK + parent.getProcessedName());
             icon.getLore().addAll(Util.textWrap(civilian, LocaleManager.getInstance()
                     .getTranslationWithPlaceholders(player,
-                    parent.getProcessedName() + "-desc")));
+                            parent.getProcessedName() + "-desc")));
             putActions(civilian, menuIcon, icon.createItemStack(), count);
             return icon.createItemStack();
         } else if (menuIcon.getKey().equals("items")) {

@@ -1,16 +1,13 @@
 package org.redcastlemedia.multitallented.civs.civclass;
 
-import org.redcastlemedia.multitallented.civs.items.CivItem;
-import org.redcastlemedia.multitallented.civs.items.CVItem;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.items.CivItem;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 public class ClassType extends CivItem {
@@ -21,9 +18,9 @@ public class ClassType extends CivItem {
     private final Map<String, Integer> allowedActions = new HashMap<>();
     private final String manaTitle;
     private final Map<Integer, List<String>> spellSlots = new HashMap<>();
+    private final Map<String, Integer> classPermissions = new HashMap<>();
     @Setter
     private int maxLevel;
-    private final Map<String, Integer> classPermissions = new HashMap<>();
 
     public ClassType(List<String> reqs,
                      String name,

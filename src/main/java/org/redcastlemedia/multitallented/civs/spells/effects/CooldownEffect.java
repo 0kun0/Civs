@@ -1,6 +1,5 @@
 package org.redcastlemedia.multitallented.civs.spells.effects;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -94,6 +93,7 @@ public class CooldownEffect extends Effect {
         }
         return true;
     }
+
     @Override
     public void apply() {
         Object target = getTarget();
@@ -121,6 +121,7 @@ public class CooldownEffect extends Effect {
 
         civilian.getStates().put(newAbilityName + "." + getKey(), state);
     }
+
     @Override
     public void remove(LivingEntity origin, int level, Spell spell) {
         if (!(origin instanceof Player)) {

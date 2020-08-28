@@ -1,10 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.classes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +17,13 @@ import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
 import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-@CivsMenu(name = "class-list") @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@CivsMenu(name = "class-list")
+@SuppressWarnings("unused")
 public class ClassListMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {

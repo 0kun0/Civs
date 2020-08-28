@@ -1,23 +1,23 @@
 package org.redcastlemedia.multitallented.civs.menus.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
 import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
 import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
 import org.redcastlemedia.multitallented.civs.menus.MenuManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @CivsMenu(name = "language")
 public class LanguageMenu extends CustomMenu {
@@ -64,7 +64,7 @@ public class LanguageMenu extends CustomMenu {
         return super.doActionAndCancel(civilian, actionString, clickedItem);
     }
 
-        @Override
+    @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
         Map<String, Object> data = new HashMap<>();
 

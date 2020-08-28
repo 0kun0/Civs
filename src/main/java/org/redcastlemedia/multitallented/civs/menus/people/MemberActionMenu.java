@@ -8,10 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
 import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
 import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
@@ -27,7 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@CivsMenu(name = "member-action") @SuppressWarnings("unused")
+@CivsMenu(name = "member-action")
+@SuppressWarnings("unused")
 public class MemberActionMenu extends CustomMenu {
 
     @Override
@@ -67,7 +68,7 @@ public class MemberActionMenu extends CustomMenu {
             alreadyVoted = town.getVotes().containsKey(civilian.getUuid()) &&
                     !town.getVotes().get(civilian.getUuid()).isEmpty();
             TownType townType = (TownType) ItemManager.getInstance().getItemType(town.getType());
-            price = 2* townType.getPrice();
+            price = 2 * townType.getPrice();
             governmentType = GovernmentManager.getInstance().getGovernment(town.getGovernmentType()).getGovernmentType();
         } else {
             governmentType = GovernmentType.DICTATORSHIP;

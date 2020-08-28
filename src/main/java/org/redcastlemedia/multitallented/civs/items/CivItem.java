@@ -23,60 +23,11 @@ public abstract class CivItem extends CVItem {
     private final double price;
     private final String permission;
     private final boolean isInShop;
-    private boolean isPlaceable = false;
     private final List<String> groups;
     private final CVItem shopIcon;
     @Getter
     private final int level;
-
-    public ItemType getItemType() {
-        return itemType;
-    }
-    public boolean isPlaceable() {
-        return isPlaceable;
-    }
-    public List<String> getCivReqs() {
-        return reqs;
-    }
-    public int getCivQty() { return qty; }
-    public int getCivMin() { return min; }
-    public int getCivMax() { return max; }
-    public boolean getInShop() { return isInShop; }
-    @Deprecated
-    public CVItem getShopIcon(String locale) {
-        CVItem returnItem =  shopIcon.clone();
-        returnItem.setDisplayName(LocaleManager.getInstance().getTranslation(locale,
-                this.getProcessedName() + LocaleConstants.NAME_SUFFIX));
-        return returnItem;
-    }
-    public CVItem getShopIcon(Player player) {
-        CVItem returnItem =  shopIcon.clone();
-        returnItem.setDisplayName(LocaleManager.getInstance().getTranslationWithPlaceholders(player,
-                this.getProcessedName() + LocaleConstants.NAME_SUFFIX));
-        Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
-        returnItem.getLore().addAll(Util.textWrap(civilian, LocaleManager.getInstance().getTranslationWithPlaceholders(player,
-                this.getProcessedName() + LocaleConstants.DESC_SUFFIX)));
-        return returnItem;
-    }
-
-    public double getPrice() {
-        ConfigManager configManager = ConfigManager.getInstance();
-        return price * configManager.getPriceMultiplier() + configManager.getPriceBase();
-    }
-
-    public String getPermission() { return permission; }
-    public String getProcessedName() {
-        return processItemName(getDisplayName());
-    }
-    public static String processItemName(String input) {
-        input = ChatColor.stripColor(input);
-        return input.replace(ChatColor.stripColor(ConfigManager.getInstance().getCivsItemPrefix()), "").toLowerCase();
-    }
-    public String getDescription(String locale) {
-        return LocaleManager.getInstance().getTranslation(locale, getProcessedName().toLowerCase() + "-desc");
-    }
-    public List<String> getGroups() { return groups; }
-
+    private boolean isPlaceable = false;
 
     public CivItem(List<String> reqs,
                    boolean isPlaceable,
@@ -114,12 +65,9 @@ public abstract class CivItem extends CVItem {
         this.level = level;
     }
 
-    public enum ItemType {
-        REGION,
-        SPELL,
-        CLASS,
-        FOLDER,
-        TOWN
+    public static String processItemName(String input) {
+        input = ChatColor.stripColor(input);
+        return input.replace(ChatColor.stripColor(ConfigManager.getInstance().getCivsItemPrefix()), "").toLowerCase();
     }
 
     public static CivItem getFromItemStack(ItemStack itemStack) {
@@ -130,6 +78,7 @@ public abstract class CivItem extends CVItem {
         return ItemManager.getInstance().getItemType(processedName
                 .replace(ChatColor.stripColor(ConfigManager.getInstance().getCivsItemPrefix()), "").toLowerCase());
     }
+
     public static CivItem getFromItemStack(CVItem cvItem) {
         if (cvItem.getLore().size() < 2) {
             return null;
@@ -137,5 +86,80 @@ public abstract class CivItem extends CVItem {
         String processedName = ChatColor.stripColor(cvItem.getLore().get(1));
         return ItemManager.getInstance().getItemType(processedName
                 .replace(ChatColor.stripColor(ConfigManager.getInstance().getCivsItemPrefix()), "").toLowerCase());
+    }
+
+    public ItemType getItemType() {
+        return itemType;
+    }
+
+    public boolean isPlaceable() {
+        return isPlaceable;
+    }
+
+    public List<String> getCivReqs() {
+        return reqs;
+    }
+
+    public int getCivQty() {
+        return qty;
+    }
+
+    public int getCivMin() {
+        return min;
+    }
+
+    public int getCivMax() {
+        return max;
+    }
+
+    public boolean getInShop() {
+        return isInShop;
+    }
+
+    @Deprecated
+    public CVItem getShopIcon(String locale) {
+        CVItem returnItem = shopIcon.clone();
+        returnItem.setDisplayName(LocaleManager.getInstance().getTranslation(locale,
+                this.getProcessedName() + LocaleConstants.NAME_SUFFIX));
+        return returnItem;
+    }
+
+    public CVItem getShopIcon(Player player) {
+        CVItem returnItem = shopIcon.clone();
+        returnItem.setDisplayName(LocaleManager.getInstance().getTranslationWithPlaceholders(player,
+                this.getProcessedName() + LocaleConstants.NAME_SUFFIX));
+        Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
+        returnItem.getLore().addAll(Util.textWrap(civilian, LocaleManager.getInstance().getTranslationWithPlaceholders(player,
+                this.getProcessedName() + LocaleConstants.DESC_SUFFIX)));
+        return returnItem;
+    }
+
+    public double getPrice() {
+        ConfigManager configManager = ConfigManager.getInstance();
+        return price * configManager.getPriceMultiplier() + configManager.getPriceBase();
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public String getProcessedName() {
+        return processItemName(getDisplayName());
+    }
+
+    public String getDescription(String locale) {
+        return LocaleManager.getInstance().getTranslation(locale, getProcessedName().toLowerCase() + "-desc");
+    }
+
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    public enum ItemType {
+        REGION,
+        SPELL,
+        CLASS,
+        FOLDER,
+        TOWN
     }
 }

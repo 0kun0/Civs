@@ -1,17 +1,16 @@
 package org.redcastlemedia.multitallented.civs.spells;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.Civs;
@@ -24,19 +23,14 @@ import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.spells.civstate.BuiltInCivState;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @CivsSingleton
 public class SpellListener implements Listener {
 
+    public static SpellListener spellListener = null;
     private final HashMap<LivingEntity, AbilityListen> damageListeners = new HashMap<LivingEntity, AbilityListen>();
     private final HashMap<Projectile, AbilityListen> projectileListeners = new HashMap<Projectile, AbilityListen>();
-    public static SpellListener spellListener = null;
 
     public SpellListener() {
         spellListener = this;
@@ -128,14 +122,17 @@ public class SpellListener implements Listener {
     public void addDamageListener(LivingEntity livingEntity, int level, ConfigurationSection section, Spell spell, Player caster, String key) {
         damageListeners.put(livingEntity, new AbilityListen(livingEntity, level, section, caster, spell, key));
     }
+
     public void removeDamageListener(LivingEntity livingEntity) {
         damageListeners.remove(livingEntity);
     }
+
     public void addProjectileListener(Projectile livingEntity, int level, ConfigurationSection section, Spell spell, String key, Player caster) {
         projectileListeners.put(livingEntity, new AbilityListen(livingEntity, level, section, caster, spell, key));
     }
 
-    @AllArgsConstructor @Getter
+    @AllArgsConstructor
+    @Getter
     private static class AbilityListen {
         private final Object target;
         private final int level;

@@ -5,8 +5,6 @@ import org.bukkit.event.HandlerList;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
 
-import java.util.UUID;
-
 public class RegionTickEvent extends Event {
     private static final HandlerList hList = new HandlerList();
     private final Region region;
@@ -15,13 +13,6 @@ public class RegionTickEvent extends Event {
     private final boolean shouldTick;
     private boolean shouldDestroy = false;
 
-    @Override
-    public HandlerList getHandlers() {
-        return hList;
-    }
-    public static HandlerList getHandlerList() {
-        return hList;
-    }
     public RegionTickEvent(Region region, RegionType regionType, boolean hasUpkeep, boolean shouldTick) {
         this.shouldTick = shouldTick;
         this.region = region;
@@ -29,9 +20,22 @@ public class RegionTickEvent extends Event {
         this.hasUpkeep = hasUpkeep;
     }
 
-    public void setShouldDestroy(boolean shouldDestroy) { this.shouldDestroy = shouldDestroy; }
+    public static HandlerList getHandlerList() {
+        return hList;
+    }
 
-    public boolean getShouldDestroy() { return shouldDestroy; }
+    @Override
+    public HandlerList getHandlers() {
+        return hList;
+    }
+
+    public boolean getShouldDestroy() {
+        return shouldDestroy;
+    }
+
+    public void setShouldDestroy(boolean shouldDestroy) {
+        this.shouldDestroy = shouldDestroy;
+    }
 
     public boolean isShouldTick() {
         return shouldTick;

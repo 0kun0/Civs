@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.spells.civstate;
 
-import java.util.ArrayList;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,6 +17,8 @@ import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.spells.effects.CivPotionEffect;
+
+import java.util.ArrayList;
 
 @CivsSingleton
 public class CivStateListener implements Listener {

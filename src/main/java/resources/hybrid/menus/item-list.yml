@@ -13,4 +13,4 @@ items:
     index: 9-53
     # icon: item icon
     # name: item name
-    actions: []
+    actions: [ ]

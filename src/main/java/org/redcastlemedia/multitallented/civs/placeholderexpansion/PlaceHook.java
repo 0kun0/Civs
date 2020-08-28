@@ -65,6 +65,7 @@ public class PlaceHook extends PlaceholderExpansion {
         Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
         return routePlaceholder(civilian, identifier, player);
     }
+
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
         if (player == null) {

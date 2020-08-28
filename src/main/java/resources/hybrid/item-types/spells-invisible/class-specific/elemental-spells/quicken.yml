@@ -2,11 +2,11 @@ icon: ORANGE_DYE
 type: spell
 is-in-shop: false
 level: 1
-groups: []
+groups: [ ]
 
-pre-reqs: []
+pre-reqs: [ ]
 
-allowed-actions: []
+allowed-actions: [ ]
 
 exp-per-use: 15
 

@@ -6,7 +6,8 @@ import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 
-@CivsCommand(keys = { "toggleann" }) @SuppressWarnings("unused")
+@CivsCommand(keys = {"toggleann"})
+@SuppressWarnings("unused")
 public class ToggleAnnouncementCommand extends CivCommand {
     @Override
     public boolean runCommand(CommandSender commandSender, Command command, String label, String[] args) {

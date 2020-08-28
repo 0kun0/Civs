@@ -1,11 +1,6 @@
 package org.redcastlemedia.multitallented.civs.localization;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.regex.Pattern;
-
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,13 +14,25 @@ import org.redcastlemedia.multitallented.civs.util.Util;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 
-import me.clip.placeholderapi.PlaceholderAPI;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGHEST)
 public class LocaleManager {
 
     private static LocaleManager localeManager;
     HashMap<String, HashMap<String, String>> languageMap = new HashMap<>();
+
+    public static LocaleManager getInstance() {
+        if (localeManager == null) {
+            localeManager = new LocaleManager();
+            localeManager.loadAllConfigs();
+        }
+        return localeManager;
+    }
 
     public String getTranslationWithPlaceholders(OfflinePlayer player, String key) {
         Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
@@ -82,7 +89,7 @@ public class LocaleManager {
 
     private String replaceVariables(String translation, String[] vars) {
         for (int i = 0; i < vars.length; i++) {
-            translation = translation.replace("$" + (i+1), vars[i]);
+            translation = translation.replace("$" + (i + 1), vars[i]);
         }
         return translation;
     }
@@ -97,6 +104,7 @@ public class LocaleManager {
         }
         return textPrefix + languageMap.get(language).get(key);
     }
+
     public Set<String> getAllLanguages() {
         return languageMap.keySet();
     }
@@ -118,7 +126,7 @@ public class LocaleManager {
         File translationFolder = new File(Civs.dataLocation, TRANSLATION_FOLDER_NAME);
         boolean translationFolderExists = translationFolder.exists();
         String path = "resources." + ConfigManager.getInstance().getDefaultConfigSet() + "." + TRANSLATION_FOLDER_NAME;
-        Reflections reflections = new Reflections(path , new ResourcesScanner());
+        Reflections reflections = new Reflections(path, new ResourcesScanner());
         for (String fileName : reflections.getResources(Pattern.compile(".*\\.yml"))) {
             try {
                 FileConfiguration config;
@@ -161,14 +169,6 @@ public class LocaleManager {
         }
 
         languageMap.put(name, currentLanguage);
-    }
-
-    public static LocaleManager getInstance() {
-        if (localeManager == null) {
-            localeManager = new LocaleManager();
-            localeManager.loadAllConfigs();
-        }
-        return localeManager;
     }
 
     public boolean hasTranslation(String language, String key) {

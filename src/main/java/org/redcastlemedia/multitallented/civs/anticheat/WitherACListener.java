@@ -1,5 +1,6 @@
 package org.redcastlemedia.multitallented.civs.anticheat;
 
+import com.gmail.olexorus.witherac.api.ViolationEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,8 +8,6 @@ import org.bukkit.event.Listener;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
-
-import com.gmail.olexorus.witherac.api.ViolationEvent;
 
 public class WitherACListener implements Listener {
 

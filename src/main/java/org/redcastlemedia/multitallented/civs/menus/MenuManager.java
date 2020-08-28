@@ -1,14 +1,6 @@
 package org.redcastlemedia.multitallented.civs.menus;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
-
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,17 +19,18 @@ import org.redcastlemedia.multitallented.civs.events.TwoSecondEvent;
 import org.redcastlemedia.multitallented.civs.util.FallbackConfigUtil;
 import org.reflections.Reflections;
 
-import lombok.Getter;
+import java.io.File;
+import java.util.*;
+import java.util.logging.Level;
 
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGH)
 public class MenuManager implements Listener {
-    private static MenuManager instance = null;
     private static final Map<UUID, CycleGUI> cycleGuis = new HashMap<>();
     private static final Map<UUID, Map<String, Object>> data = new HashMap<>();
     private static final Map<UUID, ArrayList<MenuHistoryState>> history = new HashMap<>();
     private static final Map<UUID, String> openMenus = new HashMap<>();
     protected static Map<String, CustomMenu> menus = new HashMap<>();
-
+    private static MenuManager instance = null;
     @Getter
     private MenuIcon backButton;
     @Getter
@@ -53,10 +46,77 @@ public class MenuManager implements Listener {
         }
         return instance;
     }
+
+    private static synchronized void clearCycleItems(UUID uuid) {
+        cycleGuis.remove(uuid);
+    }
+
+    public static Inventory openMenuFromString(Civilian civilian, String menuString) {
+        String[] menuSplit = menuString.split("\\?");
+        Player player = Bukkit.getPlayer(civilian.getUuid());
+        Map<String, String> params = new HashMap<>();
+        if (menuSplit.length > 1) {
+            String[] queryString = menuSplit[1].split("&");
+            for (String queryParams : queryString) {
+                String[] splitParams = queryParams.split("=");
+                params.put(splitParams[0], splitParams[1]);
+            }
+        }
+        return MenuManager.getInstance().openMenu(player, menuSplit[0], params);
+    }
+
+    public static void addHistory(UUID uuid, CustomMenu customMenu, Map<String, Object> data) {
+        if (!history.containsKey(uuid)) {
+            history.put(uuid, new ArrayList<>());
+        }
+        String name = customMenu.getClass().getAnnotation(CivsMenu.class).name();
+        MenuHistoryState menuHistoryState = new MenuHistoryState(name, data);
+        history.get(uuid).add(menuHistoryState);
+    }
+
+    public static MenuHistoryState popLastMenu(UUID uuid) {
+        if (!history.containsKey(uuid) ||
+                history.get(uuid).isEmpty()) {
+            return new MenuHistoryState("main", new HashMap<>());
+        }
+        MenuHistoryState menuHistoryState = history.get(uuid).get(history.get(uuid).size() - 1);
+        history.get(uuid).remove(history.get(uuid).size() - 1);
+        return menuHistoryState;
+    }
+
+    public static void clearHistory(UUID uuid) {
+        history.remove(uuid);
+    }
+
+    public static Map<String, Object> getAllData(UUID uuid) {
+        return data.getOrDefault(uuid, new HashMap<>());
+    }
+
+    public static Object getData(UUID uuid, String key) {
+        Map<String, Object> dataMap = data.get(uuid);
+        if (dataMap == null) {
+            return null;
+        }
+        return dataMap.get(key);
+    }
+
+    public static void putData(UUID uuid, String key, Object value) {
+        data.get(uuid).put(key, value);
+    }
+
+    public static void setNewData(UUID uuid, Map<String, Object> newData) {
+        data.put(uuid, newData);
+    }
+
+    public static void clearData(UUID uuid) {
+        data.remove(uuid);
+    }
+
     public void reload() {
         menus.clear();
         loadMenuConfigs();
     }
+
     public void clearOpenMenus() {
         data.clear();
         openMenus.clear();
@@ -65,11 +125,13 @@ public class MenuManager implements Listener {
     public boolean hasMenuOpen(UUID uuid) {
         return openMenus.containsKey(uuid);
     }
+
     public boolean hasMenuOpen(UUID uuid, String menuName) {
         return menuName.equals(openMenus.get(uuid));
     }
 
-    @EventHandler @SuppressWarnings("unused")
+    @EventHandler
+    @SuppressWarnings("unused")
     public void onTwoSecondEvent(TwoSecondEvent event) {
         try {
             for (CycleGUI gui : new HashSet<>(cycleGuis.values())) {
@@ -80,7 +142,8 @@ public class MenuManager implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true) @SuppressWarnings("unused")
+    @EventHandler(ignoreCancelled = true)
+    @SuppressWarnings("unused")
     public void onInventoryClose(InventoryCloseEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
         if (!openMenus.containsKey(uuid)) {
@@ -97,7 +160,8 @@ public class MenuManager implements Listener {
         openMenus.remove(uuid);
     }
 
-    @EventHandler(ignoreCancelled = true) @SuppressWarnings("unused")
+    @EventHandler(ignoreCancelled = true)
+    @SuppressWarnings("unused")
     public void onInventoryDrag(InventoryDragEvent event) {
         UUID uuid = event.getWhoClicked().getUniqueId();
         if (!openMenus.containsKey(uuid)) {
@@ -106,7 +170,8 @@ public class MenuManager implements Listener {
         menus.get(openMenus.get(uuid)).onInventoryDrag(event);
     }
 
-    @EventHandler(ignoreCancelled = true) @SuppressWarnings("unused")
+    @EventHandler(ignoreCancelled = true)
+    @SuppressWarnings("unused")
     public void onInventoryClick(InventoryClickEvent event) {
         try {
             UUID uuid = event.getWhoClicked().getUniqueId();
@@ -208,10 +273,6 @@ public class MenuManager implements Listener {
         customMenu.loadConfig(items, size, name);
     }
 
-    private static synchronized void clearCycleItems(UUID uuid) {
-        cycleGuis.remove(uuid);
-    }
-
     public void goBack(UUID uuid) {
         popLastMenu(uuid);
         clearCycleItems(uuid);
@@ -272,20 +333,6 @@ public class MenuManager implements Listener {
         return inventory;
     }
 
-    public static Inventory openMenuFromString(Civilian civilian, String menuString) {
-        String[] menuSplit = menuString.split("\\?");
-        Player player = Bukkit.getPlayer(civilian.getUuid());
-        Map<String, String> params = new HashMap<>();
-        if (menuSplit.length > 1) {
-            String[] queryString = menuSplit[1].split("&");
-            for (String queryParams : queryString) {
-                String[] splitParams = queryParams.split("=");
-                params.put(splitParams[0], splitParams[1]);
-            }
-        }
-        return MenuManager.getInstance().openMenu(player, menuSplit[0], params);
-    }
-
     public void refreshMenu(Civilian civilian) {
         if (!openMenus.containsKey(civilian.getUuid())) {
             return;
@@ -297,45 +344,5 @@ public class MenuManager implements Listener {
         openMenus.remove(civilian.getUuid());
         player.openInventory(menus.get(menuName).createMenu(civilian));
         openMenus.put(civilian.getUuid(), menuName);
-    }
-
-    public static void addHistory(UUID uuid, CustomMenu customMenu, Map<String, Object> data) {
-        if (!history.containsKey(uuid)) {
-            history.put(uuid, new ArrayList<>());
-        }
-        String name = customMenu.getClass().getAnnotation(CivsMenu.class).name();
-        MenuHistoryState menuHistoryState = new MenuHistoryState(name, data);
-        history.get(uuid).add(menuHistoryState);
-    }
-    public static MenuHistoryState popLastMenu(UUID uuid) {
-        if (!history.containsKey(uuid) ||
-                history.get(uuid).isEmpty()) {
-            return new MenuHistoryState("main", new HashMap<>());
-        }
-        MenuHistoryState menuHistoryState = history.get(uuid).get(history.get(uuid).size() - 1);
-        history.get(uuid).remove(history.get(uuid).size() - 1);
-        return menuHistoryState;
-    }
-    public static void clearHistory(UUID uuid) {
-        history.remove(uuid);
-    }
-    public static Map<String, Object> getAllData(UUID uuid) {
-        return data.getOrDefault(uuid, new HashMap<>());
-    }
-    public static Object getData(UUID uuid, String key) {
-        Map<String, Object> dataMap = data.get(uuid);
-        if (dataMap == null) {
-            return null;
-        }
-        return dataMap.get(key);
-    }
-    public static void putData(UUID uuid, String key, Object value) {
-        data.get(uuid).put(key, value);
-    }
-    public static void setNewData(UUID uuid, Map<String, Object> newData) {
-        data.put(uuid, newData);
-    }
-    public static void clearData(UUID uuid) {
-        data.remove(uuid);
     }
 }

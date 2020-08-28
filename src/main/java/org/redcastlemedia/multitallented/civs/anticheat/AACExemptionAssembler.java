@@ -1,14 +1,15 @@
 package org.redcastlemedia.multitallented.civs.anticheat;
 
+import me.konsolas.aac.api.HackType;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import me.konsolas.aac.api.HackType;
 
 public final class AACExemptionAssembler {
     private AACExemptionAssembler() {
 
     }
+
     public static Set<HackType> mapExemptionTypeToHackTypes(ExemptionType exemptionType) {
         Set<HackType> hackTypes = new HashSet<>();
         switch (exemptionType) {

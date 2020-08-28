@@ -1,22 +1,23 @@
 package org.redcastlemedia.multitallented.civs.commands;
 
-import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
+import org.redcastlemedia.multitallented.civs.alliances.Alliance;
 import org.redcastlemedia.multitallented.civs.alliances.AllianceManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
-import org.redcastlemedia.multitallented.civs.alliances.Alliance;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsCommand(keys = { "really" }) @SuppressWarnings("unused")
+import java.util.List;
+
+@CivsCommand(keys = {"really"})
+@SuppressWarnings("unused")
 public class ReallyCommand extends CivCommand {
     @Override
     public boolean runCommand(CommandSender commandSender, Command command, String label, String[] args) {
@@ -88,7 +89,7 @@ public class ReallyCommand extends CivCommand {
             Player player = (Player) commandSender;
             player.sendMessage(Civs.getPrefix() + LocaleManager.getInstance().getTranslationWithPlaceholders(player,
                     "alliance-renamed").replace("$1", args[1])
-                        .replace("$2", validName));
+                    .replace("$2", validName));
         }
         return true;
     }

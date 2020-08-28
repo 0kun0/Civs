@@ -1,10 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.regions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +17,13 @@ import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
 import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
 
-@CivsMenu(name = "region-type-list") @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@CivsMenu(name = "region-type-list")
+@SuppressWarnings("unused")
 public class RegionTypeListMenu extends CustomMenu {
     private static final String REGION_TYPES = "regionTypes";
 
@@ -82,7 +83,8 @@ public class RegionTypeListMenu extends CustomMenu {
         return data;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     protected ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         Player player = Bukkit.getPlayer(civilian.getUuid());
         if (player == null) {

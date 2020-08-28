@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import org.bukkit.Bukkit;
-import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
@@ -13,17 +11,17 @@ public class MaxPowerEffect implements RegionCreatedListener, DestroyRegionListe
     public static String KEY = "max_power";
     private static MaxPowerEffect instance = null;
 
+    public MaxPowerEffect() {
+        RegionManager regionManager = RegionManager.getInstance();
+        regionManager.addRegionCreatedListener(KEY, this);
+        regionManager.addDestroyRegionListener(KEY, this);
+    }
+
     public static MaxPowerEffect getInstance() {
         if (instance == null) {
             instance = new MaxPowerEffect();
         }
         return instance;
-    }
-
-    public MaxPowerEffect() {
-        RegionManager regionManager = RegionManager.getInstance();
-        regionManager.addRegionCreatedListener(KEY, this);
-        regionManager.addDestroyRegionListener(KEY, this);
     }
 
     @Override

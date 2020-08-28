@@ -2,13 +2,13 @@ icon: COBBLESTONE
 type: spell
 is-in-shop: false
 level: 1
-groups: []
+groups: [ ]
 
 pre-reqs:
   - skill:armor=5
   - skill:food=3
 
-allowed-actions: []
+allowed-actions: [ ]
 
 exp-per-use: 25
 

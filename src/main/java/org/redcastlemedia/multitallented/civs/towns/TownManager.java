@@ -10,8 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.events.TownCreatedEvent;
@@ -20,6 +18,8 @@ import org.redcastlemedia.multitallented.civs.events.TownDevolveEvent;
 import org.redcastlemedia.multitallented.civs.events.TownEvolveEvent;
 import org.redcastlemedia.multitallented.civs.items.CivItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
@@ -36,11 +36,20 @@ import java.util.*;
 public class TownManager {
 
     private static TownManager townManager = null;
-    private HashMap<String, Town> towns = new HashMap<>();
-    private List<Town> sortedTowns = new ArrayList<>();
-    private HashMap<UUID, Town> invites = new HashMap<>();
-    private ArrayList<Town> needsSaving = new ArrayList<>();
+    private final HashMap<String, Town> towns = new HashMap<>();
+    private final List<Town> sortedTowns = new ArrayList<>();
+    private final HashMap<UUID, Town> invites = new HashMap<>();
+    private final ArrayList<Town> needsSaving = new ArrayList<>();
 
+    public static TownManager getInstance() {
+        if (townManager == null) {
+            townManager = new TownManager();
+            if (Civs.getInstance() != null) {
+                townManager.loadAllTowns();
+            }
+        }
+        return townManager;
+    }
 
     public void reload() {
         towns.clear();
@@ -74,8 +83,14 @@ public class TownManager {
         }
     }
 
-    public List<Town> getTowns() { return sortedTowns; }
-    public Set<String> getTownNames() { return towns.keySet(); }
+    public List<Town> getTowns() {
+        return sortedTowns;
+    }
+
+    public Set<String> getTownNames() {
+        return towns.keySet();
+    }
+
     public Town getTown(String name) {
         return towns.get(name);
     }
@@ -293,9 +308,11 @@ public class TownManager {
             });
         }
     }
+
     public void removeTown(Town town, boolean broadcast) {
         removeTown(town, broadcast, true);
     }
+
     public void removeTown(Town town, boolean broadcast, boolean destroyRing) {
         if (broadcast) {
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -354,8 +371,8 @@ public class TownManager {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(ChatColor.RED + ChatColor.stripColor(Civs.getPrefix()) +
                     LocaleManager.getInstance().getTranslationWithPlaceholders(player, "devolve-town")
-                    .replace("$1", town.getName())
-                    .replace("$2", childTownType.getProcessedName()));
+                            .replace("$1", town.getName())
+                            .replace("$2", childTownType.getProcessedName()));
         }
     }
 
@@ -403,12 +420,15 @@ public class TownManager {
     public void addInvite(UUID uuid, Town town) {
         invites.put(uuid, town);
     }
+
     public void clearInvite(UUID uuid) {
         invites.remove(uuid);
     }
+
     public Town getInviteTown(UUID uuid) {
         return invites.get(uuid);
     }
+
     public boolean acceptInvite(UUID uuid) {
         if (!invites.containsKey(uuid)) {
             return false;
@@ -575,16 +595,6 @@ public class TownManager {
         config.set("revolt", uuidList);
     }
 
-    public static TownManager getInstance() {
-        if (townManager == null) {
-            townManager = new TownManager();
-            if (Civs.getInstance() != null) {
-                townManager.loadAllTowns();
-            }
-        }
-        return townManager;
-    }
-
     public Set<Town> findCommonTowns(Civilian damagerCiv, Civilian dyingCiv) {
         HashSet<Town> commonTowns = new HashSet<>();
         for (Town town : sortedTowns) {
@@ -646,8 +656,8 @@ public class TownManager {
         int modifier = ConfigManager.getInstance().getMinDistanceBetweenTowns();
         List<Town> intersectTowns = checkIntersect(player.getLocation(), townType, modifier);
         if (intersectTowns.size() > 1 ||
-                    (!intersectTowns.isEmpty() &&
-                    (townType.getChild() == null || !townType.getChild().equals(intersectTowns.get(0).getType())))) {
+                (!intersectTowns.isEmpty() &&
+                        (townType.getChild() == null || !townType.getChild().equals(intersectTowns.get(0).getType())))) {
             player.sendMessage(Civs.getPrefix() + localeManager.getTranslationWithPlaceholders(player,
                     "too-close-town").replace("$1", townType.getProcessedName()));
             return;
@@ -666,7 +676,8 @@ public class TownManager {
             HashMap<String, Integer> checkList = (HashMap<String, Integer>) townType.getReqs().clone();
             Set<Region> regions = RegionManager.getInstance().getRegionsXYZ(player.getLocation(), townType.getBuildRadius(),
                     townType.getBuildRadiusY(), townType.getBuildRadius(), false);
-            regionCheck: for (Region region : regions) {
+            regionCheck:
+            for (Region region : regions) {
                 RegionType regionType = (RegionType) ItemManager.getInstance().getItemType(region.getType());
                 String regionTypeName = regionType.getProcessedName();
                 if (checkList.containsKey(regionTypeName)) {
@@ -705,7 +716,6 @@ public class TownManager {
         }
 
 
-
         HashMap<UUID, String> people = new HashMap<>();
         people.put(player.getUniqueId(), Constants.OWNER);
         Location newTownLocation = player.getLocation();
@@ -733,9 +743,9 @@ public class TownManager {
             childTownType = (TownType) ItemManager.getInstance().getItemType(intersectTown.getType());
             TownManager.getInstance().removeTown(intersectTown, false, false);
             // Don't destroy the ring on upgrade
-    //            if (ConfigManager.getInstance().getTownRings()) {
-    //                intersectTown.destroyRing(false);
-    //            }
+            //            if (ConfigManager.getInstance().getTownRings()) {
+            //                intersectTown.destroyRing(false);
+            //            }
             villagerCount = intersectTown.getVillagers();
         }
 
@@ -769,7 +779,6 @@ public class TownManager {
         saveTown(newTown);
         addTown(newTown);
         player.getInventory().remove(itemStack);
-
 
 
         if (childTownType != null) {

@@ -22,4 +22,4 @@ items:
     # icon: skill icon
     # name: skill name
     # desc: skill desc
-    actions: []
+    actions: [ ]

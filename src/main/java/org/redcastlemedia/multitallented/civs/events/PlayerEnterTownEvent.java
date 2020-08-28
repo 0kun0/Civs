@@ -13,17 +13,19 @@ public class PlayerEnterTownEvent extends Event {
     private final Town town;
     private final TownType townType;
 
-    @Override
-    public HandlerList getHandlers() {
-        return hList;
-    }
-    public static HandlerList getHandlerList() {
-        return hList;
-    }
     public PlayerEnterTownEvent(UUID uuid, Town town, TownType townType) {
         this.uuid = uuid;
         this.town = town;
         this.townType = townType;
+    }
+
+    public static HandlerList getHandlerList() {
+        return hList;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return hList;
     }
 
     public UUID getUuid() {

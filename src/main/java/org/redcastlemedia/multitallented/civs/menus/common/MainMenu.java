@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.common;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,15 +23,19 @@ import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
+import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
 import org.redcastlemedia.multitallented.civs.tutorials.TutorialManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
-import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = "main") @SuppressWarnings("unused")
+import java.util.HashMap;
+import java.util.Map;
+
+@CivsMenu(name = "main")
+@SuppressWarnings("unused")
 public class MainMenu extends CustomMenu {
     @Override
     public String beforeOpenMenu(Civilian civilian) {

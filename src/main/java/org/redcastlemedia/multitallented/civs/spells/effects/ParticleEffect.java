@@ -1,5 +1,6 @@
 package org.redcastlemedia.multitallented.civs.spells.effects;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -11,15 +12,7 @@ import org.bukkit.entity.LivingEntity;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.SpellConstants;
-import org.redcastlemedia.multitallented.civs.spells.effects.particles.CivParticleEffect;
-import org.redcastlemedia.multitallented.civs.spells.effects.particles.FairyWings;
-import org.redcastlemedia.multitallented.civs.spells.effects.particles.FallingAura;
-import org.redcastlemedia.multitallented.civs.spells.effects.particles.Helix;
-import org.redcastlemedia.multitallented.civs.spells.effects.particles.Single;
-import org.redcastlemedia.multitallented.civs.spells.effects.particles.Spider;
-import org.redcastlemedia.multitallented.civs.spells.effects.particles.Waves;
-
-import lombok.Getter;
+import org.redcastlemedia.multitallented.civs.spells.effects.particles.*;
 
 public class ParticleEffect extends Effect {
     private CivParticleEffect pattern;
@@ -74,6 +67,7 @@ public class ParticleEffect extends Effect {
     public boolean meetsRequirement() {
         return true;
     }
+
     public void apply() {
         Object target = getTarget();
 

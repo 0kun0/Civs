@@ -8,23 +8,23 @@
 
 icon: "NETHERRACK"
 enabled: true
-transition: {}
+transition: { }
 buffs:
   cost:
     percent: 35
     groups:
-    - utility
-    - defense
-    - allhousing
-    - offense
+      - utility
+      - defense
+      - allhousing
+      - offense
   payout:
     percent: 25
     groups:
-    - shops
+      - shops
   cooldown:
     percent: 15
     groups:
-    - utility
-    - defense
+      - utility
+      - defense
     regions:
-    - inn
+      - inn

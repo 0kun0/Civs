@@ -3,10 +3,10 @@ name: default
 icon: PLAYER_HEAD
 is-in-shop: false
 level: 1
-groups: []
+groups: [ ]
 
-children: []
-pre-reqs: []
+children: [ ]
+pre-reqs: [ ]
 
 mana-title: mana
 mana-per-second: 1

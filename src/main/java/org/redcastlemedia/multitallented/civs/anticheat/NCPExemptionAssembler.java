@@ -1,9 +1,9 @@
 package org.redcastlemedia.multitallented.civs.anticheat;
 
+import fr.neatmonster.nocheatplus.checks.CheckType;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import fr.neatmonster.nocheatplus.checks.CheckType;
 
 public final class NCPExemptionAssembler {
     private NCPExemptionAssembler() {

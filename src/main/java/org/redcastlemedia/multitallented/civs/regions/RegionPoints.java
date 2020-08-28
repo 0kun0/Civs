@@ -3,7 +3,8 @@ package org.redcastlemedia.multitallented.civs.regions;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class RegionPoints {
     private int radiusXP;
     private int radiusXN;

@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -21,14 +18,19 @@ import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 
-@CivsSingleton @SuppressWarnings("unused")
+import java.util.HashSet;
+import java.util.Set;
+
+@CivsSingleton
+@SuppressWarnings("unused")
 public class RepairEffect implements Listener {
+
+    private static final String KEY = "repair";
 
     public static void getInstance() {
         Bukkit.getPluginManager().registerEvents(new RepairEffect(), Civs.getInstance());
     }
 
-    private static final String KEY = "repair";
     public static Set<Material> getRequiredReagent(Material material) {
         Set<Material> returnSet = new HashSet<>();
         switch (material) {
@@ -194,6 +196,7 @@ public class RepairEffect implements Listener {
                 return false;
         }
     }
+
     public static boolean isHelmet(Material mat) {
         switch (mat) {
             case DIAMOND_HELMET:
@@ -244,6 +247,7 @@ public class RepairEffect implements Listener {
                 return false;
         }
     }
+
     public static boolean isLeggings(Material mat) {
         switch (mat) {
             case DIAMOND_LEGGINGS:
@@ -256,6 +260,7 @@ public class RepairEffect implements Listener {
                 return false;
         }
     }
+
     public static boolean isBoots(Material mat) {
         switch (mat) {
             case GOLDEN_BOOTS:

@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.spells.effects;
 
-import java.util.HashSet;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -9,6 +7,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.SpellConstants;
+
+import java.util.HashSet;
 
 public class CleanseEffect extends Effect {
 
@@ -32,46 +32,6 @@ public class CleanseEffect extends Effect {
         }
     }
 
-    @Override
-    public void apply() {
-        Object target = getTarget();
-        if (!(target instanceof LivingEntity)) {
-            return;
-        }
-        LivingEntity livingEntity = (LivingEntity) target;
-        for (PotionEffect potionEffect : new HashSet<>(livingEntity.getActivePotionEffects())) {
-            if (this.cleanseTypeEnum == CleanseTypeEnum.BOTH ||
-                    ((this.cleanseTypeEnum == CleanseTypeEnum.HARMFUL &&
-                    isHarmful(potionEffect)) ||
-                    (this.cleanseTypeEnum == CleanseTypeEnum.BENEFICIAL &&
-                    isBeneficial(potionEffect)))) {
-                livingEntity.removePotionEffect(potionEffect.getType());
-            }
-        }
-    }
-
-    @Override
-    public boolean meetsRequirement() {
-        Object target = getTarget();
-        if (!(target instanceof LivingEntity)) {
-            return false;
-        }
-        LivingEntity livingEntity = (LivingEntity) target;
-        if (this.cleanseTypeEnum == CleanseTypeEnum.BOTH &&
-                !livingEntity.getActivePotionEffects().isEmpty()) {
-            return true;
-        }
-        for (PotionEffect potionEffect : livingEntity.getActivePotionEffects()) {
-            if ((this.cleanseTypeEnum == CleanseTypeEnum.HARMFUL &&
-                    isHarmful(potionEffect)) ||
-                    (this.cleanseTypeEnum == CleanseTypeEnum.BENEFICIAL &&
-                            isBeneficial(potionEffect))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static boolean isHarmful(PotionEffect potionEffect) {
         if (potionEffect.getAmplifier() > 0) {
             return isHarmful(potionEffect.getType());
@@ -79,6 +39,7 @@ public class CleanseEffect extends Effect {
             return isHarmfulNegative(potionEffect.getType());
         }
     }
+
     public static boolean isBeneficial(PotionEffect potionEffect) {
         if (potionEffect.getAmplifier() > 0) {
             return isHarmful(potionEffect.getType());
@@ -182,6 +143,46 @@ public class CleanseEffect extends Effect {
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void apply() {
+        Object target = getTarget();
+        if (!(target instanceof LivingEntity)) {
+            return;
+        }
+        LivingEntity livingEntity = (LivingEntity) target;
+        for (PotionEffect potionEffect : new HashSet<>(livingEntity.getActivePotionEffects())) {
+            if (this.cleanseTypeEnum == CleanseTypeEnum.BOTH ||
+                    ((this.cleanseTypeEnum == CleanseTypeEnum.HARMFUL &&
+                            isHarmful(potionEffect)) ||
+                            (this.cleanseTypeEnum == CleanseTypeEnum.BENEFICIAL &&
+                                    isBeneficial(potionEffect)))) {
+                livingEntity.removePotionEffect(potionEffect.getType());
+            }
+        }
+    }
+
+    @Override
+    public boolean meetsRequirement() {
+        Object target = getTarget();
+        if (!(target instanceof LivingEntity)) {
+            return false;
+        }
+        LivingEntity livingEntity = (LivingEntity) target;
+        if (this.cleanseTypeEnum == CleanseTypeEnum.BOTH &&
+                !livingEntity.getActivePotionEffects().isEmpty()) {
+            return true;
+        }
+        for (PotionEffect potionEffect : livingEntity.getActivePotionEffects()) {
+            if ((this.cleanseTypeEnum == CleanseTypeEnum.HARMFUL &&
+                    isHarmful(potionEffect)) ||
+                    (this.cleanseTypeEnum == CleanseTypeEnum.BENEFICIAL &&
+                            isBeneficial(potionEffect))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public enum CleanseTypeEnum {

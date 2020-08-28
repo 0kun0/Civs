@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.spells.effects;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
@@ -17,6 +14,9 @@ import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.SpellConstants;
 import org.redcastlemedia.multitallented.civs.spells.civstate.BuiltInCivState;
 import org.redcastlemedia.multitallented.civs.spells.civstate.CivState;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CivStateEffect extends Effect {
     private long duration;
@@ -33,6 +33,15 @@ public class CivStateEffect extends Effect {
             this.builtInCivState = BuiltInCivState.valueOf((String) configSettings);
             this.duration = 1000;
         }
+    }
+
+    public static boolean hasState(Civilian civilian, String stateName) {
+        for (CivState civState : civilian.getStates().values()) {
+            if (civState.getComponentName().equalsIgnoreCase(stateName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -74,15 +83,6 @@ public class CivStateEffect extends Effect {
         Player player = (Player) target;
         Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
         return hasState(civilian, builtInCivState.name());
-    }
-
-    public static boolean hasState(Civilian civilian, String stateName) {
-        for (CivState civState : civilian.getStates().values()) {
-            if (civState.getComponentName().equalsIgnoreCase(stateName)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void handleOnApply(Object target) {

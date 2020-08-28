@@ -7,6 +7,7 @@ public final class MenuUtil {
     private MenuUtil() {
 
     }
+
     public static void sanitizeItem(ItemStack item) {
         Material mat = item.getType();
         if (mat == Material.RED_BED || mat == Material.BLACK_BED || mat == Material.BLUE_BED
@@ -34,6 +35,7 @@ public final class MenuUtil {
             item.setType(Material.COCOA_BEANS);
         }
     }
+
     private static void divideByTwo(ItemStack item) {
         if (item.getAmount() > 1) {
             item.setAmount((int) Math.round((double) item.getAmount() / 2));

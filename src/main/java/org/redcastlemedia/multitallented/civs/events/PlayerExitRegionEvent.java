@@ -13,17 +13,19 @@ public class PlayerExitRegionEvent extends Event {
     private final Region region;
     private final RegionType regionType;
 
-    @Override
-    public HandlerList getHandlers() {
-        return hList;
-    }
-    public static HandlerList getHandlerList() {
-        return hList;
-    }
     public PlayerExitRegionEvent(UUID uuid, Region region, RegionType regionType) {
         this.uuid = uuid;
         this.region = region;
         this.regionType = regionType;
+    }
+
+    public static HandlerList getHandlerList() {
+        return hList;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return hList;
     }
 
     public UUID getUuid() {

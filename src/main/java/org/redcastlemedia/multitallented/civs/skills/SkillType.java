@@ -1,12 +1,13 @@
 package org.redcastlemedia.multitallented.civs.skills;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
+@Setter
 public class SkillType {
     private final String name;
     private final String icon;

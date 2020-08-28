@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.commands;
 
-import java.util.HashMap;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +9,9 @@ import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-@CivsCommand(keys = { "menu" })
+import java.util.HashMap;
+
+@CivsCommand(keys = {"menu"})
 public class MenuCommand extends CivCommand {
 
     public boolean runCommand(CommandSender commandSender, Command command, String s, String[] strings) {

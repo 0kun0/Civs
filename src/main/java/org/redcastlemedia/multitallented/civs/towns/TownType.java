@@ -1,13 +1,12 @@
 package org.redcastlemedia.multitallented.civs.towns;
 
-import org.redcastlemedia.multitallented.civs.items.CivItem;
+import lombok.Getter;
+import lombok.Setter;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.items.CivItem;
 
 import java.util.HashMap;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public class TownType extends CivItem {
 
@@ -20,38 +19,12 @@ public class TownType extends CivItem {
     private final int maxPower;
     private final String child;
     @Getter
-    @Setter
-    private String defaultGovType;
-    @Getter
     private final int childPopulation;
     @Getter
     private final HashMap<String, Integer> regionLimits;
-
-    public HashMap<String, Integer> getReqs() {
-        return reqs;
-    }
-    public HashMap<String, String> getEffects() {
-        return effects;
-    }
-    public int getBuildRadius() {
-        return buildRadius;
-    }
-    public int getBuildRadiusY() {
-        return buildRadiusY;
-    }
-    public List<String> getCriticalReqs() {
-        return criticalReqs;
-    }
-    public int getPower() {
-        return power;
-    }
-    public int getMaxPower() {
-        return maxPower;
-    }
-    public String getChild() { return child; }
-    public int getRegionLimit(String regionTypeName) {
-        return regionLimits.get(regionTypeName) == null ? -1 : regionLimits.get(regionTypeName);
-    }
+    @Getter
+    @Setter
+    private String defaultGovType;
 
     public TownType(String name,
                     CVItem icon,
@@ -99,5 +72,41 @@ public class TownType extends CivItem {
         this.maxPower = maxPower;
         this.child = child;
         this.childPopulation = childPopulation;
+    }
+
+    public HashMap<String, Integer> getReqs() {
+        return reqs;
+    }
+
+    public HashMap<String, String> getEffects() {
+        return effects;
+    }
+
+    public int getBuildRadius() {
+        return buildRadius;
+    }
+
+    public int getBuildRadiusY() {
+        return buildRadiusY;
+    }
+
+    public List<String> getCriticalReqs() {
+        return criticalReqs;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public int getMaxPower() {
+        return maxPower;
+    }
+
+    public String getChild() {
+        return child;
+    }
+
+    public int getRegionLimit(String regionTypeName) {
+        return regionLimits.get(regionTypeName) == null ? -1 : regionLimits.get(regionTypeName);
     }
 }

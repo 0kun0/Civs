@@ -1,12 +1,12 @@
 package org.redcastlemedia.multitallented.civs.localization;
 
-import java.util.List;
-
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.CivItem;
+
+import java.util.List;
 
 public final class LocaleUtil {
     private LocaleUtil() {

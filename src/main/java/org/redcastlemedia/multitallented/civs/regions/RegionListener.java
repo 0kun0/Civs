@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.regions;
 
-import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,23 +11,19 @@ import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.events.RegionCreatedEvent;
-import org.redcastlemedia.multitallented.civs.items.CivItem;
-import org.redcastlemedia.multitallented.civs.menus.MenuManager;
-import org.redcastlemedia.multitallented.civs.towns.GovTypeBuff;
-import org.redcastlemedia.multitallented.civs.towns.Government;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentManager;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentType;
-import org.redcastlemedia.multitallented.civs.towns.Town;
-import org.redcastlemedia.multitallented.civs.towns.TownManager;
-import org.redcastlemedia.multitallented.civs.towns.TownType;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.items.CivItem;
+import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
+import org.redcastlemedia.multitallented.civs.menus.MenuManager;
+import org.redcastlemedia.multitallented.civs.towns.*;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
+
+import java.util.HashMap;
 
 @CivsSingleton
 public class RegionListener implements Listener {
@@ -41,6 +35,7 @@ public class RegionListener implements Listener {
 
     /**
      * If placing a region block, try to create a region
+     *
      * @param blockPlaceEvent
      */
     @EventHandler(ignoreCancelled = true)
@@ -78,6 +73,7 @@ public class RegionListener implements Listener {
 
     /**
      * Open region info menu if right clicking air with region
+     *
      * @param event
      */
     @EventHandler

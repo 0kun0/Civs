@@ -1,35 +1,40 @@
 package org.redcastlemedia.multitallented.civs.menus;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuIcon {
     @Getter
     private List<String> actions = new ArrayList<>();
     @Getter
     private List<String> rightClickActions = new ArrayList<>();
-    @Getter @Setter
+    @Getter
+    @Setter
     private ArrayList<Integer> index;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String icon;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String name;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String desc;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String key;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String perm = "";
 
     public MenuIcon(String key, ConfigurationSection section) {
@@ -66,6 +71,7 @@ public class MenuIcon {
             }
         }
     }
+
     public MenuIcon(String key, String icon, String name, String desc) {
         this.key = key;
         this.index = new ArrayList<>();
@@ -82,6 +88,27 @@ public class MenuIcon {
         this.name = name;
         this.icon = icon;
         this.desc = desc;
+    }
+
+    public static ArrayList<Integer> parseIndexArrayFromString(String indexString) {
+        ArrayList<Integer> indexList = new ArrayList<>();
+        if (indexString.equals("-1")) {
+            return indexList;
+        }
+        String[] splitList = indexString.split(",");
+        for (String currentIndexString : splitList) {
+            if (currentIndexString.contains("-")) {
+                String[] currentSplit = currentIndexString.split("-");
+                int startIndex = Integer.parseInt(currentSplit[0]);
+                int endIndex = Integer.parseInt(currentSplit[1]);
+                for (int i = startIndex; i <= endIndex; i++) {
+                    indexList.add(i);
+                }
+            } else {
+                indexList.add(Integer.parseInt(currentIndexString));
+            }
+        }
+        return indexList;
     }
 
     @Deprecated
@@ -112,26 +139,5 @@ public class MenuIcon {
                     .getTranslationWithPlaceholders(player, CustomMenu.replaceVariables(civilian, desc))));
         }
         return cvItem;
-    }
-
-    public static ArrayList<Integer> parseIndexArrayFromString(String indexString) {
-        ArrayList<Integer> indexList = new ArrayList<>();
-        if (indexString.equals("-1")) {
-            return indexList;
-        }
-        String[] splitList = indexString.split(",");
-        for (String currentIndexString : splitList) {
-            if (currentIndexString.contains("-")) {
-                String[] currentSplit = currentIndexString.split("-");
-                int startIndex = Integer.parseInt(currentSplit[0]);
-                int endIndex = Integer.parseInt(currentSplit[1]);
-                for (int i = startIndex; i <= endIndex; i++) {
-                    indexList.add(i);
-                }
-            } else {
-                indexList.add(Integer.parseInt(currentIndexString));
-            }
-        }
-        return indexList;
     }
 }

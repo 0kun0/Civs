@@ -1,17 +1,17 @@
 package org.redcastlemedia.multitallented.civs.skills;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.redcastlemedia.multitallented.civs.ConfigManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.redcastlemedia.multitallented.civs.ConfigManager;
-
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter @Setter
+@Getter
+@Setter
 public class Skill {
-    private Map<String, Integer> accomplishments = new HashMap<>();
     private final String type;
+    private Map<String, Integer> accomplishments = new HashMap<>();
 
     public Skill(String type) {
         this.type = type;

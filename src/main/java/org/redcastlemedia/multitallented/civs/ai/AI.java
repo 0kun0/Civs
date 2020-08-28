@@ -1,29 +1,42 @@
 package org.redcastlemedia.multitallented.civs.ai;
 
-import java.util.UUID;
-
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-import lombok.Getter;
+import java.util.UUID;
 
 @Getter
 public class AI {
     private final String townName;
-    private Town town;
+    private final Town town;
 
     public AI(String townName) {
         this.townName = townName;
         town = TownManager.getInstance().getTown(townName);
+    }
+
+    public static void broadcastToAllPlayers(String key, String[] args, String aiName) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            String message = LocaleManager.getInstance().getTranslationWithPlaceholders(player, key);
+            for (int i = 0; i < args.length; i++) {
+                message = message.replace("$" + i, args[i]);
+            }
+            if (aiName == null) {
+                player.sendMessage(Civs.getPrefix() + message);
+            } else {
+                player.sendMessage(aiName + message);
+            }
+        }
     }
 
     public String getDisplayName() {
@@ -58,20 +71,6 @@ public class AI {
             return !role2.contains("member");
         } else {
             return false;
-        }
-    }
-
-    public static void broadcastToAllPlayers(String key, String[] args, String aiName) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            String message = LocaleManager.getInstance().getTranslationWithPlaceholders(player, key);
-            for (int i=0; i<args.length; i++) {
-                message = message.replace("$" + i, args[i]);
-            }
-            if (aiName == null) {
-                player.sendMessage(Civs.getPrefix() + message);
-            } else {
-                player.sendMessage(aiName + message);
-            }
         }
     }
 

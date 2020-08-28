@@ -1,7 +1,9 @@
 package org.redcastlemedia.multitallented.civs.anticheat;
 
-import java.util.Set;
-
+import fr.neatmonster.nocheatplus.NoCheatPlus;
+import fr.neatmonster.nocheatplus.checks.CheckType;
+import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
+import me.jinky.BAC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,12 +15,7 @@ import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 
-import com.gmail.olexorus.witherac.api.ViolationEvent;
-
-import fr.neatmonster.nocheatplus.NoCheatPlus;
-import fr.neatmonster.nocheatplus.checks.CheckType;
-import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
-import me.jinky.BAC;
+import java.util.Set;
 
 @CivsSingleton
 public class AntiCheatManager implements Listener {
@@ -27,15 +24,15 @@ public class AntiCheatManager implements Listener {
     private static BAC basicAntiCheat = null;
     private static NoCheatPlus noCheatPlus = null;
 
+    public AntiCheatManager() {
+        setupDependencies();
+    }
+
     public static AntiCheatManager getInstance() {
         if (instance == null) {
             instance = new AntiCheatManager();
         }
         return instance;
-    }
-
-    public AntiCheatManager() {
-        setupDependencies();
     }
 
     private void setupDependencies() {

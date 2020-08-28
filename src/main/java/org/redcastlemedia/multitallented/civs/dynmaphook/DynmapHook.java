@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.dynmaphook;
 
-import java.util.HashSet;
-import java.util.logging.Level;
-
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,13 +10,7 @@ import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.events.RegionCreatedEvent;
-import org.redcastlemedia.multitallented.civs.events.RegionDestroyedEvent;
-import org.redcastlemedia.multitallented.civs.events.RenameTownEvent;
-import org.redcastlemedia.multitallented.civs.events.TownCreatedEvent;
-import org.redcastlemedia.multitallented.civs.events.TownDestroyedEvent;
-import org.redcastlemedia.multitallented.civs.events.TownDevolveEvent;
-import org.redcastlemedia.multitallented.civs.events.TownEvolveEvent;
+import org.redcastlemedia.multitallented.civs.events.*;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
 import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
 import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
@@ -29,6 +20,9 @@ import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
+
+import java.util.HashSet;
+import java.util.logging.Level;
 
 //https://github.com/webbukkit/dynmap/wiki/Using-markers
 public class DynmapHook implements Listener {
@@ -74,8 +68,8 @@ public class DynmapHook implements Listener {
         double x2 = centerX - radius;
         double z1 = centerZ + radius;
         double z2 = centerZ - radius;
-        double[] x = { x1, x2 };
-        double[] z = { z1, z2 };
+        double[] x = {x1, x2};
+        double[] z = {z1, z2};
         try {
             AreaMarker areaMarker = markerSet.createAreaMarker(markerId, town.getName(), false,
                     town.getLocation().getWorld().getName(), x, z, true);
@@ -168,6 +162,7 @@ public class DynmapHook implements Listener {
                     event.getRegionType().getDynmapMarkerKey());
         }
     }
+
     @EventHandler
     public void onRegionDestroyed(RegionDestroyedEvent event) {
         deleteRegionMarker(event.getRegion().getLocation());

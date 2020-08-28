@@ -13,7 +13,7 @@ items:
     # icon: region shop-icon
     # name: region name
     # desc: region desc
-    actions: []
+    actions: [ ]
   region-type:
     index: 1
     icon: WRITABLE_BOOK
@@ -26,7 +26,7 @@ items:
     icon: GREEN_WOOL
     name: operation
     desc: region-working
-    actions: []
+    actions: [ ]
   upkeep-not-working:
     index: 2
     icon: RED_WOOL
@@ -46,7 +46,7 @@ items:
     icon: WRITABLE_BOOK
     name: income
     desc: income-desc
-    actions: []
+    actions: [ ]
   destroy:
     index: 6
     icon: BARRIER

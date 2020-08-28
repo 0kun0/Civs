@@ -1,8 +1,7 @@
 package org.redcastlemedia.multitallented.civs.menus;
 
-import java.util.*;
-import java.util.List;
-
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,11 +12,11 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.civclass.CivClass;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.alliances.Alliance;
+import org.redcastlemedia.multitallented.civs.civclass.CivClass;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.towns.Town;
@@ -26,8 +25,7 @@ import org.redcastlemedia.multitallented.civs.tutorials.TutorialManager;
 import org.redcastlemedia.multitallented.civs.util.CommandUtil;
 import org.redcastlemedia.multitallented.civs.util.PermissionUtil;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import java.util.*;
 
 public abstract class CustomMenu {
     protected HashSet<MenuIcon> itemIndexes;
@@ -36,7 +34,54 @@ public abstract class CustomMenu {
     protected HashMap<UUID, CycleGUI> cycleItems = new HashMap<>();
     protected int size;
     private String name;
-    private HashMap<UUID, HashMap<String, List<String>>> rightClickActions = new HashMap<>();
+    private final HashMap<UUID, HashMap<String, List<String>>> rightClickActions = new HashMap<>();
+
+    public static String stringifyData(String key, Object data) {
+        if (key.equals("town")) {
+            Town town = (Town) data;
+            return town.getName();
+        } else if (key.equals("alliance")) {
+            Alliance alliance = (Alliance) data;
+            return alliance.getName();
+        } else if (key.equals("region")) {
+            Region region = (Region) data;
+            return region.getId();
+        } else if (key.equals("regionType")) {
+            RegionType regionType = (RegionType) data;
+            return regionType.getProcessedName();
+        } else if (key.equals("townType")) {
+            TownType townType = (TownType) data;
+            return townType.getProcessedName();
+        } else if (key.equals("uuid") && data instanceof UUID) {
+            return ((UUID) data).toString();
+        } else if (data instanceof String) {
+            return (String) data;
+        } else if (data instanceof CivClass) {
+            return "" + ((CivClass) data).getId();
+        } else {
+            return "" + data;
+        }
+    }
+
+    public static String replaceVariables(Civilian civilian, ItemStack clickedItem, String actionString) {
+        if (clickedItem.getItemMeta() != null) {
+            actionString = actionString.replaceAll("\\$itemName\\$",
+                    clickedItem.getItemMeta().getDisplayName());
+        }
+        return replaceVariables(civilian, actionString);
+    }
+
+    public static String replaceVariables(Civilian civilian, String actionString) {
+        Map<String, Object> data = MenuManager.getAllData(civilian.getUuid());
+        for (String key : data.keySet()) {
+            if (!actionString.contains("$" + key + "$")) {
+                continue;
+            }
+            String replaceString = stringifyData(key, data.get(key));
+            actionString = actionString.replaceAll("\\$" + key + "\\$", replaceString);
+        }
+        return actionString;
+    }
 
     public abstract Map<String, Object> createData(Civilian civilian, Map<String, String> params);
 
@@ -58,11 +103,13 @@ public abstract class CustomMenu {
         MenuManager.putData(civilian.getUuid(), "menuName", name);
         return createMenu(civilian);
     }
+
     public Inventory createMenuFromHistory(Civilian civilian, Map<String, Object> data) {
         MenuManager.setNewData(civilian.getUuid(), data);
         MenuManager.putData(civilian.getUuid(), "menuName", name);
         return createMenu(civilian);
     }
+
     public Inventory createMenu(Civilian civilian) {
         actions.put(civilian.getUuid(), new HashMap<>());
         rightClickActions.put(civilian.getUuid(), new HashMap<>());
@@ -83,6 +130,7 @@ public abstract class CustomMenu {
         }
         return inventory;
     }
+
     protected ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         Player player = Bukkit.getPlayer(civilian.getUuid());
         if (player == null) {
@@ -113,6 +161,7 @@ public abstract class CustomMenu {
         putActions(civilian, menuIcon, itemStack, count);
         return itemStack;
     }
+
     protected void putActions(Civilian civilian, MenuIcon menuIcon, ItemStack itemStack, int count) {
         List<String> currentActions = new ArrayList<>();
         if (menuIcon.getActions().isEmpty()) {
@@ -162,7 +211,7 @@ public abstract class CustomMenu {
     }
 
     public void loadConfig(HashSet<MenuIcon> itemIndexes,
-                    int size, String name) {
+                           int size, String name) {
         this.itemIndexes = itemIndexes;
         this.size = size;
         this.name = name;
@@ -172,6 +221,7 @@ public abstract class CustomMenu {
             }
         }
     }
+
     public String getName() {
         return this.name;
     }
@@ -261,53 +311,6 @@ public abstract class CustomMenu {
             player.spigot().sendMessage(textComponent);
         }
         return true;
-    }
-
-    public static String stringifyData(String key, Object data) {
-        if (key.equals("town")) {
-            Town town = (Town) data;
-            return town.getName();
-        } else if (key.equals("alliance")) {
-            Alliance alliance = (Alliance) data;
-            return alliance.getName();
-        } else if (key.equals("region")) {
-            Region region = (Region) data;
-            return region.getId();
-        } else if (key.equals("regionType")) {
-            RegionType regionType = (RegionType) data;
-            return regionType.getProcessedName();
-        } else if (key.equals("townType")) {
-            TownType townType = (TownType) data;
-            return townType.getProcessedName();
-        } else if (key.equals("uuid") && data instanceof UUID) {
-            return ((UUID) data).toString();
-        } else if (data instanceof String) {
-            return (String) data;
-        } else if (data instanceof CivClass) {
-            return "" + ((CivClass) data).getId();
-        } else {
-            return "" + data;
-        }
-    }
-
-    public static String replaceVariables(Civilian civilian, ItemStack clickedItem, String actionString) {
-        if (clickedItem.getItemMeta() != null) {
-            actionString = actionString.replaceAll("\\$itemName\\$",
-                    clickedItem.getItemMeta().getDisplayName());
-        }
-        return replaceVariables(civilian, actionString);
-    }
-
-    public static String replaceVariables(Civilian civilian, String actionString) {
-        Map<String, Object> data = MenuManager.getAllData(civilian.getUuid());
-        for (String key : data.keySet()) {
-            if (!actionString.contains("$" + key + "$")) {
-                continue;
-            }
-            String replaceString = stringifyData(key, data.get(key));
-            actionString = actionString.replaceAll("\\$" + key + "\\$", replaceString);
-        }
-        return actionString;
     }
 
     public void onCloseMenu(Civilian civilian, Inventory inventory) {

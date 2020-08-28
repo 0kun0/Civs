@@ -18,7 +18,7 @@ items:
     index: 0
     # icon player head
     # name player name
-    actions: []
+    actions: [ ]
   friends:
     index: 1
     icon: PLAYER_HEAD
@@ -29,7 +29,7 @@ items:
     index: 2
     icon: EMERALD
     name: money{$money$
-    actions: []
+    actions: [ ]
   towns:
     index: 3
     icon: OAK_DOOR
@@ -65,39 +65,39 @@ items:
     index: 9
     icon: DIAMOND
     name: points{$points$
-    actions: []
+    actions: [ ]
   karma:
     index: 10
     icon: CREEPER_HEAD
     name: karma{$karma$
     desc: karma-desc
-    actions: []
+    actions: [ ]
   hardship:
     index: 11
     icon: WITHER_SKELETON_SKULL
     name: hardship{$hardship$
     desc: hardship-desc
-    actions: []
+    actions: [ ]
   kills:
     index: 12
     icon: PLAYER_HEAD
     name: kills{$kills$
-    actions: []
+    actions: [ ]
   deaths:
     index: 13
     icon: SKELETON_SKULL
     name: deaths{$deaths$
-    actions: []
+    actions: [ ]
   killstreak:
     index: 14
     icon: IRON_SWORD
     name: killstreak{$killstreak$
-    actions: []
+    actions: [ ]
   highest-killstreak:
     index: 15
     icon: DIAMOND_SWORD
     name: highest-killstreak{$highest-killstreak$
-    actions: []
+    actions: [ ]
   skills:
     index: 17
     icon: BOOK

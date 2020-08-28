@@ -6,10 +6,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.events.PlayerEnterRegionEvent;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.util.Util;
@@ -21,6 +21,19 @@ public class ForSaleEffect implements Listener {
 
     public static void getInstance() {
         Bukkit.getPluginManager().registerEvents(new ForSaleEffect(), Civs.getInstance());
+    }
+
+    public static void sendTitleForSale(Region region, RegionType regionType, Player player) {
+
+        Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
+        if (civilian.isAtMax(regionType) != null) {
+            return;
+        }
+        String title = " ";
+        String subTitle = LocaleManager.getInstance().getTranslation(civilian.getLocale(), "region-sale-set")
+                .replace("$1", regionType.getName())
+                .replace("$2", Util.getNumberFormat(region.getForSale(), civilian.getLocale()));
+        player.sendTitle(title, subTitle, 5, 40, 5);
     }
 
     @EventHandler
@@ -35,18 +48,5 @@ public class ForSaleEffect implements Listener {
             return;
         }
         sendTitleForSale(region, regionType, player);
-    }
-
-    public static void sendTitleForSale(Region region, RegionType regionType, Player player) {
-
-        Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
-        if (civilian.isAtMax(regionType) != null) {
-            return;
-        }
-        String title = " ";
-        String subTitle = LocaleManager.getInstance().getTranslation(civilian.getLocale(), "region-sale-set")
-                .replace("$1", regionType.getName())
-                .replace("$2", Util.getNumberFormat(region.getForSale(), civilian.getLocale()));
-        player.sendTitle(title, subTitle, 5, 40, 5);
     }
 }

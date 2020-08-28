@@ -1,17 +1,18 @@
 package org.redcastlemedia.multitallented.civs.anticheat;
 
+import rip.reflex.api.Cheat;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import rip.reflex.api.Cheat;
 
 public final class ReflexExemptionAssembler {
     private ReflexExemptionAssembler() {
 
     }
+
     public static Set<Cheat> mapExemptionTypeToCheats(ExemptionType exemptionType) {
         Set<Cheat> cheats = new HashSet<>();
-        switch(exemptionType) {
+        switch (exemptionType) {
             case FLY:
                 cheats.add(Cheat.Speed);
                 cheats.add(Cheat.ElytraMove);

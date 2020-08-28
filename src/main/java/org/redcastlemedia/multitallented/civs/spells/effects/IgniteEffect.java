@@ -46,10 +46,7 @@ public class IgniteEffect extends Effect {
             return false;
         }
         LivingEntity le = (LivingEntity) target;
-        if (le.getFireTicks() > this.ticks) {
-            return true;
-        }
-        return false;
+        return le.getFireTicks() > this.ticks;
     }
 
     public void apply() {

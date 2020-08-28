@@ -1,5 +1,7 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,30 +13,23 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.events.RenameTownEvent;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
+import org.redcastlemedia.multitallented.civs.events.RenameTownEvent;
 import org.redcastlemedia.multitallented.civs.events.TwoSecondEvent;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
-
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import java.util.*;
 
 @CivsSingleton
 public class AntiCampEffect implements Listener {
+    public static final String KEY = "anticamp";
     private static final HashMap<UUID, String> lastDeathTown = new HashMap<>();
     private static final HashMap<String, Long> lastPoison = new HashMap<>();
     private static final HashMap<UUID, ArrayList<Long>> lastDeath = new HashMap<>();
-    public static final String KEY = "anticamp";
 
     public static void getInstance() {
         AntiCampEffect antiCampEffect = new AntiCampEffect();
@@ -57,7 +52,19 @@ public class AntiCampEffect implements Listener {
         lastDeath.put(uuid, lastDeaths);
     }
 
-    @EventHandler @SuppressWarnings("unused")
+    private static long getPeriod(String antiCampString) {
+        long period = 2;
+        if (antiCampString != null) {
+            String[] antiCampSplit = antiCampString.split("\\.");
+            if (antiCampSplit.length > 1) {
+                period = Long.parseLong(antiCampSplit[1]);
+            }
+        }
+        return period;
+    }
+
+    @EventHandler
+    @SuppressWarnings("unused")
     public void onTownRename(RenameTownEvent event) {
         for (Map.Entry<UUID, String> entry : new HashMap<>(lastDeathTown).entrySet()) {
             if (event.getOldName().equals(entry.getValue())) {
@@ -71,13 +78,15 @@ public class AntiCampEffect implements Listener {
         }
     }
 
-    @EventHandler @SuppressWarnings("unused")
+    @EventHandler
+    @SuppressWarnings("unused")
     public void onPlayerQuit(PlayerQuitEvent event) {
         lastDeathTown.remove(event.getPlayer().getUniqueId());
         lastDeath.remove(event.getPlayer().getUniqueId());
     }
 
-    @EventHandler(priority = EventPriority.LOW) @SuppressWarnings("unused")
+    @EventHandler(priority = EventPriority.LOW)
+    @SuppressWarnings("unused")
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
@@ -268,16 +277,5 @@ public class AntiCampEffect implements Listener {
             }
             lastPoison.remove(s);
         }
-    }
-
-    private static long getPeriod(String antiCampString) {
-        long period = 2;
-        if (antiCampString != null) {
-            String[] antiCampSplit = antiCampString.split("\\.");
-            if (antiCampSplit.length > 1) {
-                period = Long.parseLong(antiCampSplit[1]);
-            }
-        }
-        return period;
     }
 }

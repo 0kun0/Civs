@@ -1,23 +1,39 @@
 package org.redcastlemedia.multitallented.civs.items;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @CivsSingleton()
 public class UnloadedInventoryHandler {
+    private static final HashMap<String, HashMap<String, CVInventory>> unloadedChestInventories = new HashMap<>();
     public static UnloadedInventoryHandler instance = null;
 
     public UnloadedInventoryHandler() {
         instance = this;
     }
 
-    private static final HashMap<String, HashMap<String, CVInventory>> unloadedChestInventories = new HashMap<>();
+    public static String getChunkString(Location location) {
+        int x = (int) Math.floor(location.getX() / 16);
+        int z = (int) Math.floor(location.getZ() / 16);
+        return "c:" + x + ":" + z;
+    }
+
+    public static String getChunkString(Chunk chunk) {
+        return "c:" + chunk.getX() + ":" + chunk.getZ();
+    }
+
+    public static UnloadedInventoryHandler getInstance() {
+        if (instance == null) {
+            new UnloadedInventoryHandler();
+        }
+        return instance;
+    }
 
     public void loadChunks() {
         for (Map.Entry<String, HashMap<String, CVInventory>> outerEntry : unloadedChestInventories.entrySet()) {
@@ -95,16 +111,6 @@ public class UnloadedInventoryHandler {
         }
     }
 
-    public static String getChunkString(Location location) {
-        int x = (int) Math.floor(location.getX() / 16);
-        int z = (int) Math.floor(location.getZ() / 16);
-        return "c:" + x + ":" + z;
-    }
-
-    public static String getChunkString(Chunk chunk) {
-        return "c:" + chunk.getX() + ":" + chunk.getZ();
-    }
-
     private CVInventory getInventoryForce(Location location) {
         CVInventory cvInventory = new CVInventory(location);
         setUnloadedChestInventory(getChunkString(location), Region.locationToString(location), cvInventory);
@@ -132,12 +138,5 @@ public class UnloadedInventoryHandler {
                 unloadedChestInventories.remove(chunkString);
             }
         }
-    }
-
-    public static UnloadedInventoryHandler getInstance() {
-        if (instance == null) {
-            new UnloadedInventoryHandler();
-        }
-        return instance;
     }
 }

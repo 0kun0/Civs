@@ -83,7 +83,7 @@ items:
     icon: RED_WOOL
     name: limits
     desc: item-limit
-    actions: []
+    actions: [ ]
   reagents:
     index: 9,18,27,36,45
     icon: CHEST

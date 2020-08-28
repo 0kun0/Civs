@@ -1,20 +1,17 @@
 package org.redcastlemedia.multitallented.civs.commands;
 
-import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
-import org.redcastlemedia.multitallented.civs.towns.Government;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentManager;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentType;
-import org.redcastlemedia.multitallented.civs.towns.Town;
-import org.redcastlemedia.multitallented.civs.towns.TownManager;
+import org.redcastlemedia.multitallented.civs.towns.*;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-@CivsCommand(keys = { "colony" }) @SuppressWarnings("unused")
+import java.util.List;
+
+@CivsCommand(keys = {"colony"})
+@SuppressWarnings("unused")
 public class ColonyCommand extends CivCommand {
     @Override
     public boolean runCommand(CommandSender commandSender, Command command, String label, String[] args) {

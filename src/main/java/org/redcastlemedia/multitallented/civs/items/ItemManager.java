@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGHER)
 public class ItemManager {
     private static ItemManager itemManager;
-    private HashMap<String, CivItem> itemTypes = new HashMap<>();
+    private final HashMap<String, CivItem> itemTypes = new HashMap<>();
 
     public static ItemManager getInstance() {
         if (itemManager == null) {
@@ -112,7 +112,7 @@ public class ItemManager {
             if (!typeConfig.getBoolean("enabled", true)) {
                 return;
             }
-            String type = typeConfig.getString("type",Constants.REGION);
+            String type = typeConfig.getString("type", Constants.REGION);
             CivItem civItem = null;
             String itemName = currentFileName.replace(".yml", "").toLowerCase();
             if (Constants.REGION.equals(type)) {
@@ -188,7 +188,7 @@ public class ItemManager {
                     if (!typeConfig.getBoolean("enabled", true)) {
                         return;
                     }
-                    String type = typeConfig.getString("type","region");
+                    String type = typeConfig.getString("type", "region");
                     CivItem civItem = null;
                     String itemName = file.getName().replace(".yml", "").toLowerCase();
                     if (type.equals("region")) {
@@ -213,6 +213,7 @@ public class ItemManager {
             return;
         }
     }
+
     public CivItem loadClassType(FileConfiguration config, String name) {
         CVItem icon = CVItem.createCVItemFromString(config.getString("icon", Material.CHEST.name()));
         ClassType civItem = new ClassType(
@@ -305,7 +306,7 @@ public class ItemManager {
                 CVItem.createCVItemFromString(config.getString("shop-icon", config.getString("icon", Material.CHEST.name()))),
                 config.getStringList("pre-reqs"),
                 config.getInt("qty", 0),
-                config.getInt("min",0),
+                config.getInt("min", 0),
                 config.getInt("max", -1),
                 config.getDouble("price", 0),
                 config.getString("permission"),
@@ -426,7 +427,7 @@ public class ItemManager {
                 config.getStringList("groups"),
                 config.getBoolean("is-in-shop", true),
                 config.getBoolean("rebuild-required", false),
-                config.getInt("level",1),
+                config.getInt("level", 1),
                 worlds);
         if (config.isSet("commands-on-creation")) {
             regionType.getCommandsOnCreation().addAll(config.getStringList("commands-on-creation"));
@@ -497,6 +498,7 @@ public class ItemManager {
     public List<CivItem> getShopItems(Civilian civilian, CivItem parent) {
         return getAllItemsWithParent(civilian, parent, true);
     }
+
     private List<CivItem> getAllItemsWithParent(Civilian civilian, CivItem parent, boolean isShop) {
         List<CivItem> returnList = new ArrayList<>();
         HashSet<CivItem> checkList = new HashSet<>();
@@ -572,7 +574,7 @@ public class ItemManager {
             }
             if (hasItemUnlocked(civilian, civItem)) {
                 int add = 0;
-                while(count + add < civItem.getCivMin()) {
+                while (count + add < civItem.getCivMin()) {
                     addItems.add(civItem);
                     add++;
                 }
@@ -600,7 +602,8 @@ public class ItemManager {
             return allUnmetRequirements;
         }
 
-        outer: for (String reqString : civItem.getCivReqs()) {
+        outer:
+        for (String reqString : civItem.getCivReqs()) {
             List<String> unmetRequirements = new ArrayList<>();
             for (String req : reqString.split("\\|")) {
                 if (fast && !unmetRequirements.isEmpty()) {
@@ -609,7 +612,7 @@ public class ItemManager {
                 if (!fast && unmetRequirements.size() % 2 > 0) {
                     unmetRequirements.add(ChatColor.GOLD + " " +
                             LocaleManager.getInstance().getTranslationWithPlaceholders(player,
-                            "or") + " " + ChatColor.RED);
+                                    "or") + " " + ChatColor.RED);
                 }
                 //perm=civs.admin
                 if (req.startsWith("perm=")) {
@@ -820,7 +823,7 @@ public class ItemManager {
     }
 
     private boolean checkMemberOfTownRequirement(Civilian civilian, List<String> unmetRequirements, Player player,
-                                              String req, boolean fast) {
+                                                 String req, boolean fast) {
         String[] townTypeStrings = req.replace("member=", "").split(":");
         Set<String> townTypes = new HashSet<>(Arrays.asList(townTypeStrings));
         boolean isMember = false;

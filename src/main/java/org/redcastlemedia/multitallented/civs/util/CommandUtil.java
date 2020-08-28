@@ -8,11 +8,12 @@ public final class CommandUtil {
     private CommandUtil() {
 
     }
+
     public static void performCommand(OfflinePlayer offlinePlayer, String command) {
         String finalCommand = command;
         boolean runAsOp = false;
         boolean runFromConsole = false;
-        for (;;) {
+        for (; ; ) {
             if (finalCommand.startsWith("^")) {
                 runAsOp = true;
                 finalCommand = finalCommand.substring(1);

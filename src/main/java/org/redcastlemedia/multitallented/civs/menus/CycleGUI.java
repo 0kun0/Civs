@@ -1,40 +1,22 @@
 package org.redcastlemedia.multitallented.civs.menus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 class CycleGUI {
     private final UUID uuid;
-    private HashMap<Integer, CycleGUIItemSet> cycleItems;
+    private final HashMap<Integer, CycleGUIItemSet> cycleItems;
 
-    private static class CycleGUIItemSet {
-        private int position;
-        private final List<ItemStack> items;
-
-        CycleGUIItemSet(int position, List<ItemStack> items) {
-            this.position = position;
-            this.items = items;
-        }
-
-        void setPosition(int position) {
-            this.position = position;
-        }
-        int getPosition() {
-            return position;
-        }
-        public List<ItemStack> getItems() {
-            return items;
-        }
-        void addItem(ItemStack is) {
-            items.add(is);
-        }
+    CycleGUI(UUID uuid) {
+        this.uuid = uuid;
+        this.cycleItems = new HashMap<>();
     }
 
     synchronized void advanceItemPositions() {
@@ -64,11 +46,6 @@ class CycleGUI {
         }
     }
 
-    CycleGUI(UUID uuid) {
-        this.uuid=uuid;
-        this.cycleItems = new HashMap<>();
-    }
-
     void addCycleItem(int index, ItemStack is) {
         if (cycleItems.containsKey(index)) {
             cycleItems.get(index).addItem(is);
@@ -81,5 +58,31 @@ class CycleGUI {
 
     void putCycleItems(int index, List<ItemStack> items) {
         cycleItems.put(index, new CycleGUIItemSet(0, items));
+    }
+
+    private static class CycleGUIItemSet {
+        private final List<ItemStack> items;
+        private int position;
+
+        CycleGUIItemSet(int position, List<ItemStack> items) {
+            this.position = position;
+            this.items = items;
+        }
+
+        int getPosition() {
+            return position;
+        }
+
+        void setPosition(int position) {
+            this.position = position;
+        }
+
+        public List<ItemStack> getItems() {
+            return items;
+        }
+
+        void addItem(ItemStack is) {
+            items.add(is);
+        }
     }
 }

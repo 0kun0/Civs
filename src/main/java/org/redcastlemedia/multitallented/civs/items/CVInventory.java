@@ -1,12 +1,7 @@
 package org.redcastlemedia.multitallented.civs.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import lombok.Getter;
+import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,14 +10,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-import lombok.Getter;
-import lombok.NonNull;
+import java.util.*;
 
 public class CVInventory {
-    private List<Integer> indexes = new ArrayList<>();
-    private Map<Integer, ItemStack> contents = new HashMap<>();
+    private final List<Integer> indexes = new ArrayList<>();
+    private final Map<Integer, ItemStack> contents = new HashMap<>();
     @Getter
-    private Location location;
+    private final Location location;
     private Inventory inventory;
     @Getter
     private int size;
@@ -168,9 +162,11 @@ public class CVInventory {
     public Map<Integer, ItemStack> checkAddItems(ItemStack... itemStacks) {
         return addOrCheckItems(false, itemStacks);
     }
+
     public Map<Integer, ItemStack> addItem(ItemStack... itemStackParams) {
         return addOrCheckItems(true, itemStackParams);
     }
+
     private Map<Integer, ItemStack> addOrCheckItems(boolean modify, ItemStack... itemStackParams) {
         boolean isChunkLoaded = Util.isChunkLoadedAt(this.location);
         if (isChunkLoaded && modify) {
@@ -199,7 +195,7 @@ public class CVInventory {
         }
 
         int index = 0;
-        while(!itemStacks.isEmpty()) {
+        while (!itemStacks.isEmpty()) {
             boolean itemAdded = false;
             for (int i = 0; i < getSize(); i++) {
                 if (itemStacks.isEmpty()) {
@@ -256,7 +252,7 @@ public class CVInventory {
             ArrayList<ItemStack> itemStacks = new ArrayList<>(Arrays.asList(itemStackParams));
 
             int index = 0;
-            while(!itemStacks.isEmpty()) {
+            while (!itemStacks.isEmpty()) {
                 boolean itemRemoved = false;
                 for (int i = 0; i < getSize(); i++) {
                     if (itemStacks.isEmpty()) {
@@ -278,7 +274,7 @@ public class CVInventory {
     }
 
     private boolean adjustItemToRemove(ArrayList<ItemStack> itemStacks,
-                                    Map<Integer, ItemStack> contentsToModify, int i) {
+                                       Map<Integer, ItemStack> contentsToModify, int i) {
         boolean itemRemoved = false;
         ItemStack currentStack = itemStacks.get(0);
         if (!contentsToModify.containsKey(i)) {

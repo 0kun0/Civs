@@ -26,7 +26,9 @@ import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.spells.effects.DamageEffect;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.UUID;
 
 import static org.redcastlemedia.multitallented.civs.util.Util.isLocationWithinSightOfPlayer;
 
@@ -37,34 +39,6 @@ public class ArrowTurret implements Listener {
 
     public static void getInstance() {
         Bukkit.getPluginManager().registerEvents(new ArrowTurret(), Civs.getInstance());
-    }
-
-    //Shoot arrows at mobs
-    @EventHandler
-    public void onRegionTickEvent(RegionTickEvent event) {
-        if (ConfigManager.getInstance().getDenyArrowTurretShootAtMobs() ||
-                !isLocationWithinSightOfPlayer(event.getRegion().getLocation())) {
-            return;
-        }
-        Region region = event.getRegion();
-        if (!region.getEffects().containsKey(ArrowTurret.KEY)) {
-            return;
-        }
-        RegionType regionType = event.getRegionType();
-        Location location = region.getLocation();
-
-        for (Entity e : location.getWorld().getNearbyEntities(location, regionType.getEffectRadius(),
-                regionType.getEffectRadius(), regionType.getEffectRadius())) {
-            if ((!(e instanceof Monster) && !(e instanceof Phantom))) {
-                continue;
-            }
-            LivingEntity monster = (LivingEntity) e;
-            if (monster.getLocation().distance(location) > regionType.getEffectRadius()) {
-                continue;
-            }
-            ArrowTurret.shootArrow(region, monster, region.getEffects().get(ArrowTurret.KEY), false);
-            break;
-        }
     }
 
     public static void shootArrow(Region r, UUID uuid, String vars, boolean runUpkeep) {
@@ -171,7 +145,6 @@ public class ArrowTurret implements Listener {
 //            }
 
 
-
         //Location playerLoc = player.getLocation().getBlock().getRelative(BlockFace.UP).getLocation();
         //playerLoc.setX(Math.floor(playerLoc.getX()) + 0.5);
         //playerLoc.setY(Math.floor(playerLoc.getY()) + 0.5);
@@ -181,6 +154,34 @@ public class ArrowTurret implements Listener {
         //Spawn and set velocity of the arrow
         Arrow arrow = l.getWorld().spawnArrow(loc, vel, (float) (speed), spread);
         arrowDamages.put(arrow, damage);
+    }
+
+    //Shoot arrows at mobs
+    @EventHandler
+    public void onRegionTickEvent(RegionTickEvent event) {
+        if (ConfigManager.getInstance().getDenyArrowTurretShootAtMobs() ||
+                !isLocationWithinSightOfPlayer(event.getRegion().getLocation())) {
+            return;
+        }
+        Region region = event.getRegion();
+        if (!region.getEffects().containsKey(ArrowTurret.KEY)) {
+            return;
+        }
+        RegionType regionType = event.getRegionType();
+        Location location = region.getLocation();
+
+        for (Entity e : location.getWorld().getNearbyEntities(location, regionType.getEffectRadius(),
+                regionType.getEffectRadius(), regionType.getEffectRadius())) {
+            if ((!(e instanceof Monster) && !(e instanceof Phantom))) {
+                continue;
+            }
+            LivingEntity monster = (LivingEntity) e;
+            if (monster.getLocation().distance(location) > regionType.getEffectRadius()) {
+                continue;
+            }
+            ArrowTurret.shootArrow(region, monster, region.getEffects().get(ArrowTurret.KEY), false);
+            break;
+        }
     }
 
     @EventHandler
@@ -238,7 +239,7 @@ public class ArrowTurret implements Listener {
         double z1 = targetHere.getZ();
 
         Vector start = new Vector(x, y, z);
-        Vector end = new Vector (x1, y1, z1);
+        Vector end = new Vector(x1, y1, z1);
 
         BlockIterator bi = new BlockIterator(shootHere.getWorld(), start, end, 0, (int) shootHere.distance(targetHere));
         while (bi.hasNext()) {

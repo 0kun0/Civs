@@ -1,11 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.people;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -26,7 +20,10 @@ import org.redcastlemedia.multitallented.civs.skills.SkillManager;
 import org.redcastlemedia.multitallented.civs.skills.SkillType;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = "skills") @SuppressWarnings("unused")
+import java.util.*;
+
+@CivsMenu(name = "skills")
+@SuppressWarnings("unused")
 public class SkillsMenu extends CustomMenu {
 
     @Override
@@ -34,7 +31,7 @@ public class SkillsMenu extends CustomMenu {
         Map<String, Object> data = new HashMap<>();
         UUID uuid = civilian.getUuid();
         if (params.containsKey("uuid")) {
-            uuid =  UUID.fromString(params.get("uuid"));
+            uuid = UUID.fromString(params.get("uuid"));
         }
         data.put("uuid", uuid);
         List<Skill> skills = new ArrayList<>(CivilianManager.getInstance().getCivilian(uuid).getSkills().values());
@@ -50,7 +47,8 @@ public class SkillsMenu extends CustomMenu {
         return data;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     protected ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         Player player = Bukkit.getPlayer(civilian.getUuid());
         if (player == null) {

@@ -13,13 +13,13 @@ public class HousingEffect implements RegionCreatedListener, DestroyRegionListen
     public static final String KEY = "housing";
     public static final String HOUSING_EXCEPT = "exempt_housing";
 
-    public static void getInstance() {
-        new HousingEffect();
-    }
-
     public HousingEffect() {
         RegionManager.getInstance().addRegionCreatedListener(KEY, this);
         RegionManager.getInstance().addDestroyRegionListener(KEY, this);
+    }
+
+    public static void getInstance() {
+        new HousingEffect();
     }
 
     @Override

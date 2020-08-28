@@ -8,7 +8,7 @@ groups:
 pre-reqs:
   - backflip:level=10
 
-allowed-actions: []
+allowed-actions: [ ]
 
 exp-per-use: 20
 

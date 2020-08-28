@@ -1,11 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.regions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -28,7 +22,14 @@ import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = "blueprints") @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
+@CivsMenu(name = "blueprints")
+@SuppressWarnings("unused")
 public class BlueprintsMenu extends CustomMenu {
 
     @Override
@@ -63,7 +64,8 @@ public class BlueprintsMenu extends CustomMenu {
         return data;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public void onCloseMenu(Civilian civilian, Inventory inventory) {
         Map<String, Integer> stashItems = civilian.getStashItems();
         HashMap<String, Integer> itemsInView = (HashMap<String, Integer>) MenuManager.getData(civilian.getUuid(), Constants.ITEMS_IN_VIEW);
@@ -89,6 +91,7 @@ public class BlueprintsMenu extends CustomMenu {
         CivilianManager.getInstance().saveCivilian(civilian);
         itemsInView.clear();
     }
+
     private void addItemsToStash(Inventory inventory,
                                  HashMap<String, Integer> itemsInView,
                                  Map<String, Integer> stashItems) {
@@ -129,7 +132,8 @@ public class BlueprintsMenu extends CustomMenu {
         }
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         Player player = Bukkit.getPlayer(civilian.getUuid());
         if (player == null) {

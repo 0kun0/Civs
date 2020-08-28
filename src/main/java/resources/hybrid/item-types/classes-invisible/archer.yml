@@ -3,9 +3,9 @@ name: archer
 icon: BOW
 is-in-shop: false
 level: 1
-groups: []
+groups: [ ]
 
-children: []
+children: [ ]
 pre-reqs:
   - skill:bow=7|skill:crossbow=7
   - skill:exploration=1

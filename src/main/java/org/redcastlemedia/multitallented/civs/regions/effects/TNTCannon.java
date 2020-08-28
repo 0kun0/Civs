@@ -1,13 +1,6 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.HashMap;
-
-import org.bukkit.Bukkit;
-import org.bukkit.FluidCollisionMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -28,17 +21,20 @@ import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-@CivsSingleton @SuppressWarnings("unused")
+import java.util.HashMap;
+
+@CivsSingleton
+@SuppressWarnings("unused")
 public class TNTCannon implements Listener, RegionCreatedListener {
     private final String KEY = "tnt_cannon";
     private final HashMap<Location, Long> cooldowns = new HashMap<>();
 
-    public static void getInstance() {
-        Bukkit.getPluginManager().registerEvents(new TNTCannon(), Civs.getInstance());
-    }
-
     public TNTCannon() {
         RegionManager.getInstance().addRegionCreatedListener(KEY, this);
+    }
+
+    public static void getInstance() {
+        Bukkit.getPluginManager().registerEvents(new TNTCannon(), Civs.getInstance());
     }
 
     @Override
@@ -150,10 +146,10 @@ public class TNTCannon implements Listener, RegionCreatedListener {
         double deltaX = targetLocation.distance(fireLocation);
 //            double deltaY = targetLocation.getY() - fireLocation.getY();
 
-        double theta = 64.2556-0.0651852*deltaX;
+        double theta = 64.2556 - 0.0651852 * deltaX;
         theta = Math.PI * theta / 180;
 
-        double current = 0.977778*g*(11.4205+deltaX)/(vt*Math.cos(theta));
+        double current = 0.977778 * g * (11.4205 + deltaX) / (vt * Math.cos(theta));
 //            double prevPrev = 0.041*deltaX;
 //            double prev = prevPrev + 0.01;
 //            accuracy = accuracy / 10000;
@@ -167,9 +163,9 @@ public class TNTCannon implements Listener, RegionCreatedListener {
             }*/
 //            player.sendMessage(ChatColor.GREEN + "[Townships] Val: " + Math.abs(functionDx(deltaX, deltaY, prev)));
 //            player.sendMessage(ChatColor.GREEN + "[Townships] Iterations: " + i);
-        double newX = current*Math.cos(theta)*Math.cos(Math.atan2(targetLocation.getZ() - fireLocation.getZ(), targetLocation.getX() - fireLocation.getX()));
-        double newZ = current*Math.cos(theta)*Math.sin(Math.atan2(targetLocation.getZ() - fireLocation.getZ(), targetLocation.getX() - fireLocation.getX()));
-        double newY = current*Math.sin(theta);
+        double newX = current * Math.cos(theta) * Math.cos(Math.atan2(targetLocation.getZ() - fireLocation.getZ(), targetLocation.getX() - fireLocation.getX()));
+        double newZ = current * Math.cos(theta) * Math.sin(Math.atan2(targetLocation.getZ() - fireLocation.getZ(), targetLocation.getX() - fireLocation.getX()));
+        double newY = current * Math.sin(theta);
 
 //            player.sendMessage(ChatColor.GREEN + "[Townships] Current Velocity: " + current);
 
@@ -185,11 +181,11 @@ public class TNTCannon implements Listener, RegionCreatedListener {
             player.sendMessage(ChatColor.GREEN + "[Townships] Velocity: " + newX + ", " + newY + ", " + newZ);
             player.sendMessage(ChatColor.GREEN + "[Townships] Theta: " + theta);
             player.sendMessage(ChatColor.GREEN + "[Townships] Current: " + current);*/
-        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.NORTH,1).getLocation(), 1);
-        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.EAST,1).getLocation(), 1);
-        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.WEST,1).getLocation(), 1);
-        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.SOUTH,1).getLocation(), 1);
-        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.UP,1).getLocation(), 1);
+        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.NORTH, 1).getLocation(), 1);
+        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.EAST, 1).getLocation(), 1);
+        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.WEST, 1).getLocation(), 1);
+        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.SOUTH, 1).getLocation(), 1);
+        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation.getBlock().getRelative(BlockFace.UP, 1).getLocation(), 1);
         player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireLocation, 3);
         for (Player currPlayer : Bukkit.getOnlinePlayers()) {
             if (currPlayer.getLocation().distanceSquared(fireLocation) > 2500) {

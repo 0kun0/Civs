@@ -3,9 +3,9 @@ name: alchemist
 icon: SPLASH_POTION
 is-in-shop: false
 level: 1
-groups: []
+groups: [ ]
 
-children: []
+children: [ ]
 pre-reqs:
   - skill:crafting=3
   - skill:food=4

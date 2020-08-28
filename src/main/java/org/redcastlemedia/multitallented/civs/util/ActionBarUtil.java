@@ -1,19 +1,20 @@
 package org.redcastlemedia.multitallented.civs.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.Civs;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+
 public final class ActionBarUtil {
+    private static String nmsver = null;
+
     private ActionBarUtil() {
 
     }
 
-    private static String nmsver = null;
     public static void sendActionBar(Player player, String message) {
         if (!player.isOnline()) {
             return; // Player may have logged out

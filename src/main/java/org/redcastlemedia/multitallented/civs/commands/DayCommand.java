@@ -8,7 +8,8 @@ import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.scheduler.DailyScheduler;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-@CivsCommand(keys = { "newday" }) @SuppressWarnings("unused")
+@CivsCommand(keys = {"newday"})
+@SuppressWarnings("unused")
 public class DayCommand extends CivCommand {
 
     @Override

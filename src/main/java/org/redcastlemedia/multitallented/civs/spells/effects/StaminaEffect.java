@@ -1,6 +1,5 @@
 package org.redcastlemedia.multitallented.civs.spells.effects;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -50,7 +49,7 @@ public class StaminaEffect extends Effect {
                 Player originPlayer = (Player) origin;
                 originPlayer.sendMessage(Civs.getPrefix() + LocaleManager.getInstance()
                         .getTranslationWithPlaceholders(originPlayer,
-                        "need-more-stamina").replace("$1", "" + Math.abs(stamina)));
+                                "need-more-stamina").replace("$1", "" + Math.abs(stamina)));
             }
             return false;
         }
@@ -64,12 +63,13 @@ public class StaminaEffect extends Effect {
                 Player originPlayer = (Player) origin;
                 originPlayer.sendMessage(Civs.getPrefix() + LocaleManager.getInstance()
                         .getTranslationWithPlaceholders(originPlayer,
-                        "need-more-stamina").replace("$1", "" + Math.abs(stamina)));
+                                "need-more-stamina").replace("$1", "" + Math.abs(stamina)));
             }
             return false;
         }
         return true;
     }
+
     @Override
     public void apply() {
         Object target = getTarget();

@@ -5,21 +5,21 @@ name: Altar
 price: 100
 max: 1
 groups:
-- offense
+  - offense
 level: 1
 
 build-reqs:
-- IRON_BLOCK*2
-- REDSTONE_BLOCK
+  - IRON_BLOCK*2
+  - REDSTONE_BLOCK
 
 build-radius: 1
 
 effects:
-- block_break
-- block_build
-- block_liquid
-- block_fire
-- chest_use
+  - block_break
+  - block_build
+  - block_liquid
+  - block_fire
+  - chest_use
 
 period: 3600 #1 hour
 upkeep:

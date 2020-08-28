@@ -19,7 +19,7 @@ items:
     # icon: class shop-icon
     # name: class name
     # desc: class desc
-    actions: []
+    actions: [ ]
   level:
     index: 1
     icon: EXPERIENCE_BOTTLE
@@ -40,13 +40,13 @@ items:
     icon: POTION
     name: "{$classManaName$"
     desc: mana-desc{$maxMana$,,$manaRegen$
-    actions: []
+    actions: [ ]
   health:
     index: 4
     icon: COOKED_BEEF
     name: health
     desc: health-desc{$maxHealth$
-    actions: []
+    actions: [ ]
   destroy:
     index: 6
     icon: BARRIER

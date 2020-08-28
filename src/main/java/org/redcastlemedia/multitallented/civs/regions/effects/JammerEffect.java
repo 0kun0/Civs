@@ -10,34 +10,33 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
-import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.spells.Vector3D;
 import org.redcastlemedia.multitallented.civs.util.Constants;
-import org.redcastlemedia.multitallented.civs.util.DiscordUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-@CivsSingleton @SuppressWarnings("unused")
+@CivsSingleton
+@SuppressWarnings("unused")
 public class JammerEffect implements Listener, RegionCreatedListener {
 
     public static String KEY = "jammer";
-    private static HashMap<UUID, Long> cooldowns = new HashMap<>();
-
-    public static void getInstance() {
-        Bukkit.getPluginManager().registerEvents(new JammerEffect(), Civs.getInstance());
-    }
+    private static final HashMap<UUID, Long> cooldowns = new HashMap<>();
 
     public JammerEffect() {
         RegionManager.getInstance().addRegionCreatedListener(KEY, this);
+    }
+
+    public static void getInstance() {
+        Bukkit.getPluginManager().registerEvents(new JammerEffect(), Civs.getInstance());
     }
 
     @EventHandler

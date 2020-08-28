@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,7 +13,11 @@ import org.redcastlemedia.multitallented.civs.tutorials.TutorialStep;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsCommand(keys = { "advancetut" }) @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.List;
+
+@CivsCommand(keys = {"advancetut"})
+@SuppressWarnings("unused")
 public class TutorialAdvanceCommand extends CivCommand {
 
     @Override

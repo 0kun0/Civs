@@ -1,14 +1,13 @@
 package org.redcastlemedia.multitallented.civs.spells.effects;
 
-import java.util.HashMap;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.SpellComponent;
 
+import java.util.HashMap;
+
 /**
- *
  * @author Multitallented
  */
 public abstract class Effect extends SpellComponent {
@@ -28,6 +27,7 @@ public abstract class Effect extends SpellComponent {
     public void remove(LivingEntity origin, int level, Spell spell) {
         //Optional override
     }
+
     @Override
     public HashMap<String, Double> getVariables(Object target, Entity origin, int level, Spell spell) {
         //Optional override

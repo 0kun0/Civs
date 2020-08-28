@@ -1,9 +1,9 @@
 package org.redcastlemedia.multitallented.civs.spells;
 
-import java.util.HashMap;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+
+import java.util.HashMap;
 
 public abstract class SpellComponent {
     private final Spell spell;
@@ -24,16 +24,34 @@ public abstract class SpellComponent {
         this.level = level;
     }
 
-    public String getKey() { return key; }
-    public String getAbilityName() { return spell.getType(); }
-    public Spell getSpell() { return spell; }
-    public int getLevel() { return level; }
-    public Object getTarget() { return target; }
-    public Entity getOrigin() { return origin; }
+    public String getKey() {
+        return key;
+    }
+
+    public String getAbilityName() {
+        return spell.getType();
+    }
+
+    public Spell getSpell() {
+        return spell;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public Object getTarget() {
+        return target;
+    }
+
+    public Entity getOrigin() {
+        return origin;
+    }
 
     public void remove(LivingEntity origin, int level, Spell spell) {
         //Optional override
     }
+
     public HashMap<String, Double> getVariables(Object target, Entity origin, int level, Spell spell) {
         //Optional override
         return null;

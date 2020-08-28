@@ -3,23 +3,13 @@ package org.redcastlemedia.multitallented.civs.spells.targets;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.redcastlemedia.multitallented.civs.civilians.Civilian;
-import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.SpellComponent;
-import org.redcastlemedia.multitallented.civs.spells.civstate.BuiltInCivState;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
- *
  * @author Multitallented
  */
 public abstract class Target extends SpellComponent {
@@ -31,8 +21,9 @@ public abstract class Target extends SpellComponent {
                   int level,
                   ConfigurationSection config) {
         super(spell, key, null, origin, level);
-        this.config=config;
+        this.config = config;
     }
+
     public ConfigurationSection getConfig() {
         return config;
     }

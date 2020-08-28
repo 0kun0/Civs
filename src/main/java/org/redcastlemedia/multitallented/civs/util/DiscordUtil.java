@@ -1,15 +1,5 @@
 package org.redcastlemedia.multitallented.civs.util;
 
-import java.util.UUID;
-import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.towns.Town;
-
-
 public final class DiscordUtil {
     private DiscordUtil() {
 

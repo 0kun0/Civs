@@ -1,24 +1,20 @@
 package org.redcastlemedia.multitallented.civs.scheduler;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianListener;
 import org.redcastlemedia.multitallented.civs.events.RegionTickEvent;
-import org.redcastlemedia.multitallented.civs.events.TwoSecondEvent;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class RegionTickUtil {
     private static final int MAX_TPCycle = 10;
     private static int i = 0;
+
     private RegionTickUtil() {
 
     }

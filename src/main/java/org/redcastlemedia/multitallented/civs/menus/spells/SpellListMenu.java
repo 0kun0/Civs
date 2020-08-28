@@ -1,12 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.spells;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,7 +19,10 @@ import org.redcastlemedia.multitallented.civs.spells.SpellManager;
 import org.redcastlemedia.multitallented.civs.spells.SpellType;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-@CivsMenu(name = "spell-list") @SuppressWarnings("unused")
+import java.util.*;
+
+@CivsMenu(name = "spell-list")
+@SuppressWarnings("unused")
 public class SpellListMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -73,7 +69,8 @@ public class SpellListMenu extends CustomMenu {
         return data;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     protected ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         if ("spells".equals(menuIcon.getKey())) {
             Player player = Bukkit.getPlayer(civilian.getUuid());
@@ -109,7 +106,8 @@ public class SpellListMenu extends CustomMenu {
         return super.createItemStack(civilian, menuIcon, count);
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean doActionAndCancel(Civilian civilian, String actionString, ItemStack itemStack) {
         if ("set-spell-slot".equals(actionString)) {
             CivClass civClass = (CivClass) MenuManager.getData(civilian.getUuid(), Constants.CLASS);

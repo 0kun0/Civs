@@ -1,14 +1,16 @@
 package org.redcastlemedia.multitallented.civs.civilians;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.redcastlemedia.multitallented.civs.CivsSingleton;
-import org.redcastlemedia.multitallented.civs.civclass.CivClass;
 import org.redcastlemedia.multitallented.civs.Civs;
+import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
+import org.redcastlemedia.multitallented.civs.civclass.CivClass;
 import org.redcastlemedia.multitallented.civs.civclass.ClassManager;
 import org.redcastlemedia.multitallented.civs.items.CivItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
@@ -23,19 +25,25 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGH)
 public class CivilianManager {
 
-    private HashMap<UUID, Civilian> civilians = new HashMap<>();
-    private ArrayList<Civilian> sortedCivilians = new ArrayList<>();
+    private static CivilianManager civilianManager = null;
+    private final HashMap<UUID, Civilian> civilians = new HashMap<>();
+    private final ArrayList<Civilian> sortedCivilians = new ArrayList<>();
     @Getter
     @Setter
     private boolean listNeedsToBeSorted = false;
 
-    private static CivilianManager civilianManager = null;
+    public static CivilianManager getInstance() {
+        if (civilianManager == null) {
+            civilianManager = new CivilianManager();
+            if (Civs.getInstance() != null) {
+                civilianManager.loadAllCivilians();
+            }
+        }
+        return civilianManager;
+    }
 
     public void reload() {
         civilians.clear();
@@ -55,7 +63,7 @@ public class CivilianManager {
         }
         for (File currentFile : civilianFolder.listFiles()) {
             try {
-                UUID uuid = UUID.fromString(currentFile.getName().replace(".yml",""));
+                UUID uuid = UUID.fromString(currentFile.getName().replace(".yml", ""));
                 Civilian civilian = loadFromFileCivilian(uuid);
                 civilians.put(uuid, civilian);
                 sortedCivilians.add(civilian);
@@ -67,27 +75,19 @@ public class CivilianManager {
         sortCivilians();
     }
 
-    public static CivilianManager getInstance() {
-        if (civilianManager == null) {
-            civilianManager = new CivilianManager();
-            if (Civs.getInstance() != null) {
-                civilianManager.loadAllCivilians();
-            }
-        }
-        return civilianManager;
-    }
-
     void loadCivilian(Player player) {
         Civilian civilian = loadFromFileCivilian(player.getUniqueId());
         civilians.put(player.getUniqueId(), civilian);
         ClassManager.getInstance().loadPlayer(player, civilian);
     }
+
     public void createDefaultCivilian(Player player) {
         Civilian civilian = createDefaultCivilian(player.getUniqueId());
         civilians.put(player.getUniqueId(), civilian);
         sortedCivilians.add(civilian);
         listNeedsToBeSorted = true;
     }
+
     public void sortCivilians() {
         if (!listNeedsToBeSorted) {
             return;
@@ -103,12 +103,14 @@ public class CivilianManager {
             }
         });
     }
+
     void unloadCivilian(Player player) {
         ClassManager.getInstance().unloadPlayer(player);
         Civilian civilian = getCivilian(player.getUniqueId());
         saveCivilian(civilian);
 //        civilians.remove(player.getUniqueId());
     }
+
     public Civilian getCivilian(UUID uuid) {
         Civilian civilian = civilians.get(uuid);
         if (civilian == null) {
@@ -116,6 +118,7 @@ public class CivilianManager {
         }
         return civilian;
     }
+
     private Civilian loadFromFileCivilian(UUID uuid) {
         if (Civs.getInstance() == null) {
             Civilian civilian = createDefaultCivilian(uuid);
@@ -217,6 +220,7 @@ public class CivilianManager {
             return createDefaultCivilian(uuid);
         }
     }
+
     Civilian createDefaultCivilian(UUID uuid) {
         ConfigManager configManager = ConfigManager.getInstance();
         Civilian civilian = new Civilian(uuid,
@@ -234,6 +238,7 @@ public class CivilianManager {
         }
         return civilian;
     }
+
     public void saveCivilian(Civilian civilian) {
         File civilianFolder = new File(Civs.dataLocation, "players");
         if (!civilianFolder.exists()) {

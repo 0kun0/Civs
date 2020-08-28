@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,13 +28,59 @@ import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 @CivsSingleton
 public class HuntEffect implements Listener, CreateRegionListener {
     public static final String KEY = "hunt";
 
     private final HashMap<UUID, Long> cooldowns = new HashMap<>();
+
     public static void getInstance() {
         Bukkit.getPluginManager().registerEvents(new HuntEffect(), Civs.getInstance());
+    }
+
+    public static void messageNearbyPlayers(Player player, String messageKey, String replace1) {
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
+            if (!player1.getWorld().equals(player.getWorld()) ||
+                    player1.getLocation().distanceSquared(player.getLocation()) > 90000) {
+                continue;
+            }
+            String message = LocaleManager.getInstance().getTranslationWithPlaceholders(player1, messageKey);
+            if (replace1 != null) {
+                message = message.replace("$1", replace1);
+            }
+            player1.sendMessage(Civs.getPrefix() + message);
+        }
+    }
+
+    public static Location findNearbyLocationForTeleport(Location location, int radius, Player player) {
+        int times = 0;
+        Block targetBlock;
+        do {
+            times++;
+            int xRadius = (int) (Math.random() * radius);
+            if (Math.random() > .5) {
+                xRadius = xRadius * -1;
+            }
+            int x = location.getBlockX() + xRadius;
+            int zRadius = (int) ((Math.sqrt(radius * radius - xRadius * xRadius)));
+            if (Math.random() > .5) {
+                zRadius = zRadius * -1;
+            }
+            int z = location.getBlockZ() + zRadius;
+            targetBlock = location.getWorld().getHighestBlockAt(x, z);
+        } while (times < 5 && (targetBlock.getType() == Material.LAVA));
+
+        if (times == 5) {
+            return null;
+        }
+
+        return new Location(targetBlock.getWorld(),
+                targetBlock.getX(),
+                (double) targetBlock.getY() + 0.5,
+                targetBlock.getZ());
     }
 
     @EventHandler
@@ -164,7 +207,7 @@ public class HuntEffect implements Listener, CreateRegionListener {
         if (Civs.econ != null) {
             hardhipThreshold = Civs.econ.getBalance(targetPlayer);
         }
-        if ( targetCiv.getHardship() > civilian.getHardship() + hardhipThreshold) {
+        if (targetCiv.getHardship() > civilian.getHardship() + hardhipThreshold) {
             player.sendMessage(Civs.getPrefix() + LocaleManager.getInstance().getTranslationWithPlaceholders(player,
                     "hardship-too-high").replace("$1", targetPlayer.getDisplayName()));
             return;
@@ -189,47 +232,5 @@ public class HuntEffect implements Listener, CreateRegionListener {
             }
             cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
         }
-    }
-
-    public static void messageNearbyPlayers(Player player, String messageKey, String replace1) {
-        for (Player player1 : Bukkit.getOnlinePlayers()) {
-            if (!player1.getWorld().equals(player.getWorld()) ||
-                    player1.getLocation().distanceSquared(player.getLocation()) > 90000) {
-                continue;
-            }
-            String message = LocaleManager.getInstance().getTranslationWithPlaceholders(player1, messageKey);
-            if (replace1 != null) {
-                message = message.replace("$1", replace1);
-            }
-            player1.sendMessage(Civs.getPrefix() + message);
-        }
-    }
-
-    public static Location findNearbyLocationForTeleport(Location location, int radius, Player player) {
-        int times = 0;
-        Block targetBlock;
-        do {
-            times++;
-            int xRadius = (int) (Math.random()*radius);
-            if (Math.random() > .5) {
-                xRadius = xRadius *-1;
-            }
-            int x = location.getBlockX() + xRadius;
-            int zRadius = (int) ((Math.sqrt(radius*radius - xRadius*xRadius)));
-            if (Math.random() > .5) {
-                zRadius = zRadius *-1;
-            }
-            int z = location.getBlockZ() + zRadius;
-            targetBlock = location.getWorld().getHighestBlockAt(x, z);
-        } while (times < 5 && (targetBlock.getType() == Material.LAVA));
-
-        if (times == 5) {
-            return null;
-        }
-
-        return new Location(targetBlock.getWorld(),
-                targetBlock.getX(),
-                (double) targetBlock.getY() + 0.5,
-                targetBlock.getZ());
     }
 }

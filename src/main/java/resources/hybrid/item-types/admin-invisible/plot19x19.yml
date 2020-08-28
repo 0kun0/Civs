@@ -8,17 +8,17 @@ is-in-shop: false
 level: 1
 
 pre-reqs:
-- member=village:town:city:metropolis
+  - member=village:town:city:metropolis
 
 towns:
-- village
-- town
-- city
-- metropolis
+  - village
+  - town
+  - city
+  - metropolis
 
 build-radius: 9 # 19x19
 effects:
-- block_break
-- block_build
-- plot
-- buyable
+  - block_break
+  - block_build
+  - plot
+  - buyable

@@ -11,11 +11,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
 import org.redcastlemedia.multitallented.civs.civclass.ClassType;
+import org.redcastlemedia.multitallented.civs.civilians.Civilian;
+import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
 import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
 import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
-import org.redcastlemedia.multitallented.civs.civilians.Civilian;
-import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.towns.Town;
@@ -27,9 +27,45 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
-@CivsCommand(keys = { Constants.PORT, "spawn", "home" })
+@CivsCommand(keys = {Constants.PORT, "spawn", "home"})
 public class PortCommand extends CivCommand {
-    private HashMap<UUID, Long> cooldowns = new HashMap<>();
+    private final HashMap<UUID, Long> cooldowns = new HashMap<>();
+
+    public static boolean canPort(Region r, UUID uuid, Town town) {
+        try {
+            if (!r.getEffects().containsKey(Constants.PORT)) {
+                return false;
+            }
+            boolean privatePort = r.getEffects().get(Constants.PORT) != null &&
+                    !r.getEffects().get(Constants.PORT).equals("");
+            if (town == null) {
+                town = TownManager.getInstance().getTownAt(r.getLocation());
+            }
+            boolean townPrivatePort = privatePort && r.getEffects().get(Constants.PORT).equals("town");
+            boolean memberPrivatePort = privatePort && r.getEffects().get(Constants.PORT).equals(Constants.MEMBER);
+            boolean ownerPrivatePort = privatePort && r.getEffects().get(Constants.PORT).equals(Constants.OWNER);
+            if (!r.getPeople().containsKey(uuid)) {
+                return false;
+            }
+            if (privatePort) {
+                if (townPrivatePort && (town == null || !town.getPeople().containsKey(uuid) ||
+                        town.getPeople().get(uuid).contains(Constants.ALLY))) {
+                    return false;
+                }
+                if (memberPrivatePort && r.getPeople().get(uuid).contains(Constants.ALLY)) {
+                    return false;
+                }
+                if (ownerPrivatePort && (r.getPeople().get(uuid).contains(Constants.ALLY) ||
+                        r.getPeople().get(uuid).contains(Constants.MEMBER))) {
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            Civs.logger.log(Level.SEVERE, "Exception when trying to execute port command", e);
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public boolean runCommand(CommandSender commandSender, Command command, String label, String[] args) {
@@ -212,41 +248,5 @@ public class PortCommand extends CivCommand {
         }
         Player player = (Player) commandSender;
         return Civs.perm == null || Civs.perm.has(player, Constants.PORT_PERMISSION);
-    }
-
-    public static boolean canPort(Region r, UUID uuid, Town town) {
-        try {
-            if (!r.getEffects().containsKey(Constants.PORT)) {
-                return false;
-            }
-            boolean privatePort = r.getEffects().get(Constants.PORT) != null &&
-                    !r.getEffects().get(Constants.PORT).equals("");
-            if (town == null) {
-                town = TownManager.getInstance().getTownAt(r.getLocation());
-            }
-            boolean townPrivatePort = privatePort && r.getEffects().get(Constants.PORT).equals("town");
-            boolean memberPrivatePort = privatePort && r.getEffects().get(Constants.PORT).equals(Constants.MEMBER);
-            boolean ownerPrivatePort = privatePort && r.getEffects().get(Constants.PORT).equals(Constants.OWNER);
-            if (!r.getPeople().containsKey(uuid)) {
-                return false;
-            }
-            if (privatePort) {
-                if (townPrivatePort && (town == null || !town.getPeople().containsKey(uuid) ||
-                        town.getPeople().get(uuid).contains(Constants.ALLY))) {
-                    return false;
-                }
-                if (memberPrivatePort && r.getPeople().get(uuid).contains(Constants.ALLY)) {
-                    return false;
-                }
-                if (ownerPrivatePort && (r.getPeople().get(uuid).contains(Constants.ALLY) ||
-                        r.getPeople().get(uuid).contains(Constants.MEMBER))) {
-                    return false;
-                }
-            }
-        } catch (Exception e) {
-            Civs.logger.log(Level.SEVERE, "Exception when trying to execute port command", e);
-            return false;
-        }
-        return true;
     }
 }

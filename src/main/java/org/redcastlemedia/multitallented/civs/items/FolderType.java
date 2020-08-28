@@ -36,5 +36,8 @@ public class FolderType extends CivItem {
     public List<CivItem> getChildren() {
         return children;
     }
-    public boolean getVisible() { return visible; }
+
+    public boolean getVisible() {
+        return visible;
+    }
 }

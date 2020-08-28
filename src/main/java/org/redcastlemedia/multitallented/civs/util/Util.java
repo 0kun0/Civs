@@ -1,17 +1,6 @@
 package org.redcastlemedia.multitallented.civs.util;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -24,18 +13,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.items.CVInventory;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Bounty;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
+import org.redcastlemedia.multitallented.civs.items.CVInventory;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.towns.*;
 
-import net.md_5.bungee.api.chat.TextComponent;
+import java.text.NumberFormat;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Util {
 
@@ -221,7 +214,7 @@ public final class Util {
         }
         String prefix = getDefaultColor(input);
         ArrayList<String> lore = new ArrayList<>();
-        String sendMe = new String(input);
+        String sendMe = input;
         String addMe = prefix.equals("§r") ? prefix : "";
         for (String line : sendMe.split("\n")) {
             for (String s : line.split(" ")) {
@@ -296,16 +289,17 @@ public final class Util {
     }
 
     public static List<String> parseColors(List<String> inputString) {
-        for (int i=0; i<inputString.size(); i++) {
+        for (int i = 0; i < inputString.size(); i++) {
             inputString.set(i, parseColors(inputString.get(i)));
         }
         return inputString;
     }
+
     public static String parseColors(String input) {
         if (input == null) {
             return null;
         }
-        String returnInput = new String(input);
+        String returnInput = input;
         for (ChatColor color : ChatColor.values()) {
             returnInput = returnInput.replaceAll("@\\{" + color.name() + "\\}", color + "");
         }
@@ -392,14 +386,16 @@ public final class Util {
                 type != Material.ACACIA_BUTTON &&
                 type != Material.OAK_BUTTON;
     }
+
     public static boolean validateFileName(String fileName) {
         return fileName.matches("^[^.\\\\/:*?\"<>|]?[^\\\\/:*?\"<>|]*")
-                && getValidFileName(fileName).length()>0;
+                && getValidFileName(fileName).length() > 0;
     }
 
     public static String getValidFileName(String fileName) {
         return fileName.replaceAll("^[.\\\\/:*?\"<>|]?[\\\\/:*?\"<>|]*", "");
     }
+
     public static Locale getNumberFormatLocale(String locale) {
         Locale localeEnum = Locale.forLanguageTag(locale);
         if (localeEnum == null) {
@@ -408,6 +404,7 @@ public final class Util {
         }
         return localeEnum;
     }
+
     public static String getNumberFormat(double number, String locale) {
         String numberFormat = NumberFormat.getInstance(getNumberFormatLocale(locale)).format(number);
         if (numberFormat.isEmpty()) {
@@ -448,7 +445,8 @@ public final class Util {
             return false;
         }
 
-        outer: for (List<CVItem> orReqs : req) {
+        outer:
+        for (List<CVItem> orReqs : req) {
             for (CVItem orReq : orReqs) {
 
                 int amount = 0;
@@ -507,15 +505,16 @@ public final class Util {
         ArrayList<Integer> removeItems = new ArrayList<>();
         HashMap<Integer, Integer> reduceItems = new HashMap<>();
 
-        for (int i =0; i< inv.getSize(); i++) {
+        for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
             if (item == null) {
                 continue;
             }
 
-            int j=0;
+            int j = 0;
             boolean removeIndex = false;
-            outer1: for (ArrayList<CVItem> hsItems : hsItemsList) {
+            outer1:
+            for (ArrayList<CVItem> hsItems : hsItemsList) {
                 for (CVItem hsItem : hsItems) {
                     if (hsItem.equivalentItem(item, hsItem.getDisplayName() != null, !hsItem.getLore().isEmpty())) {
 
@@ -557,7 +556,8 @@ public final class Util {
 
     public static ItemStack[] getItems(List<List<CVItem>> addItems) {
         List<ItemStack> output = new ArrayList<>();
-        outer: for (List<CVItem> tempItems : addItems) {
+        outer:
+        for (List<CVItem> tempItems : addItems) {
             double rand = Math.random();
             double prevChance = 0;
             for (CVItem item : tempItems) {
@@ -566,7 +566,7 @@ public final class Util {
                     is.setAmount(1);
                     int amount = item.getQty();
                     int max = is.getMaxStackSize();
-                    for (;;) {
+                    for (; ; ) {
                         ItemStack isa;
                         if (amount > max) {
                             isa = item.createItemStack();
@@ -592,7 +592,8 @@ public final class Util {
     public static ArrayList<ItemStack> addItems(List<List<CVItem>> addItems, CVInventory inv) {
         ArrayList<ItemStack> remainingItems = new ArrayList<>();
 
-        outer: for (List<CVItem> tempItems : addItems) {
+        outer:
+        for (List<CVItem> tempItems : addItems) {
             double rand = Math.random();
             double prevChance = 0;
             for (CVItem item : tempItems) {
@@ -724,58 +725,59 @@ public final class Util {
         //Then apply this to our rocket
         firework.setFireworkMeta(fireworkMeta);
     }
+
     private static Color getColor(int i) {
         Color c = null;
-        if(i==1){
-            c=Color.AQUA;
+        if (i == 1) {
+            c = Color.AQUA;
         }
-        if(i==2){
-            c=Color.BLACK;
+        if (i == 2) {
+            c = Color.BLACK;
         }
-        if(i==3){
-            c=Color.BLUE;
+        if (i == 3) {
+            c = Color.BLUE;
         }
-        if(i==4){
-            c=Color.FUCHSIA;
+        if (i == 4) {
+            c = Color.FUCHSIA;
         }
-        if(i==5){
-            c=Color.GRAY;
+        if (i == 5) {
+            c = Color.GRAY;
         }
-        if(i==6){
-            c=Color.GREEN;
+        if (i == 6) {
+            c = Color.GREEN;
         }
-        if(i==7){
-            c=Color.LIME;
+        if (i == 7) {
+            c = Color.LIME;
         }
-        if(i==8){
-            c=Color.MAROON;
+        if (i == 8) {
+            c = Color.MAROON;
         }
-        if(i==9){
-            c=Color.NAVY;
+        if (i == 9) {
+            c = Color.NAVY;
         }
-        if(i==10){
-            c=Color.OLIVE;
+        if (i == 10) {
+            c = Color.OLIVE;
         }
-        if(i==11){
-            c=Color.ORANGE;
+        if (i == 11) {
+            c = Color.ORANGE;
         }
-        if(i==12){
-            c=Color.PURPLE;
+        if (i == 12) {
+            c = Color.PURPLE;
         }
-        if(i==13){
-            c=Color.RED;
+        if (i == 13) {
+            c = Color.RED;
         }
-        if(i==14){
-            c=Color.SILVER;
+        if (i == 14) {
+            c = Color.SILVER;
         }
-        if(i==15){
-            c=Color.TEAL;
+        if (i == 15) {
+            c = Color.TEAL;
         }
-        if(i==16){
-            c=Color.WHITE;
+        if (i == 16) {
+            c = Color.WHITE;
         }
-        if(i==17){
-            c=Color.YELLOW;
+        if (i == 17) {
+            c = Color.YELLOW;
         }
 
         return c;

@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
-
 import rip.reflex.api.event.ReflexCheckEvent;
 
 public class ReflexListener implements Listener {

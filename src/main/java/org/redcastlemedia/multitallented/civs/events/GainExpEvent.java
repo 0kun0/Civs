@@ -8,7 +8,6 @@ import org.bukkit.event.HandlerList;
 import java.util.UUID;
 
 /**
- *
  * @author Multitallented
  */
 public class GainExpEvent extends Event implements Cancellable {
@@ -24,41 +23,46 @@ public class GainExpEvent extends Event implements Cancellable {
         this.exp = exp;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public static HandlerList getHandlerList() {
+        return hList;
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
+
     public double getExp() {
         return exp;
     }
+
     public void setExp(double exp) {
         this.exp = exp;
-    }
-
-    public static HandlerList getHandlerList() {
-        return hList;
     }
 
     @Override
     public HandlerList getHandlers() {
         return hList;
     }
-    @Override
-    public void setCancelled(boolean bln) {
-        this.cancelled = bln;
-    }
+
     @Override
     public boolean isCancelled() {
         return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean bln) {
+        this.cancelled = bln;
     }
 }

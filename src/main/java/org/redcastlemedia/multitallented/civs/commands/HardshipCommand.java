@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.commands;
 
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -12,7 +10,10 @@ import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsCommand(keys = { "hardship" }) @SuppressWarnings("unused")
+import java.util.List;
+
+@CivsCommand(keys = {"hardship"})
+@SuppressWarnings("unused")
 public class HardshipCommand extends CivCommand {
     @Override
     public boolean runCommand(CommandSender commandSender, Command command, String label, String[] args) {

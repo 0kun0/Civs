@@ -1,39 +1,36 @@
 package org.redcastlemedia.multitallented.civs.menus.regions;
 
-import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
+import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
 import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
 import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
 import org.redcastlemedia.multitallented.civs.menus.MenuManager;
-import org.redcastlemedia.multitallented.civs.regions.Region;
-import org.redcastlemedia.multitallented.civs.regions.RegionManager;
-import org.redcastlemedia.multitallented.civs.regions.RegionType;
-import org.redcastlemedia.multitallented.civs.regions.RegionUpkeep;
+import org.redcastlemedia.multitallented.civs.regions.*;
 import org.redcastlemedia.multitallented.civs.regions.effects.ForSaleEffect;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
-import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = "region") @SuppressWarnings("unused")
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+@CivsMenu(name = "region")
+@SuppressWarnings("unused")
 public class RegionMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -84,7 +81,7 @@ public class RegionMenu extends CustomMenu {
         Town town = TownManager.getInstance().getTownAt(region.getLocation());
         boolean viewMembers = Util.hasOverride(region, civilian, town) ||
                 (regionPeople.get(civilian.getUuid()) != null &&
-                regionPeople.get(civilian.getUuid()).contains(Constants.OWNER));
+                        regionPeople.get(civilian.getUuid()).contains(Constants.OWNER));
         int personCount = 0;
         for (String role : region.getRawPeople().values()) {
             if (role.contains(Constants.OWNER) || role.contains(Constants.MEMBER)) {
@@ -114,7 +111,7 @@ public class RegionMenu extends CustomMenu {
             return new ItemStack(Material.AIR);
         } else if ("upkeep-working".equals(menuIcon.getKey()) &&
                 (region.getFailingUpkeeps().size() >= regionType.getUpkeeps().size() ||
-                !region.getMissingBlocks().isEmpty())) {
+                        !region.getMissingBlocks().isEmpty())) {
             return new ItemStack(Material.AIR);
         } else if ("destroy".equals(menuIcon.getKey())) {
             boolean isIndestrucible = region.getEffects().containsKey("indestructible");

@@ -29,18 +29,21 @@ import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.util.DebugLogger;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.logging.Level;
 
 @CivsSingleton
 public class ConveyorEffect implements Listener, RegionCreatedListener {
-    private static ConveyorEffect instance = null;
-    private HashMap<Region, StorageMinecart> carts = new HashMap<>();
-    private HashMap<Region, StorageMinecart> orphanCarts = new HashMap<>();
-    private HashMap<Region, Location> cacheSpawnPoints = new HashMap<>();
-    private HashMap<Region, Region> cacheDestinationRegions = new HashMap<>();
-    private boolean disabled = false;
     public static String KEY = "conveyor";
+    private static ConveyorEffect instance = null;
+    private final HashMap<Region, StorageMinecart> carts = new HashMap<>();
+    private final HashMap<Region, StorageMinecart> orphanCarts = new HashMap<>();
+    private final HashMap<Region, Location> cacheSpawnPoints = new HashMap<>();
+    private final HashMap<Region, Region> cacheDestinationRegions = new HashMap<>();
+    private boolean disabled = false;
 
     public ConveyorEffect() {
         RegionManager.getInstance().addRegionCreatedListener(KEY, this);
@@ -103,7 +106,8 @@ public class ConveyorEffect implements Listener, RegionCreatedListener {
         double x0 = l.getX();
         double y0 = l.getY();
         double z0 = l.getZ();
-        outer: for (int x = (int) (x0 - radius); x < x0 + radius; x++) {
+        outer:
+        for (int x = (int) (x0 - radius); x < x0 + radius; x++) {
             for (int y = (int) (y0 - radius); y < y0 + radius; y++) {
                 for (int z = (int) (z0 - radius); z < z0 + radius; z++) {
                     Block b = l.getWorld().getBlockAt(x, y, z);

@@ -1,13 +1,7 @@
 package org.redcastlemedia.multitallented.civs.towns;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Location;
 import org.redcastlemedia.multitallented.civs.alliances.Alliance;
 import org.redcastlemedia.multitallented.civs.alliances.AllianceManager;
@@ -19,59 +13,70 @@ import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.*;
 
 public class Town {
-    @Getter @Setter
+    @Getter
+    @Setter
     private String type;
 
     private int maxPower;
     private int power;
-    private Location location;
+    private final Location location;
     private String name;
-    private HashMap<UUID, String> people;
+    private final HashMap<UUID, String> people;
     private int housing;
     private ArrayList<Bounty> bounties = new ArrayList<>();
-    private List<String> allyInvites = new ArrayList<>();
+    private final List<String> allyInvites = new ArrayList<>();
     private List<Location> childLocations = new ArrayList<>();
-    @Getter @Setter
+    @Getter
+    @Setter
     private HashMap<String, String> effects = new HashMap<>();
     private long lastDisable;
     private int villagers;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private double bankAccount;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private double taxes;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String governmentType;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String colonialTown;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private long lastVote = 0;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private HashMap<UUID, HashMap<UUID, Integer>> votes = new HashMap<>();
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean govTypeChangedToday;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private long lastActive;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean devolvedToday;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private HashMap<UUID, Integer> idiocracyScore = new HashMap<>();
 
     @Getter
-    private HashSet<UUID> revolt = new HashSet<>();
+    private final HashSet<UUID> revolt = new HashSet<>();
 
     public Town(String name, String type, Location location, HashMap<UUID, String> people, int power, int maxPower,
                 int housing, int villagers, long lastDisable) {
@@ -91,6 +96,7 @@ public class Town {
     public long getLastDisable() {
         return lastDisable;
     }
+
     public void setLastDisable(long lastDisable) {
         this.lastDisable = lastDisable;
     }
@@ -106,8 +112,15 @@ public class Town {
     public Location getLocation() {
         return location;
     }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public List<String> getAllyInvites() {
         return allyInvites;
     }
@@ -115,6 +128,7 @@ public class Town {
     public List<Location> getChildLocations() {
         return childLocations;
     }
+
     public void setChildLocations(List<Location> childLocations) {
         this.childLocations = childLocations;
     }
@@ -122,9 +136,11 @@ public class Town {
     public HashMap<UUID, String> getRawPeople() {
         return people;
     }
+
     public void setPeople(UUID uuid, String role) {
         people.put(uuid, role);
     }
+
     public HashMap<UUID, String> getPeople() {
         HashSet<Alliance> allies = new HashSet<>(AllianceManager.getInstance().getAlliances(this));
         if (allies.isEmpty()) {
@@ -160,15 +176,19 @@ public class Town {
         }
         return newPeople;
     }
+
     public int getMaxPower() {
         return maxPower;
     }
-    public int getPower() {
-        return power;
-    }
+
     public void setMaxPower(int maxPower) {
         this.maxPower = maxPower;
     }
+
+    public int getPower() {
+        return power;
+    }
+
     protected void setPower(int power) {
         this.power = power;
     }
@@ -189,9 +209,11 @@ public class Town {
     public ArrayList<Bounty> getBounties() {
         return bounties;
     }
+
     public void setBounties(ArrayList<Bounty> bounties) {
         this.bounties = bounties;
     }
+
     public void sortBounties() {
         if (bounties.size() < 2) {
             return;
@@ -210,6 +232,7 @@ public class Town {
     public int getHousing() {
         return this.housing;
     }
+
     public void setHousing(int housing) {
         this.housing = housing;
     }

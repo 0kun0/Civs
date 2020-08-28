@@ -8,7 +8,8 @@ import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.spells.SpellUtil;
 
-@CivsCommand(keys = {"combat", "spells"}) @SuppressWarnings("unused")
+@CivsCommand(keys = {"combat", "spells"})
+@SuppressWarnings("unused")
 public class CombatBarCommand extends CivCommand {
 
     @Override

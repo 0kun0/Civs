@@ -41,6 +41,7 @@ public class SoundEffect extends Effect {
     public boolean meetsRequirement() {
         return true;
     }
+
     public void apply() {
         Object target = getTarget();
         Location location = null;

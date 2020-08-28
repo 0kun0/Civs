@@ -5,7 +5,6 @@ import lombok.Setter;
 import net.Indyuce.mmoitems.api.Type;
 import net.Indyuce.mmoitems.api.item.MMOItem;
 import net.mmogroup.mmolib.api.item.NBTItem;
-
 import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,22 +24,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Multi
  */
 public class CVItem {
+    private final double chance;
     private Material mat;
     private int qty;
-    private final double chance;
     private String displayName = null;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String mmoItemType = null;
 
-    @Setter @Getter
+    @Setter
+    @Getter
     private String mmoItemName = null;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String group = null;
     private List<String> lore = new ArrayList<>();
 
@@ -75,7 +76,7 @@ public class CVItem {
         return createCVItemFromString(ConfigManager.getInstance().getDefaultLanguage(), materialString);
     }
 
-    public static CVItem createCVItemFromString(String locale, String materialString)  {
+    public static CVItem createCVItemFromString(String locale, String materialString) {
         boolean isMMOItem = materialString.contains("mi:");
         if (isMMOItem) {
             materialString = materialString.replace("mi:", "");
@@ -90,7 +91,7 @@ public class CVItem {
         String[] splitString;
 
 
-        for (;;) {
+        for (; ; ) {
             int asteriskIndex = materialString.indexOf("*");
             int percentIndex = materialString.indexOf("%");
             int nameIndex = materialString.indexOf(".");
@@ -104,7 +105,7 @@ public class CVItem {
                 materialString = splitString[0];
             } else if (nameIndex != -1 && nameIndex > percentIndex && nameIndex > asteriskIndex) {
                 splitString = materialString.split("\\.");
-                nameString = splitString[splitString.length -1];
+                nameString = splitString[splitString.length - 1];
                 materialString = splitString[0];
             } else {
                 if (isMMOItem) {
@@ -181,10 +182,6 @@ public class CVItem {
         itemStack.getItemMeta().setLore(lore);
     }
 
-    public boolean isCustomItem() {
-        return isCustomItem(lore);
-    }
-
     private static boolean isCustomItem(List<String> lore) {
         return lore != null && !lore.isEmpty() &&
                 LocaleManager.getInstance().hasTranslation(
@@ -196,10 +193,6 @@ public class CVItem {
         return Material.valueOf(materialString.replaceAll(" ", "_").toUpperCase());
     }
 
-    public boolean equivalentItem(ItemStack iss) {
-        return equivalentItem(iss, false);
-    }
-
     public static boolean isCivsItem(ItemStack is) {
         if (is == null || !is.hasItemMeta()) {
             return false;
@@ -208,33 +201,25 @@ public class CVItem {
         if (im == null || im.getDisplayName() == null) {
             return false;
         }
-        if (im.getLore() == null || im.getLore().size() < 2 || ItemManager.getInstance().getItemType(im.getLore().get(1)) == null) {
-            return false;
-        }
-        return true;
-    }
-
-    public CivItem getCivItem() {
-        if (lore.size() < 2) {
-            return null;
-        }
-        return ItemManager.getInstance().getItemType(lore.get(1));
+        return im.getLore() != null && im.getLore().size() >= 2 && ItemManager.getInstance().getItemType(im.getLore().get(1)) != null;
     }
 
     public static CVItem createFromItemStack(ItemStack is) {
         if (is.hasItemMeta() && is.getItemMeta().getDisplayName() != null &&
                 !"".equals(is.getItemMeta().getDisplayName())) {
             if (is.getItemMeta().getLore() != null) {
-                return new CVItem(is.getType(),is.getAmount(), 100, is.getItemMeta().getDisplayName(), is.getItemMeta().getLore());
+                return new CVItem(is.getType(), is.getAmount(), 100, is.getItemMeta().getDisplayName(), is.getItemMeta().getLore());
             } else {
-                return new CVItem(is.getType(),is.getAmount(), 100, is.getItemMeta().getDisplayName());
+                return new CVItem(is.getType(), is.getAmount(), 100, is.getItemMeta().getDisplayName());
             }
         }
-        return new CVItem(is.getType(),is.getAmount());
+        return new CVItem(is.getType(), is.getAmount());
     }
+
     public static List<CVItem> createListFromString(String input) {
         String groupName = null;
-        group: if (input.contains("g:")) {
+        group:
+        if (input.contains("g:")) {
             String itemGroup = null;
             String params = null;
             for (String currKey : ConfigManager.getInstance().getItemGroups().keySet()) {
@@ -265,6 +250,21 @@ public class CVItem {
             reqs.add(cvItem);
         }
         return reqs;
+    }
+
+    public boolean isCustomItem() {
+        return isCustomItem(lore);
+    }
+
+    public boolean equivalentItem(ItemStack iss) {
+        return equivalentItem(iss, false);
+    }
+
+    public CivItem getCivItem() {
+        if (lore.size() < 2) {
+            return null;
+        }
+        return ItemManager.getInstance().getItemType(lore.get(1));
     }
 
     public ItemStack createItemStack() {
@@ -315,10 +315,7 @@ public class CVItem {
             if (!mmoItemType.equalsIgnoreCase(nbtItem.getString("MMOITEMS_ITEM_TYPE"))) {
                 return false;
             }
-            if (!mmoItemName.equalsIgnoreCase(nbtItem.getString("MMOITEMS_ITEM_ID"))) {
-                return false;
-            }
-            return true;
+            return mmoItemName.equalsIgnoreCase(nbtItem.getString("MMOITEMS_ITEM_ID"));
         }
         if (useDisplayName) {
             boolean nullComparison = getDisplayName() == null;
@@ -360,31 +357,36 @@ public class CVItem {
         return lore;
     }
 
+    public void setLore(List<String> lore) {
+        this.lore = lore;
+    }
+
     public String getDisplayName() {
         return displayName;
+    }
+
+    public void setDisplayName(String name) {
+        this.displayName = name;
+    }
+
+    public Material getMat() {
+        return mat;
     }
 
     public void setMat(Material mat) {
         this.mat = mat;
     }
 
-    public Material getMat() {
-        return mat;
-    }
     public int getQty() {
         return qty;
     }
-    public double getChance() {
-        return chance;
-    }
+
     public void setQty(int qty) {
         this.qty = qty;
     }
-    public void setDisplayName(String name) {
-        this.displayName = name;
-    }
-    public void setLore(List<String> lore) {
-        this.lore = lore;
+
+    public double getChance() {
+        return chance;
     }
 
     @Override

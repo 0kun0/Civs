@@ -1,40 +1,35 @@
 package org.redcastlemedia.multitallented.civs.scheduler;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
+import org.redcastlemedia.multitallented.civs.civilians.Civilian;
+import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.civilians.allowedactions.AllowedActionsListener;
+import org.redcastlemedia.multitallented.civs.events.*;
+import org.redcastlemedia.multitallented.civs.items.ItemManager;
 import org.redcastlemedia.multitallented.civs.items.UnloadedInventoryHandler;
 import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
 import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
-import org.redcastlemedia.multitallented.civs.civilians.Civilian;
-import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
-import org.redcastlemedia.multitallented.civs.events.*;
-import org.redcastlemedia.multitallented.civs.items.ItemManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
+import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.skills.CivSkills;
 import org.redcastlemedia.multitallented.civs.skills.Skill;
 import org.redcastlemedia.multitallented.civs.spells.civstate.BuiltInCivState;
 import org.redcastlemedia.multitallented.civs.towns.*;
 import org.redcastlemedia.multitallented.civs.tutorials.AnnouncementUtil;
 import org.redcastlemedia.multitallented.civs.util.Constants;
-import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.util.MessageUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public class CommonScheduler implements Runnable {
     @Getter
@@ -42,10 +37,15 @@ public class CommonScheduler implements Runnable {
     @Getter
     protected static final Map<UUID, Town> lastTown = new HashMap<>();
     private static final HashMap<UUID, Long> lastAnnouncment = new HashMap<>();
+    @Getter
+    @Setter
+    protected static boolean run = true;
     private int i = 0;
     private boolean notTwoSecond = true;
-    @Getter @Setter
-    protected static boolean run = true;
+
+    public static void removeLastAnnouncement(UUID uuid) {
+        lastAnnouncment.remove(uuid);
+    }
 
     @Override
     public void run() {
@@ -125,10 +125,6 @@ public class CommonScheduler implements Runnable {
         AnnouncementUtil.sendAnnouncement(player);
     }
 
-    public static void removeLastAnnouncement(UUID uuid) {
-        lastAnnouncment.remove(uuid);
-    }
-
     private void depreciateKarma() {
         long karmaPeriod = ConfigManager.getInstance().getKarmaDepreciatePeriod() * 1000;
         for (Civilian civilian : CivilianManager.getInstance().getCivilians()) {
@@ -161,6 +157,7 @@ public class CommonScheduler implements Runnable {
             }
         }
     }
+
     void playerInTown(Player player) {
         TownManager townManager = TownManager.getInstance();
         Town town = townManager.getTownAt(player.getLocation());
@@ -224,6 +221,7 @@ public class CommonScheduler implements Runnable {
                     "town-enter-warning"));
         }
     }
+
     private void exitTown(Player player, Civilian civilian, Town town, TownType townType) {
         PlayerExitTownEvent playerExitTownEvent = new PlayerExitTownEvent(player.getUniqueId(),
                 town, townType);

@@ -1,9 +1,9 @@
 package org.redcastlemedia.multitallented.civs.anticheat;
 
+import me.vagdedes.spartan.system.Enums;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import me.vagdedes.spartan.system.Enums;
 
 public final class SpartanExemptionAssembler {
     private SpartanExemptionAssembler() {

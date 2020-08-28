@@ -1,10 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.regions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
@@ -19,7 +14,13 @@ import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 
-@CivsMenu(name = "region-list") @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@CivsMenu(name = "region-list")
+@SuppressWarnings("unused")
 public class RegionListMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -63,7 +64,8 @@ public class RegionListMenu extends CustomMenu {
         return data;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean doActionAndCancel(Civilian civilian, String actionString, ItemStack clickedItem) {
         if ("view-region".equals(actionString)) {
             Region region = ((HashMap<ItemStack, Region>) MenuManager.getData(civilian.getUuid(), "regionMap")).get(clickedItem);
@@ -76,7 +78,8 @@ public class RegionListMenu extends CustomMenu {
         return super.doActionAndCancel(civilian, actionString, clickedItem);
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     protected ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         if (menuIcon.getKey().equals("regions")) {
             List<Region> regions;

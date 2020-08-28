@@ -1,21 +1,22 @@
 package org.redcastlemedia.multitallented.civs.commands;
 
-import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsCommand(keys = { "sell" }) @SuppressWarnings("unused")
+import java.util.List;
+
+@CivsCommand(keys = {"sell"})
+@SuppressWarnings("unused")
 public class SellRegionCommand extends CivCommand {
     @Override
     public boolean runCommand(CommandSender commandSender, Command command, String label, String[] args) {
@@ -55,8 +56,8 @@ public class SellRegionCommand extends CivCommand {
         setRegionNotForSale(player, region, salePrice);
         commandSender.sendMessage(Civs.getPrefix() +
                 LocaleManager.getInstance().getTranslationWithPlaceholders(player, "region-sale-set")
-                .replace("$1", region.getType())
-                .replace("$2", Util.getNumberFormat(salePrice, civilian.getLocale())));
+                        .replace("$1", region.getType())
+                        .replace("$2", Util.getNumberFormat(salePrice, civilian.getLocale())));
         return true;
     }
 
@@ -78,11 +79,8 @@ public class SellRegionCommand extends CivCommand {
                 count++;
             }
         }
-        if (!region.getRawPeople().containsKey(player.getUniqueId())
-                || count != 1) {
-            return false;
-        }
-        return true;
+        return region.getRawPeople().containsKey(player.getUniqueId())
+                && count == 1;
     }
 
     @Override

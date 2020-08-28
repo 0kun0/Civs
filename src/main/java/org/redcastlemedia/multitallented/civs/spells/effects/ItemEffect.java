@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.spells.effects;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -14,6 +11,9 @@ import org.bukkit.potion.PotionType;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
 import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.SpellConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemEffect extends Effect {
 
@@ -64,6 +64,7 @@ public class ItemEffect extends Effect {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         return this.transformReq.contains(itemStack.getType().name().toUpperCase());
     }
+
     public void apply() {
         Object target = getTarget();
         if (!(target instanceof Player)) {

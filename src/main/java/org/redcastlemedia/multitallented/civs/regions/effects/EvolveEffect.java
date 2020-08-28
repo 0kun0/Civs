@@ -7,11 +7,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.events.RegionUpkeepEvent;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
@@ -65,9 +65,9 @@ public class EvolveEffect implements Listener {
             if (player != null && player.isOnline()) {
                 player.sendMessage(Civs.getPrefix() +
                         LocaleManager.getInstance().getTranslation(civilian.getLocale(),
-                        "region-evolved")
-                        .replace("$1", typeName)
-                        .replace("$2", evolveName));
+                                "region-evolved")
+                                .replace("$1", typeName)
+                                .replace("$2", evolveName));
             }
         }
 

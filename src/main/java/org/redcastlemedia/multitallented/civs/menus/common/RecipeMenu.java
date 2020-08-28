@@ -1,27 +1,24 @@
 package org.redcastlemedia.multitallented.civs.menus.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
-import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
-import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
-import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
-import org.redcastlemedia.multitallented.civs.menus.MenuManager;
-import org.redcastlemedia.multitallented.civs.menus.MenuUtil;
+import org.redcastlemedia.multitallented.civs.menus.*;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-@CivsMenu(name = "recipe") @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@CivsMenu(name = "recipe")
+@SuppressWarnings("unused")
 public class RecipeMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -103,7 +100,8 @@ public class RecipeMenu extends CustomMenu {
         return data;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     protected ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         RegionType regionType = (RegionType) ItemManager.getInstance().getItemType(
                 (String) MenuManager.getData(civilian.getUuid(), Constants.REGION_TYPE));

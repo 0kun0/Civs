@@ -16,11 +16,11 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.events.RegionTickEvent;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
@@ -38,10 +38,6 @@ public class VillagerEffect implements CreateRegionListener, DestroyRegionListen
     public static String KEY = "villager";
     protected static HashMap<String, Long> townCooldowns = new HashMap<>();
 
-    public static void getInstance() {
-        Bukkit.getPluginManager().registerEvents(new VillagerEffect(), Civs.getInstance());
-    }
-
     public VillagerEffect() {
         RegionManager regionManager = RegionManager.getInstance();
         regionManager.addCreateRegionListener(KEY, this);
@@ -49,77 +45,8 @@ public class VillagerEffect implements CreateRegionListener, DestroyRegionListen
         regionManager.addDestroyRegionListener(KEY, this);
     }
 
-    @EventHandler
-    public void onRegionTickEvent(RegionTickEvent event) {
-        Region region = event.getRegion();
-        if (region.getEffects().containsKey(VillagerEffect.KEY)) {
-            VillagerEffect.spawnVillager(region);
-        }
-    }
-
-    @Override
-    public void regionCreatedHandler(Region region) {
-        if (!region.getEffects().containsKey(KEY)) {
-            return;
-        }
-        Block block = region.getLocation().getBlock();
-
-        Town town = TownManager.getInstance().getTownAt(block.getLocation());
-        String villagerCountString = region.getEffects().get(KEY);
-        int villagerCount = 1;
-        if (villagerCountString != null && !villagerCountString.isEmpty()) {
-            try {
-                villagerCount = Integer.parseInt(villagerCountString);
-            } catch (Exception e) {
-
-            }
-        }
-        if (town != null) {
-            town.setVillagers(town.getVillagers() + villagerCount);
-            TownManager.getInstance().saveTown(town);
-        }
-    }
-
-    @Override
-    public boolean createRegionHandler(Block block, Player player, RegionType regionType) {
-        Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
-        if (block.getRelative(BlockFace.UP, 1).getType() != Material.AIR ||
-                block.getRelative(BlockFace.UP, 2).getType() != Material.AIR) {
-
-            player.sendMessage(Civs.getPrefix() +
-                    LocaleManager.getInstance().getTranslation(civilian.getLocale(), "building-requires-2space"));
-            return false;
-        }
-        Town town = TownManager.getInstance().getTownAt(block.getLocation());
-        if (town == null) {
-            player.sendMessage(Civs.getPrefix() +
-                    LocaleManager.getInstance().getTranslation(civilian.getLocale(), "req-build-inside-town")
-                    .replace("$1", regionType.getName()).replace("$2", "town"));
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public void destroyRegionHandler(Region region) {
-        if (!region.getEffects().containsKey(KEY)) {
-            return;
-        }
-        Town town = TownManager.getInstance().getTownAt(region.getLocation());
-        if (town == null) {
-            return;
-        }
-        String villagerCountString = region.getEffects().get(KEY);
-        int villagerCount = 1;
-        if (villagerCountString != null && !villagerCountString.isEmpty()) {
-            try {
-                villagerCount = Integer.parseInt(villagerCountString);
-            } catch (Exception e) {
-
-            }
-        }
-        town.setVillagers(Math.max(0, town.getVillagers() - villagerCount));
-        TownManager.getInstance().saveTown(town);
+    public static void getInstance() {
+        Bukkit.getPluginManager().registerEvents(new VillagerEffect(), Civs.getInstance());
     }
 
     static Villager spawnVillager(Region region) {
@@ -131,7 +58,7 @@ public class VillagerEffect implements CreateRegionListener, DestroyRegionListen
             return null;
         }
         // Don't spawn a villager if there aren't players in the town
-        if (!CommonScheduler.getLastTown().values().contains(town)) {
+        if (!CommonScheduler.getLastTown().containsValue(town)) {
             return null;
         }
         long cooldownTime = ConfigManager.getInstance().getVillagerCooldown() * 1000;
@@ -182,6 +109,79 @@ public class VillagerEffect implements CreateRegionListener, DestroyRegionListen
         }
 
         return region.getLocation().getWorld().spawn(region.getLocation().add(0, 0.5, 0), Villager.class);
+    }
+
+    @EventHandler
+    public void onRegionTickEvent(RegionTickEvent event) {
+        Region region = event.getRegion();
+        if (region.getEffects().containsKey(VillagerEffect.KEY)) {
+            VillagerEffect.spawnVillager(region);
+        }
+    }
+
+    @Override
+    public void regionCreatedHandler(Region region) {
+        if (!region.getEffects().containsKey(KEY)) {
+            return;
+        }
+        Block block = region.getLocation().getBlock();
+
+        Town town = TownManager.getInstance().getTownAt(block.getLocation());
+        String villagerCountString = region.getEffects().get(KEY);
+        int villagerCount = 1;
+        if (villagerCountString != null && !villagerCountString.isEmpty()) {
+            try {
+                villagerCount = Integer.parseInt(villagerCountString);
+            } catch (Exception e) {
+
+            }
+        }
+        if (town != null) {
+            town.setVillagers(town.getVillagers() + villagerCount);
+            TownManager.getInstance().saveTown(town);
+        }
+    }
+
+    @Override
+    public boolean createRegionHandler(Block block, Player player, RegionType regionType) {
+        Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
+        if (block.getRelative(BlockFace.UP, 1).getType() != Material.AIR ||
+                block.getRelative(BlockFace.UP, 2).getType() != Material.AIR) {
+
+            player.sendMessage(Civs.getPrefix() +
+                    LocaleManager.getInstance().getTranslation(civilian.getLocale(), "building-requires-2space"));
+            return false;
+        }
+        Town town = TownManager.getInstance().getTownAt(block.getLocation());
+        if (town == null) {
+            player.sendMessage(Civs.getPrefix() +
+                    LocaleManager.getInstance().getTranslation(civilian.getLocale(), "req-build-inside-town")
+                            .replace("$1", regionType.getName()).replace("$2", "town"));
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void destroyRegionHandler(Region region) {
+        if (!region.getEffects().containsKey(KEY)) {
+            return;
+        }
+        Town town = TownManager.getInstance().getTownAt(region.getLocation());
+        if (town == null) {
+            return;
+        }
+        String villagerCountString = region.getEffects().get(KEY);
+        int villagerCount = 1;
+        if (villagerCountString != null && !villagerCountString.isEmpty()) {
+            try {
+                villagerCount = Integer.parseInt(villagerCountString);
+            } catch (Exception e) {
+
+            }
+        }
+        town.setVillagers(Math.max(0, town.getVillagers() - villagerCount));
+        TownManager.getInstance().saveTown(town);
     }
 
     @EventHandler

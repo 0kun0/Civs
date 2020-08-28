@@ -5,9 +5,9 @@ level: 1
 groups:
   - chase
 
-pre-reqs: []
+pre-reqs: [ ]
 
-allowed-actions: []
+allowed-actions: [ ]
 
 exp-per-use: 10
 

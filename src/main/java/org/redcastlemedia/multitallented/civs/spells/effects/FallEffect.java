@@ -58,6 +58,7 @@ public class FallEffect extends Effect {
         }
         return true;
     }
+
     public void apply() {
         Object target = getTarget();
         if (!(target instanceof LivingEntity)) {

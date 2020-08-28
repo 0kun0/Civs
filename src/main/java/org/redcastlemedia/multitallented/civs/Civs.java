@@ -1,16 +1,9 @@
 package org.redcastlemedia.multitallented.civs;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import me.clip.placeholderapi.PlaceholderAPIPlugin;
+import net.Indyuce.mmoitems.MMOItems;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -18,14 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dynmap.DynmapCommonAPI;
-import org.redcastlemedia.multitallented.civs.civilians.allowedactions.AllowedActionsListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.redcastlemedia.multitallented.civs.civilians.allowedactions.AllowedActionsListener;
 import org.redcastlemedia.multitallented.civs.commands.CivCommand;
 import org.redcastlemedia.multitallented.civs.commands.CivsCommand;
 import org.redcastlemedia.multitallented.civs.commands.TabComplete;
 import org.redcastlemedia.multitallented.civs.dynmaphook.DynmapHook;
+import org.redcastlemedia.multitallented.civs.placeholderexpansion.PlaceHook;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
+import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.regions.effects.ConveyorEffect;
 import org.redcastlemedia.multitallented.civs.scheduler.CommonScheduler;
 import org.redcastlemedia.multitallented.civs.scheduler.DailyScheduler;
@@ -33,30 +28,49 @@ import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.DebugLogger;
 import org.redcastlemedia.multitallented.civs.util.LogInfo;
-import org.redcastlemedia.multitallented.civs.placeholderexpansion.PlaceHook;
-import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import me.clip.placeholderapi.PlaceholderAPIPlugin;
-import net.Indyuce.mmoitems.MMOItems;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Civs extends JavaPlugin {
 
-    public static File dataLocation;
-    private HashMap<String, CivCommand> commandList = new HashMap<>();
     public static final String NAME = "Civs";
+    public static File dataLocation;
     public static Economy econ;
     public static Permission perm;
     public static MMOItems mmoItems;
     public static PlaceholderAPIPlugin placeholderAPI;
-    protected static Civs civs;
     public static Logger logger;
+    protected static Civs civs;
+    private final HashMap<String, CivCommand> commandList = new HashMap<>();
     private TabComplete tabComplete;
+
+    public static Economy getEcon() {
+        return econ;
+    }
+
+    public static Permission getPerm() {
+        return perm;
+    }
+
+    public static String getPrefix() {
+        return ConfigManager.getInstance().getCivsChatPrefix() + " ";
+    }
+
+    public static String getRawPrefix() {
+        return ConfigManager.getInstance().civsChatPrefix + " ";
+    }
+
+    public static synchronized Civs getInstance() {
+        return civs;
+    }
 
     @Override
     public void onEnable() {
@@ -87,6 +101,10 @@ public class Civs extends JavaPlugin {
         AllowedActionsListener.getInstance().onDisable();
     }
 
+    //    private void initListeners() {
+//        Bukkit.getPluginManager().registerEvents(new SpellListener(), this);
+//        Bukkit.getPluginManager().registerEvents(new AIListener(), this);
+//    }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String message, String[] args) {
@@ -178,23 +196,20 @@ public class Civs extends JavaPlugin {
         return tabComplete.onTabComplete(sender, command, alias, args);
     }
 
-    //    private void initListeners() {
-//        Bukkit.getPluginManager().registerEvents(new SpellListener(), this);
-//        Bukkit.getPluginManager().registerEvents(new AIListener(), this);
-//    }
-
     private void setupEconomy() {
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp != null) {
             econ = rsp.getProvider();
         }
     }
+
     private void setupPermissions() {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
         if (permissionProvider != null) {
             perm = permissionProvider.getProvider();
         }
     }
+
     private void setupDependencies() {
         if (Bukkit.getPluginManager().isPluginEnabled(Constants.PLACEHOLDER_API)) {
             new PlaceHook().register();
@@ -237,19 +252,5 @@ public class Civs extends JavaPlugin {
 
             }
         }
-    }
-
-    public static Economy getEcon() {
-        return econ;
-    }
-    public static Permission getPerm() {
-        return perm;
-    }
-    public static String getPrefix() {
-        return ConfigManager.getInstance().getCivsChatPrefix() + " ";
-    }
-    public static String getRawPrefix() { return ConfigManager.getInstance().civsChatPrefix + " ";}
-    public static synchronized Civs getInstance() {
-        return civs;
     }
 }

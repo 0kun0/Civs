@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.classes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,8 +22,23 @@ import org.redcastlemedia.multitallented.civs.spells.SpellUtil;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = Constants.CLASS) @SuppressWarnings("unused")
+import java.util.HashMap;
+import java.util.Map;
+
+@CivsMenu(name = Constants.CLASS)
+@SuppressWarnings("unused")
 public class ClassMenu extends CustomMenu {
+    protected static void swapSpellSlots(CivClass civClass, int unmappedSwap, int index) {
+        int mappedSwap = civClass.getSpellSlotOrder().get(unmappedSwap);
+        int mappedIndex = civClass.getSpellSlotOrder().get(index);
+
+        if (index != unmappedSwap) {
+            civClass.getSpellSlotOrder().put(index, mappedSwap);
+            civClass.getSpellSlotOrder().put(unmappedSwap, mappedIndex);
+            ClassManager.getInstance().saveClass(civClass);
+        }
+    }
+
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
         Map<String, Object> data = new HashMap<>();
@@ -34,7 +46,7 @@ public class ClassMenu extends CustomMenu {
         if (!params.containsKey(Constants.CLASS)) {
             civClass = civilian.getCurrentClass();
         } else {
-            for (CivClass cClass: civilian.getCivClasses()) {
+            for (CivClass cClass : civilian.getCivClasses()) {
                 if (cClass.getId() == Integer.parseInt(params.get(Constants.CLASS))) {
                     civClass = cClass;
                 }
@@ -191,17 +203,6 @@ public class ClassMenu extends CustomMenu {
             return true;
         }
         return super.doActionAndCancel(civilian, actionString, itemStack);
-    }
-
-    protected static void swapSpellSlots(CivClass civClass, int unmappedSwap, int index) {
-        int mappedSwap = civClass.getSpellSlotOrder().get(unmappedSwap);
-        int mappedIndex = civClass.getSpellSlotOrder().get(index);
-
-        if (index != unmappedSwap) {
-            civClass.getSpellSlotOrder().put(index, mappedSwap);
-            civClass.getSpellSlotOrder().put(unmappedSwap, mappedIndex);
-            ClassManager.getInstance().saveClass(civClass);
-        }
     }
 
     private String getAllowedActionsString(Map<String, Integer> allowedActions) {

@@ -1,9 +1,9 @@
 package org.redcastlemedia.multitallented.civs.anticheat;
 
+import com.gmail.olexorus.witherac.api.CheckType;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import com.gmail.olexorus.witherac.api.CheckType;
 
 public final class WitherACExemptionAssembler {
     private WitherACExemptionAssembler() {

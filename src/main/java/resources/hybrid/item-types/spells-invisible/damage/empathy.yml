@@ -9,7 +9,7 @@ pre-reqs:
   - skill:food=2
   - skill:armor=5
 
-allowed-actions: []
+allowed-actions: [ ]
 
 exp-per-use: 10
 

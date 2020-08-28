@@ -1,21 +1,17 @@
 package org.redcastlemedia.multitallented.civs.spells.targets;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.civstate.BuiltInCivState;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NearbyTarget extends Target {
     public NearbyTarget(Spell spell,
@@ -35,7 +31,7 @@ public class NearbyTarget extends Target {
         }
         LivingEntity player = (LivingEntity) getOrigin();
         ConfigurationSection config = getConfig();
-        int range = (int) Math.round(Spell.getLevelAdjustedValue(config.getString("range","15"), level, null, spell));
+        int range = (int) Math.round(Spell.getLevelAdjustedValue(config.getString("range", "15"), level, null, spell));
         int radius = (int) Math.round(Spell.getLevelAdjustedValue(config.getString("radius", "5"), level, null, spell));
         int maxTargets = (int) Math.round(Spell.getLevelAdjustedValue(config.getString("max-targets", "-1"), level, null, spell));
         Collection<Entity> nearbyEntities;

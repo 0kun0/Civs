@@ -9,11 +9,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.events.PlayerEnterTownEvent;
 import org.redcastlemedia.multitallented.civs.events.PlayerExitTownEvent;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.towns.Town;
@@ -25,8 +25,8 @@ import java.util.HashMap;
 @CivsSingleton
 public class IntruderEffect implements Listener {
 
-    private final HashMap<String, Long> lastMessage = new HashMap<>();
     private final static String KEY = "intruder";
+    private final HashMap<String, Long> lastMessage = new HashMap<>();
 
     public static void getInstance() {
         Bukkit.getPluginManager().registerEvents(new IntruderEffect(), Civs.getInstance());
@@ -34,9 +34,7 @@ public class IntruderEffect implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        if (lastMessage.containsKey(event.getPlayer().getName())) {
-            lastMessage.remove(event.getPlayer().getName());
-        }
+        lastMessage.remove(event.getPlayer().getName());
     }
 
     @EventHandler

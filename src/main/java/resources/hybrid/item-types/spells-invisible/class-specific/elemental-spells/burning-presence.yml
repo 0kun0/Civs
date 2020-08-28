@@ -2,13 +2,13 @@ icon: BLAZE_POWDER
 type: spell
 is-in-shop: false
 level: 1
-groups: []
+groups: [ ]
 
-pre-reqs: []
+pre-reqs: [ ]
 
 exp-per-use: 5
 
-allowed-actions: []
+allowed-actions: [ ]
 
 condition:
   cooldown: 3000
@@ -16,9 +16,9 @@ condition:
 components:
   0:
     costs:
-      cancel^1: {}
+      cancel^1: { }
     yield:
-      cancel^0: {}
+      cancel^0: { }
   1:
     costs:
       mana: 20

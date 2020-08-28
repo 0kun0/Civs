@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,6 +10,9 @@ import org.redcastlemedia.multitallented.civs.alliances.AllianceManager;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CivCommand {
     public abstract boolean runCommand(CommandSender commandSender, Command command, String label, String[] args);
@@ -49,6 +49,7 @@ public abstract class CivCommand {
         }
         return townNames;
     }
+
     protected List<String> getAllianceNames(String allianceName) {
         List<String> allianceNames = new ArrayList<>();
         for (Alliance alliance : AllianceManager.getInstance().getAllAlliances()) {
@@ -58,6 +59,7 @@ public abstract class CivCommand {
         }
         return allianceNames;
     }
+
     protected List<String> getTownNamesForPlayer(String townName, Player player) {
         List<String> suggestions = new ArrayList<>();
         for (Town town : TownManager.getInstance().getTownsForPlayer(player.getUniqueId())) {

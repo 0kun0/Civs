@@ -1,12 +1,11 @@
 package org.redcastlemedia.multitallented.civs.tutorials;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.redcastlemedia.multitallented.civs.items.CVItem;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.redcastlemedia.multitallented.civs.items.CVItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter

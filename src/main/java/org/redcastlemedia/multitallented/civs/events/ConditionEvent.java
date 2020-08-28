@@ -7,29 +7,30 @@ import org.redcastlemedia.multitallented.civs.spells.SpellResult;
 
 /**
  * This is thrown whenever a condition is being tested
+ *
  * @author Multitallented
  */
 public class ConditionEvent extends Event {
-    private SpellResult result = SpellResult.NORMAL;
     private static final HandlerList hList = new HandlerList();
     public final Spell SPELL;
     public final int INDEX;
+    private SpellResult result = SpellResult.NORMAL;
 
     public ConditionEvent(Spell cs, int index) {
         this.SPELL = cs;
         this.INDEX = index;
     }
 
-    public void setResult(SpellResult result) {
-        this.result = result;
+    public static HandlerList getHandlerList() {
+        return hList;
     }
 
     public SpellResult getResult() {
         return result;
     }
 
-    public static HandlerList getHandlerList() {
-        return hList;
+    public void setResult(SpellResult result) {
+        this.result = result;
     }
 
     @Override

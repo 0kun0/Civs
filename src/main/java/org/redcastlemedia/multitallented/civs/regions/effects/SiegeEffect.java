@@ -1,14 +1,6 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -18,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
-import org.redcastlemedia.multitallented.civs.ConfigManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.events.RegionTickEvent;
@@ -31,20 +22,22 @@ import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
-import org.redcastlemedia.multitallented.civs.util.DiscordUtil;
+
+import java.util.Set;
+import java.util.UUID;
 
 @CivsSingleton
 public class SiegeEffect implements Listener, CreateRegionListener {
     public static String CHARGING_KEY = "charging_drain_power";
     public static String KEY = "drain_power";
 
-    public static void getInstance() {
-        Bukkit.getPluginManager().registerEvents(new SiegeEffect(), Civs.getInstance());
-    }
-
     public SiegeEffect() {
         RegionManager.getInstance().addCreateRegionListener(KEY, this);
         RegionManager.getInstance().addCreateRegionListener(CHARGING_KEY, this);
+    }
+
+    public static void getInstance() {
+        Bukkit.getPluginManager().registerEvents(new SiegeEffect(), Civs.getInstance());
     }
 
     @EventHandler
@@ -95,7 +88,7 @@ public class SiegeEffect implements Listener, CreateRegionListener {
         TownType townType = (TownType) ItemManager.getInstance().getItemType(town.getType());
         double rawRadius = townType.getBuildRadius();
         try {
-            if (town.getLocation().distance(l) - rawRadius >  150) {
+            if (town.getLocation().distance(l) - rawRadius > 150) {
                 sign.setLine(2, "out of");
                 sign.setLine(3, "range");
                 sign.update();
@@ -133,9 +126,9 @@ public class SiegeEffect implements Listener, CreateRegionListener {
             }
         }
         if (town.getHardship() > hardshipBuffer) {
-            sign.setLine(1,"hardship");
-            sign.setLine(2,"limit");
-            sign.setLine(3,"exceeded");
+            sign.setLine(1, "hardship");
+            sign.setLine(2, "limit");
+            sign.setLine(3, "exceeded");
             sign.update();
             return;
         }
@@ -260,7 +253,7 @@ public class SiegeEffect implements Listener, CreateRegionListener {
         }
         TownType townType = (TownType) ItemManager.getInstance().getItemType(town.getType());
         double rawRadius = townType.getBuildRadius();
-        if (town.getLocation().distance(l) - rawRadius >  150) {
+        if (town.getLocation().distance(l) - rawRadius > 150) {
             sign.setLine(2, "out of");
             sign.setLine(3, "range");
             sign.update();

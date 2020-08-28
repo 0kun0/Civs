@@ -1,12 +1,7 @@
 package org.redcastlemedia.multitallented.civs.regions;
 
 import lombok.Setter;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -55,6 +50,7 @@ public final class StructureUtil {
             removeBoundingBox(uuid);
         }
     }
+
     public static void showGuideBoundingBox(Player player, Location location, Region region) {
         if (!ConfigManager.getInstance().isUseBoundingBox()) {
             return;
@@ -244,14 +240,17 @@ public final class StructureUtil {
     public static class BoundingBox {
         @Setter
         private long creationTime;
-        private HashMap<Location, Color> locations;
+        private final HashMap<Location, Color> locations;
+
         public BoundingBox() {
             creationTime = System.currentTimeMillis();
             locations = new HashMap<>();
         }
+
         public Map<Location, Color> getLocations() {
             return locations;
         }
+
         public long getCreationTime() {
             return creationTime;
         }

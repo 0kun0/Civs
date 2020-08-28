@@ -1,11 +1,6 @@
 package org.redcastlemedia.multitallented.civs.skills;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.regex.Pattern;
-
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.redcastlemedia.multitallented.civs.Civs;
@@ -18,7 +13,11 @@ import org.reflections.Reflections;
 import org.reflections.ReflectionsException;
 import org.reflections.scanners.ResourcesScanner;
 
-import lombok.Getter;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGH)
 public class SkillManager {
@@ -40,7 +39,7 @@ public class SkillManager {
         File skillFolder = new File(Civs.dataLocation, SKILLS_FOLDER_NAME);
         boolean skillFolderExists = skillFolder.exists();
         String path = "resources." + ConfigManager.getInstance().getDefaultConfigSet() + "." + SKILLS_FOLDER_NAME;
-        Reflections reflections = new Reflections(path , new ResourcesScanner());
+        Reflections reflections = new Reflections(path, new ResourcesScanner());
         try {
             for (String fileName : reflections.getResources(Pattern.compile(".*\\.yml"))) {
                 FileConfiguration config;

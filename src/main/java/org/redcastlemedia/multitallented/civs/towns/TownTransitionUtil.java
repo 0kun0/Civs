@@ -1,11 +1,11 @@
 package org.redcastlemedia.multitallented.civs.towns;
 
-import java.util.HashSet;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
+
+import java.util.HashSet;
+import java.util.UUID;
 
 public final class TownTransitionUtil {
     private TownTransitionUtil() {
@@ -14,17 +14,17 @@ public final class TownTransitionUtil {
 
     public static void checkTownTransitions() {
         HashSet<Town> saveThese = new HashSet<>();
-        int i=0;
+        int i = 0;
         for (final Town town : TownManager.getInstance().getTowns()) {
             i++;
             Bukkit.getScheduler().scheduleSyncDelayedTask(Civs.getInstance(), new Runnable() {
-               @Override
-               public void run() {
-                   if (checkTown(town)) {
-                       saveThese.add(town);
-                   }
-               }
-            },i*20);
+                @Override
+                public void run() {
+                    if (checkTown(town)) {
+                        saveThese.add(town);
+                    }
+                }
+            }, i * 20);
         }
         for (Town town : saveThese) {
             TownManager.getInstance().saveTown(town);

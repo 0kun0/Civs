@@ -1,12 +1,5 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,13 +28,19 @@ import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.DebugLogger;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
+import java.util.*;
+
 @CivsSingleton
 public class WarehouseEffect implements Listener, RegionCreatedListener {
     public static final String KEY = "warehouse";
+    private static WarehouseEffect instance = null;
     public Map<Region, List<CVInventory>> invs = new HashMap<>();
     public Map<Region, HashMap<String, CVInventory>> availableItems = new HashMap<>();
-    private Map<Region, Long> cooldowns = new HashMap<>();
-    private static WarehouseEffect instance = null;
+    private final Map<Region, Long> cooldowns = new HashMap<>();
+
+    public WarehouseEffect() {
+        RegionManager.getInstance().addRegionCreatedListener(KEY, this);
+    }
 
     public static WarehouseEffect getInstance() {
         if (instance == null) {
@@ -49,10 +48,6 @@ public class WarehouseEffect implements Listener, RegionCreatedListener {
             Bukkit.getPluginManager().registerEvents(instance, Civs.getInstance());
         }
         return instance;
-    }
-
-    public WarehouseEffect() {
-        RegionManager.getInstance().addRegionCreatedListener(KEY, this);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -170,8 +165,8 @@ public class WarehouseEffect implements Listener, RegionCreatedListener {
             return;
         }
         //declarations
-        Region r            = event.getRegion();
-        Location l          = r.getLocation();
+        Region r = event.getRegion();
+        Location l = r.getLocation();
         if (cooldowns.containsKey(r) &&
                 System.currentTimeMillis() < cooldowns.get(r) + 60000) {
             return;
@@ -297,8 +292,8 @@ public class WarehouseEffect implements Listener, RegionCreatedListener {
                 ItemStack[] contents = inventory.getContents();
                 ItemStack is = null;
                 for (int k = contents.length; k > 0; k--) {
-                    if (contents[k-1] != null && contents[k-1].getType() != Material.AIR) {
-                        is = contents[k-1];
+                    if (contents[k - 1] != null && contents[k - 1].getType() != Material.AIR) {
+                        is = contents[k - 1];
                         break;
                     }
                 }
@@ -361,7 +356,8 @@ public class WarehouseEffect implements Listener, RegionCreatedListener {
         HashSet<String> removeTheseChests = new HashSet<>();
         HashSet<HashSet<CVItem>> req = convertToHashSet(neededItems);
         try {
-            nextItem: for (String locationString : availableItems.get(region).keySet()) {
+            nextItem:
+            for (String locationString : availableItems.get(region).keySet()) {
                 CVInventory inv = availableItems.get(region).get(locationString);
                 if (Util.isChestEmpty(inv)) {
                     removeTheseChests.add(locationString);

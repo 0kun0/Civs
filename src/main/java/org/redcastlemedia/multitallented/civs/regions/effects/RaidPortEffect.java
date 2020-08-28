@@ -1,16 +1,6 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -39,22 +29,26 @@ import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
-import org.redcastlemedia.multitallented.civs.util.DiscordUtil;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @CivsSingleton
 public class RaidPortEffect implements Listener, CreateRegionListener {
     public static String KEY = "raid_port";
     public static String CHARGING_KEY = "charging_raid_port";
-    private HashMap<Region, Location> raidLocations = new HashMap<>();
-    private HashMap<Town, Long> cooldowns = new HashMap<>();
-
-    public static void getInstance() {
-        Bukkit.getPluginManager().registerEvents(new RaidPortEffect(), Civs.getInstance());
-    }
+    private final HashMap<Region, Location> raidLocations = new HashMap<>();
+    private final HashMap<Town, Long> cooldowns = new HashMap<>();
 
     public RaidPortEffect() {
         RegionManager.getInstance().addCreateRegionListener(KEY, this);
         RegionManager.getInstance().addCreateRegionListener(CHARGING_KEY, this);
+    }
+
+    public static void getInstance() {
+        Bukkit.getPluginManager().registerEvents(new RaidPortEffect(), Civs.getInstance());
     }
 
     @Override
@@ -85,7 +79,7 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
             if (!isOnline) {
                 player.sendMessage(Civs.getPrefix() +
                         LocaleManager.getInstance().getTranslationWithPlaceholders(player, "raid-porter-offline")
-                        .replace("$1", town.getName()));
+                                .replace("$1", town.getName()));
                 return false;
             }
         }
@@ -132,7 +126,7 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
         l.getWorld().dropItemNaturally(l, raidRemote.createItemStack());
         player.sendMessage(Civs.getPrefix() + ChatColor.RED +
                 LocaleManager.getInstance().getTranslationWithPlaceholders(player, "raid-remote")
-                .replace("$1", rt.getName()));
+                        .replace("$1", rt.getName()));
         return true;
     }
 
@@ -202,8 +196,8 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
                 !r.getLocation().getBlock().equals(player.getLocation().getBlock())) {
             return;
         }
-        Location l =        r.getLocation();
-        RegionType rt =     (RegionType) ItemManager.getInstance().getItemType(r.getType());
+        Location l = r.getLocation();
+        RegionType rt = (RegionType) ItemManager.getInstance().getItemType(r.getType());
 
         Town town = hasValidSign(l, rt, event.getUuid());
         if (town == null) {
@@ -241,9 +235,7 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
         }
 
         if (!isValidTeleportTarget(targetLoc, false)) {
-            if (raidLocations.containsKey(r)) {
-                raidLocations.remove(r);
-            }
+            raidLocations.remove(r);
             l.getBlock().getRelative(BlockFace.UP).breakNaturally();
             player.sendMessage(Civs.getPrefix() + LocaleManager.getInstance().getTranslationWithPlaceholders(player,
                     "raid-target-blocked"));
@@ -263,7 +255,7 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
         int i = 0;
         for (Region currentRegion : potentialTargets) {
             double rand = Math.random();
-            if (i+1 < potentialTargets.size() && rand < (1 / (double) potentialTargets.size())) {
+            if (i + 1 < potentialTargets.size() && rand < (1 / (double) potentialTargets.size())) {
                 continue;
             }
             RegionType rt = (RegionType) ItemManager.getInstance().getItemType(currentRegion.getType());
@@ -297,7 +289,8 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
         yMin = yMin < 0 ? 0 : yMin;
 
         //Top
-        top: {
+        top:
+        {
             int y = yMax;
             for (int x = xMin; x < xMax; x++) {
                 for (int z = zMin; z < zMax; z++) {
@@ -312,7 +305,8 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
             }
         }
         //Left
-        left: {
+        left:
+        {
             int x = xMin;
             for (int y = yMin; y < yMax; y++) {
                 for (int z = zMin; z < zMax; z++) {
@@ -327,7 +321,8 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
             }
         }
         //Right
-        right: {
+        right:
+        {
             int x = xMax;
             for (int y = yMin; y < yMax; y++) {
                 for (int z = zMin; z < zMax; z++) {
@@ -342,7 +337,8 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
             }
         }
         //Front
-        front: {
+        front:
+        {
             int z = zMax;
             for (int y = yMin; y < yMax; y++) {
                 for (int x = xMin; x < xMax; x++) {
@@ -357,7 +353,8 @@ public class RaidPortEffect implements Listener, CreateRegionListener {
             }
         }
         //Back
-        back: {
+        back:
+        {
             int z = zMin;
             for (int y = yMin; y < yMax; y++) {
                 for (int x = xMin; x < xMax; x++) {

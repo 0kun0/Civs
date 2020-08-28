@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.spells.targets;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,6 +11,9 @@ import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.Vector3D;
 import org.redcastlemedia.multitallented.civs.spells.civstate.BuiltInCivState;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class VectorTarget extends Target {
     public VectorTarget(Spell spell,
@@ -34,7 +34,7 @@ public class VectorTarget extends Target {
             return returnSet;
         }
         LivingEntity player = (LivingEntity) origin;
-        int range = (int) Math.round(Spell.getLevelAdjustedValue(config.getString("range","15"), level, null, null));
+        int range = (int) Math.round(Spell.getLevelAdjustedValue(config.getString("range", "15"), level, null, null));
         boolean pen = config.getBoolean("penetration", true);
         boolean allowMultiple = config.getBoolean("allow-multiple", false);
 

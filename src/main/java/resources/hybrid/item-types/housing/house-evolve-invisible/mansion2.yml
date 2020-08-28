@@ -7,14 +7,14 @@ is-in-shop: false
 max: 2
 price: 2000
 groups:
-- housing
-- allmansion
-- basemansion
-- allhousing
+  - housing
+  - allmansion
+  - basemansion
+  - allhousing
 level: 4
 
 pre-reqs:
-- member=village:town:city:metropolis
+  - member=village:town:city:metropolis
 
 build-reqs:
   - CHEST*8
@@ -30,21 +30,21 @@ build-reqs:
 
 build-radius: 10 #21x21x21
 effects:
-- block_break
-- block_build
-- block_liquid
-- block_fire
-- door_use
-- chest_use
-- housing:1
-- evolve:mansion3.24
-- buyable
+  - block_break
+  - block_build
+  - block_liquid
+  - block_fire
+  - door_use
+  - chest_use
+  - housing:1
+  - evolve:mansion3.24
+  - buyable
 
 towns:
-- village
-- town
-- city
-- metropolis
+  - village
+  - town
+  - city
+  - metropolis
 
 period: 3600 #1 hour
 upkeep:
@@ -56,7 +56,7 @@ upkeep:
     payout: 8.4 # $203.84 / day
   2:
     input:
-    - CARROT*12   # 228 or 3.65 stacks / day
+      - CARROT*12   # 228 or 3.65 stacks / day
     payout: 18.2 # $432 / day
   3:
     input:
@@ -64,7 +64,7 @@ upkeep:
     payout: 4.2 # $100.8 / day
   4:
     input:
-    - COOKIE*24 # 576 or 9 stacks / day
+      - COOKIE*24 # 576 or 9 stacks / day
     payout: 18.4 # $432 / day
     exp: 1
 

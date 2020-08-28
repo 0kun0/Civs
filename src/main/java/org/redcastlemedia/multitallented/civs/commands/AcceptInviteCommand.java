@@ -11,7 +11,8 @@ import org.redcastlemedia.multitallented.civs.towns.TownManager;
 
 import java.util.UUID;
 
-@CivsCommand(keys = { "accept" }) @SuppressWarnings("unused")
+@CivsCommand(keys = {"accept"})
+@SuppressWarnings("unused")
 public class AcceptInviteCommand extends CivCommand {
 
     @Override

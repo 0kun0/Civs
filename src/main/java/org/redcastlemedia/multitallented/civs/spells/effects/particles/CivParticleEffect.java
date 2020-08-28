@@ -5,7 +5,23 @@ import org.bukkit.util.Vector;
 import org.redcastlemedia.multitallented.civs.spells.effects.ParticleEffect;
 
 public abstract class CivParticleEffect {
+    private static Vector rotateAroundAxisY(Vector v, double angle) {
+        double x, z, cos, sin;
+        cos = Math.cos(angle);
+        sin = Math.sin(angle);
+        x = v.getX() * cos + v.getZ() * sin;
+        z = v.getX() * -sin + v.getZ() * cos;
+        return v.setX(x).setZ(z);
+    }
+
+    private static Vector getBackVector(Location loc) {
+        final float newZ = (float) (loc.getZ() + (1 * Math.sin(Math.toRadians(loc.getYaw() + 90))));
+        final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 90))));
+        return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
+    }
+
     public abstract void update(Object target, Location location, ParticleEffect particleEffect);
+
     public abstract long getRepeatDelay(ParticleEffect particleEffect);
 
     protected void drawShape(Location location, ParticleEffect particleEffect, boolean[][] shape) {
@@ -47,21 +63,6 @@ public abstract class CivParticleEffect {
             y -= space;
             x = defX;
         }
-    }
-
-    private static Vector rotateAroundAxisY(Vector v, double angle) {
-        double x, z, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        x = v.getX() * cos + v.getZ() * sin;
-        z = v.getX() * -sin + v.getZ() * cos;
-        return v.setX(x).setZ(z);
-    }
-
-    private static Vector getBackVector(Location loc) {
-        final float newZ = (float) (loc.getZ() + (1 * Math.sin(Math.toRadians(loc.getYaw() + 90))));
-        final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 90))));
-        return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
     }
 
 }

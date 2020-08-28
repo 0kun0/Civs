@@ -7,6 +7,13 @@ import org.redcastlemedia.multitallented.civs.regions.Region;
 
 public class RegionDestroyedEvent extends Event {
     private static final HandlerList hList = new HandlerList();
+    @Getter
+    private final Region region;
+
+    public RegionDestroyedEvent(Region region) {
+        this.region = region;
+    }
+
     public static HandlerList getHandlerList() {
         return hList;
     }
@@ -14,12 +21,5 @@ public class RegionDestroyedEvent extends Event {
     @Override
     public HandlerList getHandlers() {
         return hList;
-    }
-
-    @Getter
-    private final Region region;
-
-    public RegionDestroyedEvent(Region region) {
-        this.region = region;
     }
 }

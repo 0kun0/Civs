@@ -8,11 +8,12 @@ public final class PermissionUtil {
     private PermissionUtil() {
 
     }
+
     public static void applyPermission(OfflinePlayer offlinePlayer, String permission) {
         boolean remove = false;
         boolean transientPerm = false;
         String finalPermission = permission;
-        for (;;) {
+        for (; ; ) {
             if (finalPermission.startsWith("!")) {
                 remove = true;
                 finalPermission = finalPermission.substring(1);

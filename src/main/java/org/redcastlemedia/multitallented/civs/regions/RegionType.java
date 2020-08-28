@@ -2,18 +2,13 @@ package org.redcastlemedia.multitallented.civs.regions;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import org.bukkit.block.Biome;
+import org.redcastlemedia.multitallented.civs.items.CVItem;
 import org.redcastlemedia.multitallented.civs.items.CivItem;
 import org.redcastlemedia.multitallented.civs.towns.GovTypeBuff;
 import org.redcastlemedia.multitallented.civs.towns.Government;
-import org.redcastlemedia.multitallented.civs.items.CVItem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class RegionType extends CivItem {
 
@@ -30,19 +25,19 @@ public class RegionType extends CivItem {
     private final List<String> rebuild;
     private final boolean dailyPeriod;
     private final HashSet<String> towns;
-    private List<RegionUpkeep> upkeeps;
     private final long period;
     private final Set<Biome> biomes;
     @Getter
     private final HashSet<String> worlds;
-
     @Getter
     private final boolean rebuildRequired;
     @Getter
     private final List<String> commandsOnCreation;
     @Getter
     private final List<String> commandsOnDestruction;
-    @Getter @Setter
+    private final List<RegionUpkeep> upkeeps;
+    @Getter
+    @Setter
     private String dynmapMarkerKey = "";
 
     public RegionType(String name,
@@ -104,54 +99,6 @@ public class RegionType extends CivItem {
         this.commandsOnCreation = new ArrayList<>();
         this.commandsOnDestruction = new ArrayList<>();
     }
-    public String getName() {
-        return name;
-    }
-    public List<List<CVItem>> getReqs() {
-        return cloneReqMap(reqs);
-    }
-    public HashMap<String, String> getEffects() {
-        return effects;
-    }
-    public int getBuildRadius() {
-        return buildRadius;
-    }
-    public int getBuildRadiusX() {
-        return buildRadiusX;
-    }
-    public int getBuildRadiusY() {
-        return buildRadiusY;
-    }
-    public int getBuildRadiusZ() {
-        return buildRadiusZ;
-    }
-    public int getEffectRadius() {
-        return effectRadius;
-    }
-    public List<String> getRebuild() { return rebuild; }
-    public List<RegionUpkeep> getUpkeeps() { return upkeeps; }
-    public long getPeriod() {
-        return period;
-    }
-    public long getPeriod(Government government) {
-        if (government == null) {
-            return period;
-        }
-        for (GovTypeBuff buff : government.getBuffs()) {
-            if (buff.getBuffType() != GovTypeBuff.BuffType.COOLDOWN) {
-                continue;
-            }
-            return (int) (period * (1 - (double) buff.getAmount() / 100));
-        }
-        return period;
-    }
-    public boolean isDailyPeriod() {
-        return dailyPeriod;
-    }
-    public HashSet<String> getTowns() { return towns; }
-    public Set<Biome> getBiomes() {
-        return biomes;
-    }
 
     static List<List<CVItem>> cloneReqMap(List<List<CVItem>> reqMap) {
         List<List<CVItem>> itemCheck = new ArrayList<>();
@@ -164,5 +111,74 @@ public class RegionType extends CivItem {
             itemCheck.add(currentReqMap);
         }
         return itemCheck;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<List<CVItem>> getReqs() {
+        return cloneReqMap(reqs);
+    }
+
+    public HashMap<String, String> getEffects() {
+        return effects;
+    }
+
+    public int getBuildRadius() {
+        return buildRadius;
+    }
+
+    public int getBuildRadiusX() {
+        return buildRadiusX;
+    }
+
+    public int getBuildRadiusY() {
+        return buildRadiusY;
+    }
+
+    public int getBuildRadiusZ() {
+        return buildRadiusZ;
+    }
+
+    public int getEffectRadius() {
+        return effectRadius;
+    }
+
+    public List<String> getRebuild() {
+        return rebuild;
+    }
+
+    public List<RegionUpkeep> getUpkeeps() {
+        return upkeeps;
+    }
+
+    public long getPeriod() {
+        return period;
+    }
+
+    public long getPeriod(Government government) {
+        if (government == null) {
+            return period;
+        }
+        for (GovTypeBuff buff : government.getBuffs()) {
+            if (buff.getBuffType() != GovTypeBuff.BuffType.COOLDOWN) {
+                continue;
+            }
+            return (int) (period * (1 - (double) buff.getAmount() / 100));
+        }
+        return period;
+    }
+
+    public boolean isDailyPeriod() {
+        return dailyPeriod;
+    }
+
+    public HashSet<String> getTowns() {
+        return towns;
+    }
+
+    public Set<Biome> getBiomes() {
+        return biomes;
     }
 }

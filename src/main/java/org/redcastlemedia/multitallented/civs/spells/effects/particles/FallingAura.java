@@ -6,7 +6,7 @@ import org.redcastlemedia.multitallented.civs.spells.effects.ParticleEffect;
 public class FallingAura extends CivParticleEffect {
     @Override
     public void update(Object target, Location location, ParticleEffect particleEffect) {
-        for (int i=0; i<5; i++) {
+        for (int i = 0; i < 5; i++) {
             particleEffect.spawnParticle(particleEffect.getParticleType(),
                     location.clone().add(getRandomXZ(), 1.2d + getRandomY(), getRandomXZ()),
                     particleEffect.getRed(), particleEffect.getGreen(), particleEffect.getBlue(),

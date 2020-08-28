@@ -8,7 +8,7 @@ items:
     index: 0
     # name: chat channel name
     # desc: desc of the channel
-    actions: []
+    actions: [ ]
   prev:
     index: 3
   back:

@@ -1,10 +1,5 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +15,13 @@ import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
 
-@CivsSingleton @SuppressWarnings("unused")
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.UUID;
+
+@CivsSingleton
+@SuppressWarnings("unused")
 public class PermissionEffect implements Listener {
     private static final String KEY = "permission";
     private static final Map<UUID, HashSet<String>> permissionMap = new HashMap<>();
@@ -52,11 +53,8 @@ public class PermissionEffect implements Listener {
         if (Civs.perm == null) {
             return true;
         }
-        if (!region.getEffects().containsKey(KEY) ||
-                !region.getRawPeople().containsKey(uuid)) {
-            return true;
-        }
-        return false;
+        return !region.getEffects().containsKey(KEY) ||
+                !region.getRawPeople().containsKey(uuid);
     }
 
     @EventHandler
@@ -82,12 +80,9 @@ public class PermissionEffect implements Listener {
         if (Civs.perm == null) {
             return true;
         }
-        if (!townType.getEffects().containsKey(KEY) ||
+        return !townType.getEffects().containsKey(KEY) ||
                 !town.getPeople().containsKey(uuid) ||
-                town.getPeople().get(uuid).equals("ally")) {
-            return true;
-        }
-        return false;
+                town.getPeople().get(uuid).equals("ally");
     }
 
     private void addPermission(UUID uuid, String permission) {

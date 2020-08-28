@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.towns;
 
-import java.util.*;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,7 +16,10 @@ import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 
-@CivsMenu(name = "select-town") @SuppressWarnings("unused")
+import java.util.*;
+
+@CivsMenu(name = "select-town")
+@SuppressWarnings("unused")
 public class SelectTownMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -64,7 +65,8 @@ public class SelectTownMenu extends CustomMenu {
         return data;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     protected ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         if (menuIcon.getKey().equals("towns")) {
             Set<Town> towns = (Set<Town>) MenuManager.getData(civilian.getUuid(), "towns");

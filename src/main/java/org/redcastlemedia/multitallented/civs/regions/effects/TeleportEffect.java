@@ -1,8 +1,5 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,16 +16,46 @@ import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 @CivsSingleton
 public class TeleportEffect implements Listener, RegionCreatedListener {
     public static String KEY = "teleport";
+
+    public TeleportEffect() {
+        RegionManager.getInstance().addRegionCreatedListener(KEY, this);
+    }
 
     public static void getInstance() {
         Bukkit.getPluginManager().registerEvents(new TeleportEffect(), Civs.getInstance());
     }
 
-    public TeleportEffect() {
-        RegionManager.getInstance().addRegionCreatedListener(KEY, this);
+    private static boolean hasPotentialDestinations(Region region) {
+        for (Region currentRegion : RegionManager.getInstance().getAllRegions()) {
+            if (isPotentialTeleportDestination(region, currentRegion)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPotentialTeleportDestination(Region region, Region currentRegion) {
+        if (!currentRegion.getEffects().containsKey(TeleportEffect.KEY) ||
+                !region.getEffects().containsKey(TeleportEffect.KEY)) {
+            return false;
+        }
+        for (UUID uuid : currentRegion.getRawPeople().keySet()) {
+            if (!currentRegion.getRawPeople().get(uuid).contains(Constants.OWNER)) {
+                continue;
+            }
+            if (!region.getRawPeople().containsKey(uuid) ||
+                    !region.getRawPeople().get(uuid).contains(Constants.OWNER)) {
+                continue;
+            }
+            return true;
+        }
+        return false;
     }
 
     @EventHandler
@@ -84,32 +111,5 @@ public class TeleportEffect implements Listener, RegionCreatedListener {
             }
             break;
         }
-    }
-
-    private static boolean hasPotentialDestinations(Region region) {
-        for (Region currentRegion : RegionManager.getInstance().getAllRegions()) {
-            if (isPotentialTeleportDestination(region, currentRegion)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isPotentialTeleportDestination(Region region, Region currentRegion) {
-        if (!currentRegion.getEffects().containsKey(TeleportEffect.KEY) ||
-                !region.getEffects().containsKey(TeleportEffect.KEY)) {
-            return false;
-        }
-        for (UUID uuid : currentRegion.getRawPeople().keySet()) {
-            if (!currentRegion.getRawPeople().get(uuid).contains(Constants.OWNER)) {
-                continue;
-            }
-            if (!region.getRawPeople().containsKey(uuid) ||
-                    !region.getRawPeople().get(uuid).contains(Constants.OWNER)) {
-                continue;
-            }
-            return true;
-        }
-        return false;
     }
 }

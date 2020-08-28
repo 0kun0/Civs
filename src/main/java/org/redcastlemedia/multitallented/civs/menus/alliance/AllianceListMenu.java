@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@CivsMenu(name = "alliance-list") @SuppressWarnings("unused")
+@CivsMenu(name = "alliance-list")
+@SuppressWarnings("unused")
 public class AllianceListMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {

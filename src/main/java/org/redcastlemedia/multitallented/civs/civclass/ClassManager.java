@@ -1,16 +1,5 @@
 package org.redcastlemedia.multitallented.civs.civclass;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,21 +12,31 @@ import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.CivItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
-import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.spells.SpellManager;
 import org.redcastlemedia.multitallented.civs.spells.SpellType;
 import org.redcastlemedia.multitallented.civs.spells.SpellUtil;
 import org.redcastlemedia.multitallented.civs.spells.civstate.CivState;
-import org.redcastlemedia.multitallented.civs.util.Constants;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
 
 @CivsSingleton
 public class ClassManager {
     private static ClassManager classManager = null;
-    private static Map<UUID, Set<CivClass>> classes = new HashMap<>();
+    private static final Map<UUID, Set<CivClass>> classes = new HashMap<>();
 
     public ClassManager() {
-        this.classManager = this;
+        classManager = this;
         loadClasses();
+    }
+
+    public static ClassManager getInstance() {
+        if (classManager == null) {
+            classManager = new ClassManager();
+        }
+        return classManager;
     }
 
     public void reload() {
@@ -109,6 +108,7 @@ public class ClassManager {
             Civs.logger.severe("Unable to set currentClass for civilians");
         }
     }
+
     public void saveClass(CivClass civClass) {
         File classFolder = new File(Civs.dataLocation, "class-data");
         if (!classFolder.exists()) {
@@ -148,25 +148,19 @@ public class ClassManager {
             return;
         }
     }
+
     public int getNextId() {
-        int i=0;
+        int i = 0;
         File classFolder = new File(Civs.dataLocation, "class-data");
         if (!classFolder.exists()) {
             return 0;
         }
         File classFile = new File(classFolder, i + ".yml");
-        while(classFile.exists()) {
+        while (classFile.exists()) {
             i++;
             classFile = new File(classFolder, i + ".yml");
         }
         return i;
-    }
-
-    public static ClassManager getInstance() {
-        if (classManager == null) {
-            classManager = new ClassManager();
-        }
-        return classManager;
     }
 
     public List<ClassType> getUnlockedClasses(Civilian civilian) {

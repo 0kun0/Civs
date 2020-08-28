@@ -1,15 +1,5 @@
 package org.redcastlemedia.multitallented.civs.towns;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.regex.Pattern;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -19,11 +9,11 @@ import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.ai.AIManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.FallbackConfigUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
@@ -31,10 +21,15 @@ import org.reflections.Reflections;
 import org.reflections.ReflectionsException;
 import org.reflections.scanners.ResourcesScanner;
 
+import java.io.File;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
+
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGH)
 public class GovernmentManager {
     private static GovernmentManager instance = null;
-    private HashMap<String, Government> governments = new HashMap<>();
+    private final HashMap<String, Government> governments = new HashMap<>();
 
     public static GovernmentManager getInstance() {
         if (instance == null) {
@@ -54,7 +49,7 @@ public class GovernmentManager {
         File govTypeFolder = new File(Civs.dataLocation, GOV_TYPE_FOLDER_NAME);
         boolean govTypeFolderExists = govTypeFolder.exists();
         String path = "resources." + ConfigManager.getInstance().getDefaultConfigSet() + "." + GOV_TYPE_FOLDER_NAME;
-        Reflections reflections = new Reflections(path , new ResourcesScanner());
+        Reflections reflections = new Reflections(path, new ResourcesScanner());
         try {
             for (String fileName : reflections.getResources(Pattern.compile(".*\\.yml"))) {
                 FileConfiguration config;
@@ -181,7 +176,6 @@ public class GovernmentManager {
             town.setMaxPower((int) Math.round((double) town.getMaxPower() * (1 + (double) buff.getAmount() / 100)));
             break;
         }
-
 
 
         if (government.getGovernmentType() == GovernmentType.MERITOCRACY) {

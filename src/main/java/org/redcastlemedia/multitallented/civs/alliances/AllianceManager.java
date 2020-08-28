@@ -17,16 +17,13 @@ import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGH)
 public class AllianceManager implements Listener {
     private static AllianceManager instance = null;
     private final HashMap<String, Alliance> alliances = new HashMap<>();
+
     public static AllianceManager getInstance() {
         if (instance == null) {
             instance = new AllianceManager();
@@ -106,10 +103,7 @@ public class AllianceManager implements Listener {
         }
         File allianceFolder = new File(Civs.dataLocation, "alliances");
         File allianceFile = new File(allianceFolder, alliance.getName() + ".yml");
-        if (!allianceFile.delete()) {
-            return false;
-        }
-        return true;
+        return allianceFile.delete();
     }
 
     public void saveAlliance(Alliance alliance) {
@@ -187,7 +181,8 @@ public class AllianceManager implements Listener {
         HashSet<Alliance> removeThese = new HashSet<>();
 
         Alliance mergeAlliance = null;
-        outer: for (Alliance alliance : getAlliances(town2)) {
+        outer:
+        for (Alliance alliance : getAlliances(town2)) {
             if (alliance.getMembers().contains(town1.getName())) {
                 return;
             }
@@ -210,7 +205,8 @@ public class AllianceManager implements Listener {
             alliances.put(alliance.getName(), alliance);
             saveAlliance(alliance);
         } else {
-            outer: for (Alliance alliance : alliances.values()) {
+            outer:
+            for (Alliance alliance : alliances.values()) {
                 if (alliance.equals(mergeAlliance)) {
                     continue;
                 }
@@ -249,7 +245,7 @@ public class AllianceManager implements Listener {
         HashSet<Alliance> saveThese = new HashSet<>();
         HashSet<Alliance> removeThese = new HashSet<>();
 
-        int i=0;
+        int i = 0;
         for (Alliance alliance : alliances.values()) {
             boolean inAlliance = alliance.getMembers().contains(town1.getName()) &&
                     alliance.getMembers().contains(town2.getName());

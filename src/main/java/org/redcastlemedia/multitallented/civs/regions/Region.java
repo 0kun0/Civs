@@ -1,21 +1,8 @@
 package org.redcastlemedia.multitallented.civs.regions;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,25 +15,15 @@ import org.redcastlemedia.multitallented.civs.items.CVInventory;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
 import org.redcastlemedia.multitallented.civs.items.UnloadedInventoryHandler;
-import org.redcastlemedia.multitallented.civs.towns.GovTypeBuff;
-import org.redcastlemedia.multitallented.civs.towns.Government;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentManager;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentType;
-import org.redcastlemedia.multitallented.civs.towns.Town;
-import org.redcastlemedia.multitallented.civs.towns.TownManager;
+import org.redcastlemedia.multitallented.civs.towns.*;
 import org.redcastlemedia.multitallented.civs.tutorials.TutorialManager;
-import org.redcastlemedia.multitallented.civs.util.CommandUtil;
-import org.redcastlemedia.multitallented.civs.util.Constants;
-import org.redcastlemedia.multitallented.civs.util.DebugLogger;
-import org.redcastlemedia.multitallented.civs.util.OwnershipUtil;
-import org.redcastlemedia.multitallented.civs.util.Util;
+import org.redcastlemedia.multitallented.civs.util.*;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.*;
+import java.util.logging.Level;
 
 public class Region {
 
-    private String type;
     private final Map<UUID, String> people;
     private final World world;
     private final double x;
@@ -59,23 +36,29 @@ public class Region {
     private final int radiusYP;
     private final int radiusYN;
     @Getter
-    private HashMap<Long, Integer> upkeepHistory = new HashMap<>();
-    private double exp;
-    @Getter
     public Map<String, String> effects;
     long lastTick = 0;
-    @Getter @Setter
+    private String type;
+    @Getter
+    private final HashMap<Long, Integer> upkeepHistory = new HashMap<>();
+    private double exp;
+    @Getter
+    @Setter
     private HashSet<Integer> failingUpkeeps = new HashSet<>();
-    @Getter @Setter
+    @Getter
+    @Setter
     private long lastActive = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private double forSale = -1;
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean warehouseEnabled = true;
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<List<CVItem>> missingBlocks = new ArrayList<>();
     @Getter
-    private List<String> chests = new ArrayList<>();
+    private final List<String> chests = new ArrayList<>();
 
     public Region(String type,
                   HashMap<UUID, String> people,
@@ -121,96 +104,10 @@ public class Region {
         this.exp = exp;
     }
 
-    public double getExp() {
-        return exp;
-    }
-    public void setExp(double exp) {
-        this.exp = exp;
-    }
-    public void setEffects(HashMap<String, String> effects) {
-        this.effects = effects;
-    }
-
-    public String getType() {
-        return type;
-    }
-    public void setType(String type) { this.type = type; }
-    public void setPeople(UUID uuid, String role) {
-        people.put(uuid, role);
-    }
-
-    public Map<UUID, String> getRawPeople() {
-        return people;
-    }
-    public Map<UUID, String> getPeople() {
-        TownManager townManager = TownManager.getInstance();
-        Town town = townManager.getTownAt(getLocation());
-        if (town == null) {
-            return people;
-        }
-        HashMap<UUID, String> newPeople = new HashMap<>(people);
-        for (UUID uuid : town.getPeople().keySet()) {
-            if (!newPeople.containsKey(uuid)) {
-                if (town.getPeople().get(uuid).contains("foreign")) {
-                    newPeople.put(uuid, "allyforeign");
-                } else {
-                    newPeople.put(uuid, "ally");
-                }
-            }
-        }
-        return newPeople;
-    }
-    public Set<UUID> getOwners() {
-        Set<UUID> owners = new HashSet<>();
-        for (UUID uuid : people.keySet()) {
-            if (people.get(uuid).contains(Constants.OWNER)) {
-                owners.add(uuid);
-            }
-        }
-        return owners;
-    }
-    public Location getLocation() {
-        return new Location(world, x, y, z);
-    }
-    public int getRadiusXP() {
-        return radiusXP;
-    }
-    public int getRadiusZP() {
-        return radiusZP;
-    }
-    public int getRadiusXN() {
-        return radiusXN;
-    }
-    public int getRadiusZN() {
-        return radiusZN;
-    }
-    public int getRadiusYP() {
-        return radiusYP;
-    }
-    public int getRadiusYN() {
-        return radiusYN;
-    }
-    public long getSecondsTillNextTick() {
-        RegionType regionType = (RegionType) ItemManager.getInstance().getItemType(type);
-        if (regionType.isDailyPeriod()) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            return ((86400000 + calendar.getTimeInMillis() - System.currentTimeMillis()) / 50) / 1000;
-        }
-
-        long difference = new Date().getTime() - lastTick;
-        long remainingCooldown = ((regionType.getPeriod()*1000 - difference) / 1000);
-        return remainingCooldown < 0 ? 0 : remainingCooldown;
-    }
-
-    public String getId() {
-        return locationToString(getLocation());
-    }
     public static String blockLocationToString(Location location) {
         return locationToString(location);
     }
+
     public static String locationToString(Location location) {
         if (location == null || location.getWorld() == null) {
             return null;
@@ -224,6 +121,7 @@ public class Region {
                 "~" +
                 (Math.floor(location.getZ()) + 0.5);
     }
+
     public static Location idToLocation(String id) {
         String[] idSplit = id.split("~");
         if (idSplit.length < 4) {
@@ -234,7 +132,7 @@ public class Region {
             world = Bukkit.getWorld(idSplit[0]);
         }
         if (world == null) {
-            Object[] params = { idSplit[0], idSplit.length };
+            Object[] params = {idSplit[0], idSplit.length};
             Civs.logger.log(Level.SEVERE, "Null world for {0}, {1}", params);
         }
         return new Location(world,
@@ -264,93 +162,9 @@ public class Region {
         return itemCheck;
     }
 
-    public RegionBlockCheckResponse hasRequiredBlocks() {
-        ItemManager itemManager = ItemManager.getInstance();
-        RegionType regionType = (RegionType) itemManager.getItemType(type);
-        List<HashMap<Material, Integer>> itemCheck = cloneReqMap(regionType.getReqs());
-
-        RegionPoints regionPoints = new RegionPoints(radiusXP, radiusXN, radiusYP, radiusYN, radiusZP, radiusZN);
-        if (itemCheck.isEmpty()) {
-            return new RegionBlockCheckResponse(regionPoints, itemCheck);
-        }
-
-        if (!addItemCheck(itemCheck)) {
-            return new RegionBlockCheckResponse(new RegionPoints(), itemCheck);
-        } else {
-            return new RegionBlockCheckResponse(regionPoints, itemCheck);
-        }
-    }
-
-    private boolean addItemCheck(List<HashMap<Material, Integer>> itemCheck) {
-        Location location = getLocation();
-        World currentWorld = location.getWorld();
-        int xMax = (int) location.getX() + radiusXP;
-        int xMin = (int) location.getX() - radiusXN;
-        int yMax = (int) location.getY() + radiusYP;
-        int yMin = (int) location.getY() - radiusYN;
-        int zMax = (int) location.getZ() + radiusZP;
-        int zMin = (int) location.getZ() - radiusZN;
-
-        yMax = yMax > currentWorld.getMaxHeight() ? currentWorld.getMaxHeight() : yMax;
-        yMin = yMin < 0 ? 0 : yMin;
-
-        HashMap<Material, Integer> maxCheck = new HashMap<>();
-        for (HashMap<Material, Integer> tempMap : itemCheck) {
-            for (Material mat : tempMap.keySet()) {
-                if (maxCheck.containsKey(mat)) {
-                    maxCheck.put(mat, maxCheck.get(mat) + tempMap.get(mat));
-                } else {
-                    maxCheck.put(mat, tempMap.get(mat).intValue());
-                }
-            }
-        }
-        for (int x=xMin; x<=xMax;x++) {
-            for (int y=yMin; y<=yMax; y++) {
-                for (int z=zMin; z<=zMax; z++) {
-
-                    Block currentBlock = currentWorld.getBlockAt(x,y,z);
-                    if (currentBlock == null) {
-                        continue;
-                    }
-                    Material mat = currentBlock.getType();
-                    if (maxCheck.containsKey(mat)) {
-                        maxCheck.put(mat, maxCheck.get(mat) - 1);
-                    }
-                    boolean destroyIndex = false;
-                    int i=0;
-                    for (HashMap<Material, Integer> tempMap : itemCheck) {
-                        if (tempMap.containsKey(mat)) {
-
-                            if (tempMap.get(mat) < 2) {
-                                destroyIndex = true;
-                            } else {
-                                for (Material currentMat : tempMap.keySet()) {
-                                    tempMap.put(currentMat, tempMap.get(mat) - 1);
-                                }
-                            }
-                            break;
-                        }
-                        i++;
-                    }
-                    if (destroyIndex) {
-                        if (itemCheck.size() < 2) {
-                            itemCheck.remove(i);
-                            if (itemCheck.isEmpty()) {
-                                return true;
-                            }
-                        } else {
-                            itemCheck.remove(i);
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     private static RegionPoints addItemCheck(RegionPoints radii, Location location, World currentWorld,
-                                     double xMin, double xMax, double yMin, double yMax, double zMin, double zMax,
-                                     List<HashMap<Material, Integer>> itemCheck, RegionType regionType) {
+                                             double xMin, double xMax, double yMin, double yMax, double zMin, double zMax,
+                                             List<HashMap<Material, Integer>> itemCheck, RegionType regionType) {
 
         HashMap<Material, Integer> maxCheck = new HashMap<>();
         for (HashMap<Material, Integer> tempMap : itemCheck) {
@@ -363,9 +177,10 @@ public class Region {
             }
         }
         List<Block> blocksFound = new ArrayList<>();
-        outer: for (double x=xMin; x<=xMax;x++) {
-            for (double y=yMin; y<=yMax; y++) {
-                for (double z=zMin; z<=zMax; z++) {
+        outer:
+        for (double x = xMin; x <= xMax; x++) {
+            for (double y = yMin; y <= yMax; y++) {
+                for (double z = zMin; z <= zMax; z++) {
 
                     Location location1 = new Location(currentWorld, x, y, z);
                     Block currentBlock = location1.getBlock();
@@ -377,8 +192,9 @@ public class Region {
                         maxCheck.put(mat, maxCheck.get(mat) - 1);
                     }
                     boolean destroyIndex = false;
-                    int i=0;
-                    outer1: for (HashMap<Material, Integer> tempMap : itemCheck) {
+                    int i = 0;
+                    outer1:
+                    for (HashMap<Material, Integer> tempMap : itemCheck) {
                         if (tempMap.containsKey(mat)) {
                             blocksFound.add(currentBlock);
 
@@ -389,7 +205,7 @@ public class Region {
                                     tempMap.put(currentMat, tempMap.get(mat) - 1);
                                 }
                             }
-                            RegionManager.getInstance().adjustRadii(radii, location, x,y,z);
+                            RegionManager.getInstance().adjustRadii(radii, location, x, y, z);
                             break outer1;
                         }
                         i++;
@@ -422,9 +238,9 @@ public class Region {
     }
 
     private static RegionPoints trimExcessRegion(List<Block> blocksFound,
-                                     List<HashMap<Material, Integer>> itemCheck,
-                                     HashMap<Material, Integer> maxCheck,
-                                     RegionPoints radii, Location location, RegionType regionType) {
+                                                 List<HashMap<Material, Integer>> itemCheck,
+                                                 HashMap<Material, Integer> maxCheck,
+                                                 RegionPoints radii, Location location, RegionType regionType) {
         if (radiusCheck(radii, regionType).isValid()) {
             return radii;
         }
@@ -444,7 +260,8 @@ public class Region {
                     }
                     if (!foundMat) {
                         boolean unfullFilled = true;
-                        itemLoop: for (List<CVItem> tempList : regionType.getReqs()) {
+                        itemLoop:
+                        for (List<CVItem> tempList : regionType.getReqs()) {
                             for (CVItem item : tempList) {
                                 if (item.getMat() != block.getType() &&
                                         maxCheck.get(item.getMat()) < 1) {
@@ -533,9 +350,10 @@ public class Region {
         yMax = yMax > currentWorld.getMaxHeight() ? currentWorld.getMaxHeight() : yMax;
         yMin = yMin < 0 ? 0 : yMin;
 
-        outer: for (double x=xMin; x<=xMax;x++) {
-            for (double y=yMin; y<=yMax; y++) {
-                for (double z=zMin; z<=zMax; z++) {
+        outer:
+        for (double x = xMin; x <= xMax; x++) {
+            for (double y = yMin; y <= yMax; y++) {
+                for (double z = zMin; z <= zMax; z++) {
 
                     Location location1 = new Location(currentWorld, x, y, z);
                     Block currentBlock = location1.getBlock();
@@ -544,8 +362,9 @@ public class Region {
                     }
                     Material mat = currentBlock.getType();
                     boolean destroyIndex = false;
-                    int i=0;
-                    outer1: for (HashMap<Material, Integer> tempMap : itemCheck) {
+                    int i = 0;
+                    outer1:
+                    for (HashMap<Material, Integer> tempMap : itemCheck) {
                         if (tempMap.containsKey(mat)) {
                             if (tempMap.get(mat) < 2) {
                                 destroyIndex = true;
@@ -620,6 +439,7 @@ public class Region {
         }
         return radii;
     }
+
     public static List<HashMap<Material, Integer>> hasRequiredBlocks(String type, Location location, ItemStack missingStack) {
         ItemManager itemManager = ItemManager.getInstance();
         CVItem missingItem = null;
@@ -656,6 +476,194 @@ public class Region {
         return itemCheck.isEmpty() ? null : itemCheck;
     }
 
+    public double getExp() {
+        return exp;
+    }
+
+    public void setExp(double exp) {
+        this.exp = exp;
+    }
+
+    public void setEffects(HashMap<String, String> effects) {
+        this.effects = effects;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setPeople(UUID uuid, String role) {
+        people.put(uuid, role);
+    }
+
+    public Map<UUID, String> getRawPeople() {
+        return people;
+    }
+
+    public Map<UUID, String> getPeople() {
+        TownManager townManager = TownManager.getInstance();
+        Town town = townManager.getTownAt(getLocation());
+        if (town == null) {
+            return people;
+        }
+        HashMap<UUID, String> newPeople = new HashMap<>(people);
+        for (UUID uuid : town.getPeople().keySet()) {
+            if (!newPeople.containsKey(uuid)) {
+                if (town.getPeople().get(uuid).contains("foreign")) {
+                    newPeople.put(uuid, "allyforeign");
+                } else {
+                    newPeople.put(uuid, "ally");
+                }
+            }
+        }
+        return newPeople;
+    }
+
+    public Set<UUID> getOwners() {
+        Set<UUID> owners = new HashSet<>();
+        for (UUID uuid : people.keySet()) {
+            if (people.get(uuid).contains(Constants.OWNER)) {
+                owners.add(uuid);
+            }
+        }
+        return owners;
+    }
+
+    public Location getLocation() {
+        return new Location(world, x, y, z);
+    }
+
+    public int getRadiusXP() {
+        return radiusXP;
+    }
+
+    public int getRadiusZP() {
+        return radiusZP;
+    }
+
+    public int getRadiusXN() {
+        return radiusXN;
+    }
+
+    public int getRadiusZN() {
+        return radiusZN;
+    }
+
+    public int getRadiusYP() {
+        return radiusYP;
+    }
+
+    public int getRadiusYN() {
+        return radiusYN;
+    }
+
+    public long getSecondsTillNextTick() {
+        RegionType regionType = (RegionType) ItemManager.getInstance().getItemType(type);
+        if (regionType.isDailyPeriod()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            return ((86400000 + calendar.getTimeInMillis() - System.currentTimeMillis()) / 50) / 1000;
+        }
+
+        long difference = new Date().getTime() - lastTick;
+        long remainingCooldown = ((regionType.getPeriod() * 1000 - difference) / 1000);
+        return remainingCooldown < 0 ? 0 : remainingCooldown;
+    }
+
+    public String getId() {
+        return locationToString(getLocation());
+    }
+
+    public RegionBlockCheckResponse hasRequiredBlocks() {
+        ItemManager itemManager = ItemManager.getInstance();
+        RegionType regionType = (RegionType) itemManager.getItemType(type);
+        List<HashMap<Material, Integer>> itemCheck = cloneReqMap(regionType.getReqs());
+
+        RegionPoints regionPoints = new RegionPoints(radiusXP, radiusXN, radiusYP, radiusYN, radiusZP, radiusZN);
+        if (itemCheck.isEmpty()) {
+            return new RegionBlockCheckResponse(regionPoints, itemCheck);
+        }
+
+        if (!addItemCheck(itemCheck)) {
+            return new RegionBlockCheckResponse(new RegionPoints(), itemCheck);
+        } else {
+            return new RegionBlockCheckResponse(regionPoints, itemCheck);
+        }
+    }
+
+    private boolean addItemCheck(List<HashMap<Material, Integer>> itemCheck) {
+        Location location = getLocation();
+        World currentWorld = location.getWorld();
+        int xMax = (int) location.getX() + radiusXP;
+        int xMin = (int) location.getX() - radiusXN;
+        int yMax = (int) location.getY() + radiusYP;
+        int yMin = (int) location.getY() - radiusYN;
+        int zMax = (int) location.getZ() + radiusZP;
+        int zMin = (int) location.getZ() - radiusZN;
+
+        yMax = yMax > currentWorld.getMaxHeight() ? currentWorld.getMaxHeight() : yMax;
+        yMin = yMin < 0 ? 0 : yMin;
+
+        HashMap<Material, Integer> maxCheck = new HashMap<>();
+        for (HashMap<Material, Integer> tempMap : itemCheck) {
+            for (Material mat : tempMap.keySet()) {
+                if (maxCheck.containsKey(mat)) {
+                    maxCheck.put(mat, maxCheck.get(mat) + tempMap.get(mat));
+                } else {
+                    maxCheck.put(mat, tempMap.get(mat).intValue());
+                }
+            }
+        }
+        for (int x = xMin; x <= xMax; x++) {
+            for (int y = yMin; y <= yMax; y++) {
+                for (int z = zMin; z <= zMax; z++) {
+
+                    Block currentBlock = currentWorld.getBlockAt(x, y, z);
+                    if (currentBlock == null) {
+                        continue;
+                    }
+                    Material mat = currentBlock.getType();
+                    if (maxCheck.containsKey(mat)) {
+                        maxCheck.put(mat, maxCheck.get(mat) - 1);
+                    }
+                    boolean destroyIndex = false;
+                    int i = 0;
+                    for (HashMap<Material, Integer> tempMap : itemCheck) {
+                        if (tempMap.containsKey(mat)) {
+
+                            if (tempMap.get(mat) < 2) {
+                                destroyIndex = true;
+                            } else {
+                                for (Material currentMat : tempMap.keySet()) {
+                                    tempMap.put(currentMat, tempMap.get(mat) - 1);
+                                }
+                            }
+                            break;
+                        }
+                        i++;
+                    }
+                    if (destroyIndex) {
+                        if (itemCheck.size() < 2) {
+                            itemCheck.remove(i);
+                            if (itemCheck.isEmpty()) {
+                                return true;
+                            }
+                        } else {
+                            itemCheck.remove(i);
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean shouldTick() {
         ItemManager itemManager = ItemManager.getInstance();
         RegionType regionType = (RegionType) itemManager.getItemType(type);
@@ -673,10 +681,12 @@ public class Region {
 
         return lastTick + period * 1000 < new Date().getTime();
     }
+
     public boolean hasUpkeepItems() {
         return RegionManager.getInstance().hasRegionChestChanged(this) &&
                 hasUpkeepItems(false);
     }
+
     public boolean hasUpkeepItems(boolean ignoreReagents) {
         if (!RegionManager.getInstance().hasRegionChestChanged(this)) {
             return false;
@@ -701,6 +711,7 @@ public class Region {
         }
         return false;
     }
+
     public boolean hasInput() {
         return hasUpkeepItems(true);
     }
@@ -716,11 +727,8 @@ public class Region {
         RegionUpkeep regionUpkeep = regionType.getUpkeeps().get(upkeepIndex);
         CVInventory cvInventory = UnloadedInventoryHandler.getInstance().getChestInventory(getLocation());
 
-        if ((ignoreReagents || Util.containsItems(regionUpkeep.getReagents(), cvInventory)) &&
-                Util.containsItems(regionUpkeep.getInputs(), cvInventory)) {
-            return true;
-        }
-        return false;
+        return (ignoreReagents || Util.containsItems(regionUpkeep.getReagents(), cvInventory)) &&
+                Util.containsItems(regionUpkeep.getInputs(), cvInventory);
     }
 
     private void tick() {
@@ -761,7 +769,7 @@ public class Region {
         boolean hadUpkeep = false;
         CVInventory chestInventory = null;
         boolean hasItemUpkeep = false;
-        int i=0;
+        int i = 0;
         for (RegionUpkeep regionUpkeep : regionType.getUpkeeps()) {
             if (!hasUpkeepPerm(regionUpkeep)) {
                 continue;

@@ -1,23 +1,18 @@
 package org.redcastlemedia.multitallented.civs;
 
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.redcastlemedia.multitallented.civs.civilians.ChatChannel;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentType;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.towns.GovernmentType;
 import org.redcastlemedia.multitallented.civs.util.FallbackConfigUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
-
-import lombok.Getter;
 
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.CRITICAL)
 public class ConfigManager {
@@ -67,11 +62,17 @@ public class ConfigManager {
     int combatTagDuration;
     boolean portDuringCombat;
     boolean townRings;
+    @Getter
     long karmaDepreciatePeriod;
+    @Getter
     int combatLogPenalty;
+    @Getter
     boolean destroyTownsAtZero;
+    @Getter
     boolean allowFoodHealInCombat;
+    @Getter
     long townGracePeriod;
+    @Getter
     boolean useClassesAndSpells;
     Map<String, List<String>> customItemDescriptions;
     @Getter
@@ -161,9 +162,10 @@ public class ConfigManager {
     boolean useHardshipSystem;
     @Getter
     boolean keepRegionChunksLoaded;
-    @Getter boolean useSkills;
-    @Getter boolean silentExp;
-
+    @Getter
+    boolean useSkills;
+    @Getter
+    boolean silentExp;
     @Getter
     String chatChannelFormat;
 
@@ -171,73 +173,178 @@ public class ConfigManager {
         loadDefaults();
     }
 
+    public static ConfigManager getInstance() {
+        if (configManager == null) {
+            configManager = new ConfigManager();
+            configManager.loadFile(new File(Civs.dataLocation, CONFIG_FILE_NAME));
+        }
+        return configManager;
+    }
+
     public String getDefaultLanguage() {
         return defaultLanguage;
     }
+
     public List<String> getBlackListWorlds() {
         return blackListWorlds;
     }
-    public boolean getAllowSharingCivsItems() { return allowCivItemDropping; }
-    public boolean getExplosionOverride() { return explosionOverride; }
-    public boolean getUseStarterBook() { return useStarterBook; }
-    public double getPriceMultiplier() { return priceMultiplier; }
-    public double getPriceBase() { return priceBase; }
-    public double getExpModifier() { return expModifier; }
-    public int getExpBase() { return expBase; }
-    public long getJailTime() { return jailTime; }
-    public String getDefaultClass() { return defaultClass; }
-    public Map<String, String> getItemGroups() { return itemGroups; }
-    public Map<String, Integer> getGroups() { return groups; }
-    public long getDeathGracePeriod() { return deathGracePeriod; }
-    public double getPointsPerKillStreak() { return pointsPerKillStreak; }
-    public double getMoneyPerKillStreak() { return moneyPerKillStreak; }
-    public double getPointsPerKillJoy() { return pointsPerKillJoy; }
-    public double getMoneyPerKillJoy() { return moneyPerKillJoy; }
-    public double getPointsPerKill() { return pointsPerKill; }
-    public double getMoneyPerKill() { return moneyPerKill; }
-    public double getPointsPerDeath() { return pointsPerDeath; }
-    public double getPointsPerHalfHealth() { return pointsPerHalfHealth; }
-    public double getPointsPerQuarterHealth() { return pointsPerQuarterHealth; }
-    public double getMoneyPerKarma() { return moneyPerKarma; }
-    public int getKarmaPerKill() { return karmaPerKill; }
-    public int getKarmaPerKillStreak() { return karmaPerKillStreak; }
-    public int getPowerPerKill() { return powerPerKill; }
-    public int getPowerPerNPCKill() { return powerPerNPCKill; }
-    public long getVillagerCooldown() { return villagerCooldown; }
-    public boolean getDenyArrowTurretShootAtMobs() { return denyArrowTurretShootAtMobs; }
-    public int getPortMana() { return portMana; }
+
+    public boolean getAllowSharingCivsItems() {
+        return allowCivItemDropping;
+    }
+
+    public boolean getExplosionOverride() {
+        return explosionOverride;
+    }
+
+    public boolean getUseStarterBook() {
+        return useStarterBook;
+    }
+
+    public double getPriceMultiplier() {
+        return priceMultiplier;
+    }
+
+    public double getPriceBase() {
+        return priceBase;
+    }
+
+    public double getExpModifier() {
+        return expModifier;
+    }
+
+    public int getExpBase() {
+        return expBase;
+    }
+
+    public long getJailTime() {
+        return jailTime;
+    }
+
+    public String getDefaultClass() {
+        return defaultClass;
+    }
+
+    public Map<String, String> getItemGroups() {
+        return itemGroups;
+    }
+
+    public Map<String, Integer> getGroups() {
+        return groups;
+    }
+
+    public long getDeathGracePeriod() {
+        return deathGracePeriod;
+    }
+
+    public double getPointsPerKillStreak() {
+        return pointsPerKillStreak;
+    }
+
+    public double getMoneyPerKillStreak() {
+        return moneyPerKillStreak;
+    }
+
+    public double getPointsPerKillJoy() {
+        return pointsPerKillJoy;
+    }
+
+    public double getMoneyPerKillJoy() {
+        return moneyPerKillJoy;
+    }
+
+    public double getPointsPerKill() {
+        return pointsPerKill;
+    }
+
+    public double getMoneyPerKill() {
+        return moneyPerKill;
+    }
+
+    public double getPointsPerDeath() {
+        return pointsPerDeath;
+    }
+
+    public double getPointsPerHalfHealth() {
+        return pointsPerHalfHealth;
+    }
+
+    public double getPointsPerQuarterHealth() {
+        return pointsPerQuarterHealth;
+    }
+
+    public double getMoneyPerKarma() {
+        return moneyPerKarma;
+    }
+
+    public int getKarmaPerKill() {
+        return karmaPerKill;
+    }
+
+    public int getKarmaPerKillStreak() {
+        return karmaPerKillStreak;
+    }
+
+    public int getPowerPerKill() {
+        return powerPerKill;
+    }
+
+    public int getPowerPerNPCKill() {
+        return powerPerNPCKill;
+    }
+
+    public long getVillagerCooldown() {
+        return villagerCooldown;
+    }
+
+    public boolean getDenyArrowTurretShootAtMobs() {
+        return denyArrowTurretShootAtMobs;
+    }
+
+    public int getPortMana() {
+        return portMana;
+    }
+
     public int getPortWarmup() {
         return portWarmup;
     }
+
     public int getPortCooldown() {
         return portCooldown;
     }
+
     public double getPortMoney() {
         return portMoney;
     }
+
     public int getPortDamage() {
         return portDamage;
     }
+
     public int getPortStamina() {
         return portStamina;
     }
+
     public List<String> getPortReagents() {
         return portReagents;
     }
+
     public boolean isPortSlowWarmup() {
         return portSlowWarmup;
     }
-    public int getCombatTagDuration() { return combatTagDuration; }
-    public boolean getPortDuringCombat() { return portDuringCombat; }
-    public boolean getTownRings() { return townRings; }
-    public long getKarmaDepreciatePeriod() {
-        return karmaDepreciatePeriod;
+
+    public int getCombatTagDuration() {
+        return combatTagDuration;
     }
-    public int getCombatLogPenalty() { return combatLogPenalty; }
-    public boolean getDestroyTownsAtZero() { return destroyTownsAtZero; }
-    public boolean getFoodHealInCombat() { return allowFoodHealInCombat; }
-    public long getTownGracePeriod() { return townGracePeriod; }
-    public boolean getUseClassesAndSpells() { return useClassesAndSpells; }
+
+    public boolean getPortDuringCombat() {
+        return portDuringCombat;
+    }
+
+    public boolean getTownRings() {
+        return townRings;
+    }
+
     public int getLineBreakLength(String locale) {
         return lineLengthMap.getOrDefault(locale, lineBreakLength);
     }
@@ -245,6 +352,7 @@ public class ConfigManager {
     public String getCivsChatPrefix() {
         return Util.parseColors(civsChatPrefix);
     }
+
     public String getCivsItemPrefix() {
         return Util.parseColors(civsItemPrefix + " ");
     }
@@ -256,6 +364,7 @@ public class ConfigManager {
         Integer integer = creatureHealth.get(type);
         return integer == null ? -1 : integer;
     }
+
     public CVItem getFolderIcon(String folderName) {
         CVItem cvItem = folderIcons.get(folderName);
         if (cvItem == null) {
@@ -549,13 +658,5 @@ public class ConfigManager {
         levelList = new ArrayList<>();
         defaultGovernmentType = GovernmentType.DICTATORSHIP.name();
         allowChangingOfGovType = false;
-    }
-
-    public static ConfigManager getInstance() {
-        if (configManager == null) {
-            configManager = new ConfigManager();
-            configManager.loadFile(new File(Civs.dataLocation, CONFIG_FILE_NAME));
-        }
-        return configManager;
     }
 }

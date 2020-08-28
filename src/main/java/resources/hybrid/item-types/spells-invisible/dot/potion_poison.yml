@@ -5,7 +5,7 @@ level: 1
 groups:
   - damage-over-time
 
-pre-reqs: []
+pre-reqs: [ ]
 
 allowed-actions:
   - POISON.99

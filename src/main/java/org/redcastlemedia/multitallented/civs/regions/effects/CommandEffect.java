@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.regions.effects;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +14,8 @@ import org.redcastlemedia.multitallented.civs.events.PlayerExitTownEvent;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
+
+import java.util.UUID;
 
 @CivsSingleton
 public class CommandEffect implements Listener {
@@ -54,11 +54,8 @@ public class CommandEffect implements Listener {
         if (Civs.perm == null) {
             return true;
         }
-        if (!region.getEffects().containsKey(key) ||
-                !region.getRawPeople().containsKey(uuid)) {
-            return true;
-        }
-        return false;
+        return !region.getEffects().containsKey(key) ||
+                !region.getRawPeople().containsKey(uuid);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -97,11 +94,8 @@ public class CommandEffect implements Listener {
         if (Civs.perm == null) {
             return true;
         }
-        if (!townType.getEffects().containsKey(key) ||
+        return !townType.getEffects().containsKey(key) ||
                 !town.getPeople().containsKey(uuid) ||
-                town.getPeople().get(uuid).equals("ally")) {
-            return true;
-        }
-        return false;
+                town.getPeople().get(uuid).equals("ally");
     }
 }

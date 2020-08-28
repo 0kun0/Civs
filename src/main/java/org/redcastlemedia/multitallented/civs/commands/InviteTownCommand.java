@@ -1,33 +1,28 @@
 package org.redcastlemedia.multitallented.civs.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.alliances.AllianceManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.regions.effects.HousingEffect;
-import org.redcastlemedia.multitallented.civs.towns.Government;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentManager;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentType;
-import org.redcastlemedia.multitallented.civs.towns.Town;
-import org.redcastlemedia.multitallented.civs.towns.TownManager;
-import org.redcastlemedia.multitallented.civs.towns.TownType;
+import org.redcastlemedia.multitallented.civs.towns.*;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import java.util.ArrayList;
+import java.util.List;
 
-@CivsCommand(keys = { "invite" }) @SuppressWarnings("unused")
+@CivsCommand(keys = {"invite"})
+@SuppressWarnings("unused")
 public class InviteTownCommand extends CivCommand {
 
     public boolean runCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -66,7 +61,7 @@ public class InviteTownCommand extends CivCommand {
                 !inviteAnyone) {
             if (!town.getPeople().containsKey(player.getUniqueId()) ||
                     (!town.getPeople().get(player.getUniqueId()).contains(Constants.OWNER) &&
-                    !town.getPeople().get(player.getUniqueId()).contains("recruiter"))) {
+                            !town.getPeople().get(player.getUniqueId()).contains("recruiter"))) {
                 player.sendMessage(Civs.getPrefix() + localeManager.getTranslationWithPlaceholders(player,
                         "no-permission-invite").replace("$1", townName));
                 return true;
@@ -77,7 +72,7 @@ public class InviteTownCommand extends CivCommand {
             Util.sendMessageToPlayerOrConsole(commandSender, "player-not-online{" + playerName, playerName + " isn't online");
             return true;
         }
-        if (town.getRawPeople().keySet().contains(invitee.getUniqueId()) &&
+        if (town.getRawPeople().containsKey(invitee.getUniqueId()) &&
                 !town.getRawPeople().get(invitee.getUniqueId()).contains("ally")) {
             Util.sendMessageToPlayerOrConsole(commandSender, "already-member{" + invitee.getDisplayName() + ",," + townName,
                     invitee.getDisplayName() + " is already a member of " + townName);
@@ -86,7 +81,7 @@ public class InviteTownCommand extends CivCommand {
         TownType townType = (TownType) ItemManager.getInstance().getItemType(town.getType());
         boolean adminBypass = player == null || (Civs.perm != null &&
                 (Civs.perm.has(invitee, Constants.ADMIN_PERMISSION) ||
-                Civs.perm.has(player, Constants.ADMIN_PERMISSION)));
+                        Civs.perm.has(player, Constants.ADMIN_PERMISSION)));
         if (!townType.getEffects().containsKey(HousingEffect.HOUSING_EXCEPT) &&
                 !adminBypass && town.getPopulation() >= town.getHousing()) {
             player.sendMessage(Civs.getPrefix() + localeManager.getTranslationWithPlaceholders(player,
@@ -104,7 +99,7 @@ public class InviteTownCommand extends CivCommand {
                     otherGov.getGovernmentType() == GovernmentType.TRIBALISM) &&
                     !AllianceManager.getInstance().isAllied(town, otherTown)) {
                 Util.sendMessageToPlayerOrConsole(commandSender, "tribalism-no-invite{" +
-                        invitee.getDisplayName() + ",," + otherTown.getName(),
+                                invitee.getDisplayName() + ",," + otherTown.getName(),
                         "Your tribalism town does not allow you to invite people from unallied " + otherTown.getName());
                 return true;
             }
@@ -138,7 +133,7 @@ public class InviteTownCommand extends CivCommand {
         for (Town town : TownManager.getInstance().getTownsForPlayer(player.getUniqueId())) {
             if (town.getRawPeople().containsKey(player.getUniqueId()) &&
                     (town.getRawPeople().get(player.getUniqueId()).contains(Constants.OWNER) ||
-                    town.getRawPeople().get(player.getUniqueId()).contains(Constants.RECRUITER))) {
+                            town.getRawPeople().get(player.getUniqueId()).contains(Constants.RECRUITER))) {
                 return true;
             }
         }

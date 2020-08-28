@@ -7,12 +7,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.items.CivItem;
-import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.items.CivItem;
 import org.redcastlemedia.multitallented.civs.items.ItemManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.localization.LocaleUtil;
 import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
 import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
@@ -21,9 +21,9 @@ import org.redcastlemedia.multitallented.civs.menus.MenuManager;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
 import org.redcastlemedia.multitallented.civs.regions.RegionType;
+import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.regions.effects.EvolveEffect;
 import org.redcastlemedia.multitallented.civs.util.Constants;
-import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
 import java.util.ArrayList;
@@ -31,7 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CivsMenu(name = "region-type") @SuppressWarnings("unused")
+@CivsMenu(name = "region-type")
+@SuppressWarnings("unused")
 public class RegionTypeMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -267,11 +268,11 @@ public class RegionTypeMenu extends CustomMenu {
             putActions(civilian, menuIcon, itemStack, count);
             return itemStack;
         } else if ("reagents".equals(menuIcon.getKey()) ||
-                   "output".equals(menuIcon.getKey()) ||
-                   "payout".equals(menuIcon.getKey()) ||
-                   "power-input".equals(menuIcon.getKey()) ||
-                   "power-output".equals(menuIcon.getKey()) ||
-                   "input".equals(menuIcon.getKey())) {
+                "output".equals(menuIcon.getKey()) ||
+                "payout".equals(menuIcon.getKey()) ||
+                "power-input".equals(menuIcon.getKey()) ||
+                "power-output".equals(menuIcon.getKey()) ||
+                "input".equals(menuIcon.getKey())) {
             if (count >= regionType.getUpkeeps().size()) {
                 return new ItemStack(Material.AIR);
             }

@@ -1,15 +1,7 @@
 package org.redcastlemedia.multitallented.civs.civilians;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,10 +26,8 @@ import org.redcastlemedia.multitallented.civs.spells.effects.ManaEffect;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.ActionBarUtil;
-import org.redcastlemedia.multitallented.civs.util.PermissionUtil;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.*;
 
 public class Civilian {
 
@@ -47,12 +37,16 @@ public class Civilian {
     private final Map<CivItem, Integer> exp;
     @Getter
     private final Set<CivClass> civClasses = new HashSet<>();
-    private String locale;
-    @Getter @Setter
-    private Map<String, Integer> stashItems;
     @Getter
     private final Map<String, CivState> states;
-    @Getter @Setter
+    @Getter
+    private final Set<ExemptionType> exemptions = new HashSet<>();
+    private String locale;
+    @Getter
+    @Setter
+    private Map<String, Integer> stashItems;
+    @Getter
+    @Setter
     private Location respawnPoint = null;
     private long lastJail = 0;
     private int kills;
@@ -63,38 +57,49 @@ public class Civilian {
     private double points;
     private int karma;
     private int mana;
-    @Getter @Setter
+    @Getter
+    @Setter
     private long lastDamage = -1;
-    @Getter @Setter
+    @Getter
+    @Setter
     private UUID lastDamager;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Set<UUID> friends = new HashSet<>();
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<Bounty> bounties = new ArrayList<>();
-    @Getter @Setter
+    @Getter
+    @Setter
     private long lastKarmaDepreciation;
-    @Getter @Setter
+    @Getter
+    @Setter
     private double hardship;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int daysSinceLastHardshipDepreciation;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int tutorialIndex;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String tutorialPath;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int tutorialProgress;
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean useAnnouncements;
-    @Getter @Setter
+    @Getter
+    @Setter
     private ChatChannel chatChannel;
     @Getter
     private CivClass currentClass;
     @Getter
-    private final Set<ExemptionType> exemptions = new HashSet<>();
-    @Getter @Setter
+    @Setter
     private HashMap<String, Skill> skills = new HashMap<>();
     @Getter
-    private Map<Integer, ItemStack> combatBar = new HashMap<>();
+    private final Map<Integer, ItemStack> combatBar = new HashMap<>();
 
     public Civilian(UUID uuid, String locale, Map<String, Integer> stashItems,
                     Map<CivItem, Integer> exp, int kills, int killStreak, int deaths, int highestKillStreak,
@@ -120,29 +125,83 @@ public class Civilian {
         }
         return locale;
     }
+
     public void setLocale(String locale) {
         this.locale = locale;
     }
-    public long getLastJail() { return lastJail; }
-    public void refreshJail() { lastJail = System.currentTimeMillis(); }
-    public int getKills() { return kills; }
-    public void setKills(int kills) { this.kills = kills; }
-    public int getKillStreak() { return killStreak; }
-    public void setKillStreak(int killStreak) { this.killStreak = killStreak; }
-    public int getDeaths() { return deaths; }
-    public void setDeaths(int deaths) { this.deaths = deaths; }
-    public void refreshDeath() { this.lastDeath = System.currentTimeMillis(); }
-    public long getLastDeath() { return lastDeath; }
-    public int getHighestKillStreak() { return highestKillStreak; }
-    public void setHighestKillStreak(int highestKillStreak) { this.highestKillStreak = highestKillStreak; }
-    public double getPoints() { return points; }
-    public void setPoints(double points) { this.points = points; }
-    public int getKarma() { return karma; }
-    public void setKarma(int karma) { this.karma = karma; }
-    public int getMana() { return mana; }
+
+    public long getLastJail() {
+        return lastJail;
+    }
+
+    public void refreshJail() {
+        lastJail = System.currentTimeMillis();
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
+    }
+
+    public int getKillStreak() {
+        return killStreak;
+    }
+
+    public void setKillStreak(int killStreak) {
+        this.killStreak = killStreak;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
+    }
+
+    public void refreshDeath() {
+        this.lastDeath = System.currentTimeMillis();
+    }
+
+    public long getLastDeath() {
+        return lastDeath;
+    }
+
+    public int getHighestKillStreak() {
+        return highestKillStreak;
+    }
+
+    public void setHighestKillStreak(int highestKillStreak) {
+        this.highestKillStreak = highestKillStreak;
+    }
+
+    public double getPoints() {
+        return points;
+    }
+
+    public void setPoints(double points) {
+        this.points = points;
+    }
+
+    public int getKarma() {
+        return karma;
+    }
+
+    public void setKarma(int karma) {
+        this.karma = karma;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
     public void setMana(int mana) {
         setMana(mana, true);
     }
+
     public void setMana(int mana, boolean setManaBar) {
         this.mana = Math.max(mana, 0);
         Player player = Bukkit.getPlayer(uuid);
@@ -241,7 +300,7 @@ public class Civilian {
         double modifier = configManager.getExpModifier();
         double base = configManager.getExpBase();
         int level = 1;
-        for (;;) {
+        for (; ; ) {
             experience -= base + (level - 1) * modifier * base;
             if (experience < 0) {
                 break;
@@ -252,11 +311,8 @@ public class Civilian {
     }
 
     public boolean isAtGroupMax(String group) {
-        if (ConfigManager.getInstance().getGroups().get(group) != null &&
-                ConfigManager.getInstance().getGroups().get(group) <= getCountGroup(group)) {
-            return true;
-        }
-        return false;
+        return ConfigManager.getInstance().getGroups().get(group) != null &&
+                ConfigManager.getInstance().getGroups().get(group) <= getCountGroup(group);
     }
 
     public String isAtMax(CivItem civItem) {

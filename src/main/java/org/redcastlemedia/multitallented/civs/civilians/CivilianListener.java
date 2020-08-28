@@ -1,16 +1,8 @@
 package org.redcastlemedia.multitallented.civs.civilians;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import me.clip.placeholderapi.PlaceholderAPIPlugin;
+import net.Indyuce.mmoitems.MMOItems;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -22,24 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDispenseEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.PotionSplashEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.ItemStack;
@@ -52,6 +30,7 @@ import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.CivsSingleton;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
 import org.redcastlemedia.multitallented.civs.alliances.Alliance;
+import org.redcastlemedia.multitallented.civs.dynmaphook.DynmapHook;
 import org.redcastlemedia.multitallented.civs.events.RegionCreatedEvent;
 import org.redcastlemedia.multitallented.civs.events.RegionDestroyedEvent;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
@@ -60,29 +39,21 @@ import org.redcastlemedia.multitallented.civs.items.UnloadedInventoryHandler;
 import org.redcastlemedia.multitallented.civs.localization.LocaleConstants;
 import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.menus.MenuManager;
+import org.redcastlemedia.multitallented.civs.placeholderexpansion.PlaceHook;
 import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.regions.RegionManager;
+import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.scheduler.CommonScheduler;
 import org.redcastlemedia.multitallented.civs.skills.CivSkills;
 import org.redcastlemedia.multitallented.civs.skills.Skill;
-import org.redcastlemedia.multitallented.civs.towns.Government;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentManager;
-import org.redcastlemedia.multitallented.civs.towns.GovernmentType;
-import org.redcastlemedia.multitallented.civs.towns.Town;
-import org.redcastlemedia.multitallented.civs.towns.TownManager;
-import org.redcastlemedia.multitallented.civs.towns.TownType;
+import org.redcastlemedia.multitallented.civs.spells.SpellUtil;
+import org.redcastlemedia.multitallented.civs.towns.*;
 import org.redcastlemedia.multitallented.civs.tutorials.AnnouncementUtil;
 import org.redcastlemedia.multitallented.civs.util.Constants;
-import org.redcastlemedia.multitallented.civs.dynmaphook.DynmapHook;
-import org.redcastlemedia.multitallented.civs.placeholderexpansion.PlaceHook;
-import org.redcastlemedia.multitallented.civs.spells.SpellUtil;
-import org.redcastlemedia.multitallented.civs.regions.StructureUtil;
 import org.redcastlemedia.multitallented.civs.util.MessageUtil;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-
-import me.clip.placeholderapi.PlaceholderAPIPlugin;
-import net.Indyuce.mmoitems.MMOItems;
+import java.util.*;
 
 @CivsSingleton
 public class CivilianListener implements Listener {
@@ -95,17 +66,6 @@ public class CivilianListener implements Listener {
             Bukkit.getPluginManager().registerEvents(civilianListener, Civs.getInstance());
         }
         return civilianListener;
-    }
-
-    @EventHandler
-    public void onCivilianJoin(PlayerJoinEvent event) {
-        CivilianManager civilianManager = CivilianManager.getInstance();
-        civilianManager.loadCivilian(event.getPlayer());
-        ConfigManager configManager = ConfigManager.getInstance();
-        Player player = event.getPlayer();
-        if (configManager.getUseStarterBook()) {
-            giveMenuBookIfNoneInInventory(player);
-        }
     }
 
     public static void giveMenuBookIfNoneInInventory(Player player) {
@@ -123,7 +83,50 @@ public class CivilianListener implements Listener {
         }
     }
 
-    @EventHandler @SuppressWarnings("unused")
+    public static boolean checkDroppedItem(ItemStack itemStack, Player player) {
+        if (ConfigManager.getInstance().getAllowSharingCivsItems() ||
+                !CVItem.isCivsItem(itemStack)) {
+            return false;
+        }
+        CivItem civItem = CivItem.getFromItemStack(itemStack);
+        if (civItem == null) {
+            return false;
+        }
+        Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
+        boolean hasBlueprintsMenuOpen = MenuManager.getInstance().hasMenuOpen(civilian.getUuid(), "blueprints");
+        if (hasBlueprintsMenuOpen) {
+            if (Civs.econ != null && civItem.getPrice() > 0) {
+                Civs.econ.depositPlayer(player, civItem.getPrice());
+                player.sendMessage(Civs.getPrefix() + LocaleManager.getInstance().getTranslationWithPlaceholders(player,
+                        "refund").replace("$1", Util.getNumberFormat(civItem.getPrice(), civilian.getLocale())));
+            }
+            return true;
+        }
+        String itemName = civItem.getProcessedName();
+        player.closeInventory();
+        if (civilian.getStashItems().containsKey(itemName)) {
+            civilian.getStashItems().put(itemName, civilian.getStashItems().get(itemName) + 1);
+        } else {
+            civilian.getStashItems().put(itemName, 1);
+        }
+        CivilianManager.getInstance().saveCivilian(civilian);
+        MenuManager.openMenuFromString(civilian, "blueprints");
+        return true;
+    }
+
+    @EventHandler
+    public void onCivilianJoin(PlayerJoinEvent event) {
+        CivilianManager civilianManager = CivilianManager.getInstance();
+        civilianManager.loadCivilian(event.getPlayer());
+        ConfigManager configManager = ConfigManager.getInstance();
+        Player player = event.getPlayer();
+        if (configManager.getUseStarterBook()) {
+            giveMenuBookIfNoneInInventory(player);
+        }
+    }
+
+    @EventHandler
+    @SuppressWarnings("unused")
     public void onCivilianQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
@@ -208,7 +211,8 @@ public class CivilianListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true) @SuppressWarnings("unused")
+    @EventHandler(ignoreCancelled = true)
+    @SuppressWarnings("unused")
     public void onCraftItem(CraftItemEvent event) {
         if (!ConfigManager.getInstance().isUseSkills()) {
             return;
@@ -258,37 +262,6 @@ public class CivilianListener implements Listener {
         }
     }
 
-    public static boolean checkDroppedItem(ItemStack itemStack, Player player) {
-        if (ConfigManager.getInstance().getAllowSharingCivsItems() ||
-                !CVItem.isCivsItem(itemStack)) {
-            return false;
-        }
-        CivItem civItem = CivItem.getFromItemStack(itemStack);
-        if (civItem == null) {
-            return false;
-        }
-        Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
-        boolean hasBlueprintsMenuOpen = MenuManager.getInstance().hasMenuOpen(civilian.getUuid(), "blueprints");
-        if (hasBlueprintsMenuOpen) {
-            if (Civs.econ != null && civItem.getPrice() > 0) {
-                Civs.econ.depositPlayer(player, civItem.getPrice());
-                player.sendMessage(Civs.getPrefix() + LocaleManager.getInstance().getTranslationWithPlaceholders(player,
-                        "refund").replace("$1", Util.getNumberFormat(civItem.getPrice(), civilian.getLocale())));
-            }
-            return true;
-        }
-        String itemName = civItem.getProcessedName();
-        player.closeInventory();
-        if (civilian.getStashItems().containsKey(itemName)) {
-            civilian.getStashItems().put(itemName, civilian.getStashItems().get(itemName) + 1);
-        } else {
-            civilian.getStashItems().put(itemName, 1);
-        }
-        CivilianManager.getInstance().saveCivilian(civilian);
-        MenuManager.openMenuFromString(civilian, "blueprints");
-        return true;
-    }
-
     @EventHandler(ignoreCancelled = true)
     public void onCivilianDispense(BlockDispenseEvent event) {
         ItemStack is = event.getItem();
@@ -323,6 +296,7 @@ public class CivilianListener implements Listener {
         Sign sign = (Sign) block.getState();
         changeAdvertising(sign.getLines(), town, increment);
     }
+
     private void changeAdvertising(String[] lines, Town town, boolean increment) {
         HashSet<UUID> changeThese = new HashSet<>();
         for (UUID uuid : town.getIdiocracyScore().keySet()) {
@@ -450,7 +424,7 @@ public class CivilianListener implements Listener {
         }
     }
 
-    @EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCivilianBlockBreak(BlockBreakEvent event) {
         boolean shouldCancel = shouldCancelBlockBreak(event.getBlock(), event.getPlayer());
         if (shouldCancel) {
@@ -496,7 +470,7 @@ public class CivilianListener implements Listener {
         return true;
     }
 
-    @EventHandler(priority=EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         ItemStack is = event.getItemInHand();
         if (event.getPlayer() == null || !CVItem.isCivsItem(is)) {
@@ -508,7 +482,7 @@ public class CivilianListener implements Listener {
             event.setCancelled(true);
             event.getPlayer().sendMessage(Civs.getPrefix() + LocaleManager.getInstance()
                     .getTranslationWithPlaceholders(event.getPlayer(),
-                    "not-allowed-place").replace("$1", civItem.getDisplayName()));
+                            "not-allowed-place").replace("$1", civItem.getDisplayName()));
             return;
         }
         if (civItem instanceof TownType) {
@@ -521,7 +495,7 @@ public class CivilianListener implements Listener {
                     civItem.getProcessedName() + LocaleConstants.NAME_SUFFIX);
             event.getPlayer().sendMessage(Civs.getPrefix() + LocaleManager.getInstance()
                     .getTranslationWithPlaceholders(event.getPlayer(),
-                    "town-instructions").replace("$1", localTownName));
+                            "town-instructions").replace("$1", localTownName));
             return;
         }
         CVItem cvItem = CVItem.createFromItemStack(is);
@@ -564,6 +538,7 @@ public class CivilianListener implements Listener {
             }
         }
     }
+
     @EventHandler
     public void onPluginEnable(PluginEnableEvent event) {
         if ("dynmap".equalsIgnoreCase(event.getPlugin().getName())) {
@@ -610,7 +585,8 @@ public class CivilianListener implements Listener {
         }
     }
 
-    @EventHandler @SuppressWarnings("unused")
+    @EventHandler
+    @SuppressWarnings("unused")
     public void onRegionDestroyedEvent(RegionDestroyedEvent event) {
         UnloadedInventoryHandler.getInstance().deleteUnloadedChestInventory(event.getRegion().getLocation());
         if (ConfigManager.getInstance().isKeepRegionChunksLoaded()) {
@@ -618,7 +594,8 @@ public class CivilianListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true) @SuppressWarnings("unused")
+    @EventHandler(ignoreCancelled = true)
+    @SuppressWarnings("unused")
     public void onItemMoveEvent(InventoryMoveItemEvent event) {
         RegionManager.getInstance().removeCheckedRegion(event.getDestination().getLocation());
         if (event.getDestination().getHolder() instanceof Chest) {
@@ -686,7 +663,7 @@ public class CivilianListener implements Listener {
             for (Player recipient : new HashSet<>(event.getRecipients())) {
                 if (player != recipient &&
                         (!recipient.getWorld().equals(player.getWorld()) ||
-                        10000 < recipient.getLocation().distanceSquared(player.getLocation()))) {
+                                10000 < recipient.getLocation().distanceSquared(player.getLocation()))) {
                     event.getRecipients().remove(recipient);
                 }
             }
@@ -727,7 +704,8 @@ public class CivilianListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true) @SuppressWarnings("unused")
+    @EventHandler(ignoreCancelled = true)
+    @SuppressWarnings("unused")
     public void onCivilianClickItem(InventoryClickEvent event) {
         if (event.getClickedInventory() != null) {
             Location inventoryLocation = event.getClickedInventory().getLocation();

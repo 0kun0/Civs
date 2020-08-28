@@ -1,12 +1,11 @@
 package org.redcastlemedia.multitallented.civs.towns;
 
 import lombok.Getter;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
 import java.util.ArrayList;

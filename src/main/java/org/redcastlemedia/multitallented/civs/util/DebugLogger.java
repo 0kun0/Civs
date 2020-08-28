@@ -8,10 +8,10 @@ import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import java.util.HashMap;
 
 public final class DebugLogger {
+    private static final HashMap<Region, Integer> regionActivity = new HashMap<>();
     public static int saves = 0;
     public static int chunkLoads = 0;
     public static int inventoryModifications = 0;
-    private static final HashMap<Region, Integer> regionActivity = new HashMap<>();
 
     private DebugLogger() {
 

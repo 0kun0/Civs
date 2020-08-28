@@ -1,10 +1,6 @@
 package org.redcastlemedia.multitallented.civs.spells.civstate;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -16,15 +12,14 @@ import org.redcastlemedia.multitallented.civs.spells.SpellConstants;
 import org.redcastlemedia.multitallented.civs.spells.SpellType;
 import org.redcastlemedia.multitallented.civs.spells.effects.Effect;
 
-import lombok.Getter;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
- *
  * @author Multitallented
  */
 public class CivState {
-    private int durationId;
-    private int periodId;
     private final String COMPONENT_NAME;
     private final ConfigurationSection CONFIG;
     private final String CONFIG_STRING;
@@ -32,6 +27,8 @@ public class CivState {
     private final Map<String, Object> VARS;
     @Getter
     private final Set<BuiltInCivState> builtInCivStates = new HashSet<>();
+    private int durationId;
+    private int periodId;
 
     public CivState(Spell spell, String componentName, int durationId, int periodId, String configString, Map<String, Object> vars) {
         this.durationId = durationId;
@@ -42,6 +39,7 @@ public class CivState {
         this.SPELL = spell;
         this.VARS = vars;
     }
+
     public CivState(Spell spell, String componentName, int durationId, int periodId, ConfigurationSection config, Map<String, Object> vars) {
         this.durationId = durationId;
         this.periodId = periodId;
@@ -51,6 +49,7 @@ public class CivState {
         this.SPELL = spell;
         this.VARS = vars;
     }
+
     public CivState(Spell spell, String componentName, int durationId, int periodId, Map<String, Object> vars) {
         this.durationId = durationId;
         this.periodId = periodId;
@@ -65,23 +64,35 @@ public class CivState {
     public Spell getSpell() {
         return SPELL;
     }
+
     public String getComponentName() {
         return COMPONENT_NAME;
     }
+
     public int getDurationId() {
         return durationId;
     }
+
     public void setDurationId(int newDurationId) {
         this.durationId = newDurationId;
     }
+
     public int getPeriodId() {
         return periodId;
     }
+
     public void setPeriodId(int newPeriodId) {
         this.periodId = newPeriodId;
     }
-    public ConfigurationSection getConfig() { return this.CONFIG; }
-    public String getConfigString() { return this.CONFIG_STRING; }
+
+    public ConfigurationSection getConfig() {
+        return this.CONFIG;
+    }
+
+    public String getConfigString() {
+        return this.CONFIG_STRING;
+    }
+
     public Map<String, Object> getVars() {
         return this.VARS;
     }

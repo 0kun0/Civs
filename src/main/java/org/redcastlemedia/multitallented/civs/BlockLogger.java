@@ -4,8 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.redcastlemedia.multitallented.civs.regions.Region;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.regions.Region;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,13 +14,20 @@ import java.util.HashMap;
 @CivsSingleton(priority = CivsSingleton.SingletonLoadPriority.HIGH)
 public class BlockLogger {
     private static BlockLogger blockLogger = null;
-    private HashMap<String, CVItem> blocks = new HashMap<>();
+    private final HashMap<String, CVItem> blocks = new HashMap<>();
 
 //    private long lastSave = 0;
 //    private int intervalId = -1;
 
     public BlockLogger() {
         loadBlocks();
+    }
+
+    public static BlockLogger getInstance() {
+        if (blockLogger == null) {
+            blockLogger = new BlockLogger();
+        }
+        return blockLogger;
     }
 
     public CVItem getBlock(Location location) {
@@ -32,15 +39,9 @@ public class BlockLogger {
         }
         return returnBlock;
     }
+
     public void putBlock(Location location, CVItem cvItem) {
         blocks.put(Region.locationToString(location), cvItem);
-        saveBlocks();
-    }
-    public void removeBlock(Location location) {
-        blocks.remove(Region.locationToString(location));
-        Location newLocation = new Location(location.getWorld(), location.getX() + 0.5,
-                location.getY() + 0.5, location.getZ() + 0.5);
-        blocks.remove(Region.locationToString(newLocation));
         saveBlocks();
     }
 //    private void shouldSave() {
@@ -57,6 +58,14 @@ public class BlockLogger {
 //            lastSave = System.currentTimeMillis();
 //        }
 //    }
+
+    public void removeBlock(Location location) {
+        blocks.remove(Region.locationToString(location));
+        Location newLocation = new Location(location.getWorld(), location.getX() + 0.5,
+                location.getY() + 0.5, location.getZ() + 0.5);
+        blocks.remove(Region.locationToString(newLocation));
+        saveBlocks();
+    }
 
     private void saveBlocks() {
 //        intervalId = -1;
@@ -119,12 +128,5 @@ public class BlockLogger {
             Civs.logger.severe("Unable to read from block-data.yml");
             return;
         }
-    }
-
-    public static BlockLogger getInstance() {
-        if (blockLogger == null) {
-            blockLogger = new BlockLogger();
-        }
-        return blockLogger;
     }
 }

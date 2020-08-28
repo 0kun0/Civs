@@ -8,7 +8,7 @@ items:
     # icon: town type shop-icon
     # name: town type name
     # desc: town type desc + size
-    actions: []
+    actions: [ ]
   price:
     index: 1
     icon: EMERALD
@@ -28,13 +28,13 @@ items:
     icon: PLAYER_HEAD
     name: population
     desc: population-req
-    actions: []
+    actions: [ ]
   effects:
     index: 7
     icon: POTION
     name: effects
     # desc: town effects
-    actions: []
+    actions: [ ]
   back:
     index: 8
   build-reqs:

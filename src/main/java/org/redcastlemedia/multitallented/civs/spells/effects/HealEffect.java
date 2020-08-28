@@ -1,7 +1,5 @@
 package org.redcastlemedia.multitallented.civs.spells.effects;
 
-import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,6 +14,8 @@ import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.spells.Spell;
 import org.redcastlemedia.multitallented.civs.spells.SpellConstants;
 import org.redcastlemedia.multitallented.civs.spells.civstate.BuiltInCivState;
+
+import java.util.HashMap;
 
 public class HealEffect extends Effect {
     private int heal = 0;
@@ -65,9 +65,7 @@ public class HealEffect extends Effect {
         if (livingEntity instanceof Player) {
             Player player = (Player) livingEntity;
             Civilian civilian = CivilianManager.getInstance().getCivilian(player.getUniqueId());
-            if (civilian.hasBuiltInState(BuiltInCivState.NO_HEAL)) {
-                return false;
-            }
+            return !civilian.hasBuiltInState(BuiltInCivState.NO_HEAL);
         }
         return true;
     }

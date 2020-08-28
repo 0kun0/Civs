@@ -2,12 +2,12 @@ icon: GLASS
 type: spell
 is-in-shop: false
 level: 1
-groups: []
+groups: [ ]
 
 pre-reqs:
   - skill:armor=4|skill:shield=4
 
-allowed-actions: []
+allowed-actions: [ ]
 
 exp-per-use: 10
 

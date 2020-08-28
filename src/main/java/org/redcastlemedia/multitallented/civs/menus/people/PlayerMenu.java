@@ -1,10 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.people;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -13,22 +8,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.redcastlemedia.multitallented.civs.Civs;
 import org.redcastlemedia.multitallented.civs.ConfigManager;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Bounty;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
-import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
-import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
-import org.redcastlemedia.multitallented.civs.menus.MenuConstants;
-import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
-import org.redcastlemedia.multitallented.civs.menus.MenuManager;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
+import org.redcastlemedia.multitallented.civs.menus.*;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = "player") @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+@CivsMenu(name = "player")
+@SuppressWarnings("unused")
 public class PlayerMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -99,11 +96,11 @@ public class PlayerMenu extends CustomMenu {
             cvItem.setDisplayName(LocaleManager.getInstance().getTranslationWithPlaceholders(player,
                     menuIcon.getName()).replace("$1", player.getName()));
             ArrayList<String> lore = new ArrayList<>();
-            int i=0;
+            int i = 0;
             for (Bounty bounty : civilian.getBounties()) {
                 OfflinePlayer op = Bukkit.getOfflinePlayer(bounty.getIssuer());
                 lore.add(op.getName() + ": $" + Util.getNumberFormat(bounty.getAmount(), civilian.getLocale()));
-                if (i>5) {
+                if (i > 5) {
                     break;
                 }
                 i++;

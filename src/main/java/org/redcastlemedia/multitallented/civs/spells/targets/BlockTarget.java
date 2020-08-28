@@ -30,9 +30,9 @@ public class BlockTarget extends Target {
         LivingEntity player = (LivingEntity) getOrigin();
         int level = getLevel();
         int range = (int) Math.round(Spell.getLevelAdjustedValue(
-                getConfig().getString("range","15"), level, null, null));
+                getConfig().getString("range", "15"), level, null, null));
         int yOffset = (int) Math.round(Spell.getLevelAdjustedValue(
-                getConfig().getString("offset-y","0"), level, null, null));
+                getConfig().getString("offset-y", "0"), level, null, null));
         double y = getConfig().getDouble("y", -1);
         double x = getConfig().getDouble("x", -1);
         double z = getConfig().getDouble("z", -1);

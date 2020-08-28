@@ -1,10 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,7 +22,13 @@ import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
 import org.redcastlemedia.multitallented.civs.util.Util;
 
-@CivsMenu(name = "chat-channel-list") @SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@CivsMenu(name = "chat-channel-list")
+@SuppressWarnings("unused")
 public class ChatChannelListMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -77,7 +78,8 @@ public class ChatChannelListMenu extends CustomMenu {
         }
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         Player player = Bukkit.getPlayer(civilian.getUuid());
         if (player == null) {
@@ -119,7 +121,8 @@ public class ChatChannelListMenu extends CustomMenu {
         return super.createItemStack(civilian, menuIcon, count);
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean doActionAndCancel(Civilian civilian, String actionString, ItemStack itemStack) {
         if ("set-channel".equals(actionString)) {
             ChatChannel chatChannel = ((HashMap<ItemStack, ChatChannel>) MenuManager.getData(civilian.getUuid(), "channelMap"))

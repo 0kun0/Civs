@@ -2,8 +2,6 @@ package org.redcastlemedia.multitallented.civs.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.redcastlemedia.multitallented.civs.regions.Region;
-import org.redcastlemedia.multitallented.civs.regions.RegionType;
 import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownType;
 
@@ -15,17 +13,19 @@ public class PlayerInTownEvent extends Event {
     private final Town town;
     private final TownType townType;
 
-    @Override
-    public HandlerList getHandlers() {
-        return hList;
-    }
-    public static HandlerList getHandlerList() {
-        return hList;
-    }
     public PlayerInTownEvent(UUID uuid, Town town, TownType townType) {
         this.uuid = uuid;
         this.town = town;
         this.townType = townType;
+    }
+
+    public static HandlerList getHandlerList() {
+        return hList;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return hList;
     }
 
     public UUID getUuid() {

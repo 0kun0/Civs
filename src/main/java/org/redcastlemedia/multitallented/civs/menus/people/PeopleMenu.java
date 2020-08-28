@@ -1,9 +1,5 @@
 package org.redcastlemedia.multitallented.civs.menus.people;
 
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -11,10 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.redcastlemedia.multitallented.civs.Civs;
-import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.civilians.Civilian;
 import org.redcastlemedia.multitallented.civs.civilians.CivilianManager;
 import org.redcastlemedia.multitallented.civs.items.CVItem;
+import org.redcastlemedia.multitallented.civs.localization.LocaleManager;
 import org.redcastlemedia.multitallented.civs.menus.CivsMenu;
 import org.redcastlemedia.multitallented.civs.menus.CustomMenu;
 import org.redcastlemedia.multitallented.civs.menus.MenuIcon;
@@ -25,7 +21,12 @@ import org.redcastlemedia.multitallented.civs.towns.Town;
 import org.redcastlemedia.multitallented.civs.towns.TownManager;
 import org.redcastlemedia.multitallented.civs.util.Constants;
 
-@CivsMenu(name = "people") @SuppressWarnings("unused")
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.logging.Level;
+
+@CivsMenu(name = "people")
+@SuppressWarnings("unused")
 public class PeopleMenu extends CustomMenu {
     @Override
     public Map<String, Object> createData(Civilian civilian, Map<String, String> params) {
@@ -153,6 +154,7 @@ public class PeopleMenu extends CustomMenu {
             }
         });
     }
+
     private int rankWeight(String rank) {
         if (rank.contains(Constants.OWNER)) {
             return 100;
@@ -186,7 +188,7 @@ public class PeopleMenu extends CustomMenu {
                 try {
                     return offlinePlayer1.getName().compareTo(offlinePlayer2.getName());
                 } catch (Exception e) {
-                    Object[] args = { Civs.NAME, offlinePlayer1.getName(), offlinePlayer2.getName()};
+                    Object[] args = {Civs.NAME, offlinePlayer1.getName(), offlinePlayer2.getName()};
                     Civs.logger.log(Level.WARNING, "{0} Failed to compare name {1} with {2}", args);
                     return 0;
                 }
@@ -206,7 +208,8 @@ public class PeopleMenu extends CustomMenu {
         }
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public ItemStack createItemStack(Civilian civilian, MenuIcon menuIcon, int count) {
         String sort = (String) MenuManager.getData(civilian.getUuid(), "sort");
         if ("sort-rank".equals(menuIcon.getKey())) {
@@ -283,7 +286,8 @@ public class PeopleMenu extends CustomMenu {
         }
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean doActionAndCancel(Civilian civilian, String actionString, ItemStack clickedItem) {
         if ("take-action".equals(actionString)) {
             UUID uuid = ((HashMap<ItemStack, UUID>) MenuManager.getData(civilian.getUuid(), "civMap")).get(clickedItem);
