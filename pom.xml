@@ -13,10 +13,10 @@
     </properties>
 
     <repositories>
-        <repository>
+        <!--<repository>
             <id>handy-minecraft</id>
             <url>http://maven.ljxmc.top/repository/handy-minecraft/</url>
-        </repository>
+        </repository>-->
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
@@ -175,6 +175,13 @@
             <scope>system</scope>
             <version>7</version>
             <systemPath>${pom.basedir}\lib\ReflexAPI-v7.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>de.janmm14</groupId>
+            <artifactId>aac-api</artifactId>
+            <scope>system</scope>
+            <version>4.2.0</version>
+            <systemPath>${pom.basedir}\lib\aac-api.jar</systemPath>
         </dependency>
 
         <!--<dependency>

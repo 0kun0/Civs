@@ -345,6 +345,18 @@ public class ConfigManager {
         return townRings;
     }
 
+    public boolean getUseClassesAndSpells() {
+        return useClassesAndSpells;
+    }
+
+    public boolean getFoodHealInCombat() {
+        return allowFoodHealInCombat;
+    }
+
+    public boolean getDestroyTownsAtZero() {
+        return destroyTownsAtZero;
+    }
+
     public int getLineBreakLength(String locale) {
         return lineLengthMap.getOrDefault(locale, lineBreakLength);
     }
